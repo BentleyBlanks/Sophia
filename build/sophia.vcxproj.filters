@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sophia">
+      <UniqueIdentifier>{55e13d57-b96f-4b3b-afe9-ee8900ea6a1d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\sophia\main.cpp">
+      <Filter>sophia</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
