@@ -1,13 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="sophia">
+    <Filter Include="thirdparty">
+      <UniqueIdentifier>{4e6b31af-65b0-47c4-a2c9-9623564fbd12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\t3DataStructures">
+      <UniqueIdentifier>{dc6f3ad0-9379-4ede-a274-2c4c0c3eedb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\t3Math">
+      <UniqueIdentifier>{61d307a8-400f-4769-b100-d96ab075779f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia">
       <UniqueIdentifier>{55e13d57-b96f-4b3b-afe9-ee8900ea6a1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\core">
+      <UniqueIdentifier>{3ff53234-2a9d-4a74-afa8-ab17f70efac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\core\log">
+      <UniqueIdentifier>{ff10e17b-a039-423e-b9ec-5f8432334e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{12b2b67d-3ed2-4c41-98be-08d110933f7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\sophia\main.cpp">
-      <Filter>sophia</Filter>
+    <ClCompile Include="..\thirdparty\t3Math\include\t3Math\core\t3Matri4x4.cpp">
+      <Filter>thirdparty\t3Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\thirdparty\t3Math\include\t3Math\core\t3Quaternion.cpp">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sophia\core\s3Settings.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\thirdparty\t3DataStructures\include\Common\t3Timer.cpp">
+      <Filter>thirdparty\t3DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\log\s3LogFile.cpp">
+      <Filter>Sophia\core\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\log\s3LogHTML.cpp">
+      <Filter>Sophia\core\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\log\s3Log.cpp">
+      <Filter>Sophia\core\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\app\main.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3Math.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3MathSettings.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3Matri4x4.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3Quaternion.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3Vector2.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3Vector3.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3Math\include\t3Math\core\t3Vector4.h">
+      <Filter>thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sophia\core\s3Settings.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\t3DataStructures\include\Common\t3Timer.h">
+      <Filter>thirdparty\t3DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\log\s3LogFile.h">
+      <Filter>Sophia\core\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\log\s3LogHTML.h">
+      <Filter>Sophia\core\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\log\s3Log.h">
+      <Filter>Sophia\core\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\Sophia.h">
+      <Filter>Sophia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\app\test.h">
+      <Filter>app</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\thirdparty\t3Math\include\t3Math\core\t3Math.inl">
+      <Filter>thirdparty\t3Math</Filter>
+    </None>
+    <None Include="..\thirdparty\t3Math\include\t3Math\core\t3Matrix4x4.inl">
+      <Filter>thirdparty\t3Math</Filter>
+    </None>
+    <None Include="..\thirdparty\t3Math\include\t3Math\core\t3Vector2.inl">
+      <Filter>thirdparty\t3Math</Filter>
+    </None>
+    <None Include="..\thirdparty\t3Math\include\t3Math\core\t3Vector3.inl">
+      <Filter>thirdparty\t3Math</Filter>
+    </None>
+    <None Include="..\thirdparty\t3Math\include\t3Math\core\t3Vector4.inl">
+      <Filter>thirdparty\t3Math</Filter>
+    </None>
   </ItemGroup>
 </Project>
