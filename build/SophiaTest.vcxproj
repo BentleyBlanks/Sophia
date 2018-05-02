@@ -19,33 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{63CEDA35-B38E-49E4-B9DF-B3F04FEE8258}</ProjectGuid>
-    <RootNamespace>sophia</RootNamespace>
+    <ProjectGuid>{B9DA0AB3-115F-45DB-9B33-2F36F98630AF}</ProjectGuid>
+    <RootNamespace>SophiaTest</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>Sophia</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -69,26 +68,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <TargetExt>.lib</TargetExt>
-    <TargetName>$(ProjectName)d.x86</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <TargetExt>.lib</TargetExt>
-    <TargetName>$(ProjectName)d.x64</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <TargetExt>.lib</TargetExt>
-    <TargetName>$(ProjectName).x64</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
-    <TargetExt>.lib</TargetExt>
-    <TargetName>$(ProjectName).x86</TargetName>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -97,8 +77,8 @@
       <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\include;..\Sophia\thirdparty\t3DataStructures\include;..\Sophia</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>t3Mathd.vs2015.x86.lib;t3DataStructuresd.vs2015.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Sophia\thirdparty\t3DataStructures\lib\x86;..\Sophia\thirdparty\t3Math\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\bin\x86\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Sophiad.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,8 +89,8 @@
       <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\include;..\Sophia\thirdparty\t3DataStructures\include;..\Sophia</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>t3Mathd.vs2015.x64.lib;t3DataStructuresd.vs2015.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Sophia\thirdparty\t3DataStructures\lib\x64;..\Sophia\thirdparty\t3Math\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\bin\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Sophiad.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,8 +105,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>t3Math.vs2015.x86.lib;t3DataStructures.vs2015.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Sophia\thirdparty\t3DataStructures\lib\x86;..\Sophia\thirdparty\t3Math\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\bin\x86\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Sophia.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,40 +121,15 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>t3DataStructures.vs2015.x64.lib;t3Math.vs2015.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Sophia\thirdparty\t3DataStructures\lib\x64;..\Sophia\thirdparty\t3Math\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\bin\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Sophia.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Sophia\core\log\s3Log.cpp" />
-    <ClCompile Include="..\Sophia\core\log\s3LogFile.cpp" />
-    <ClCompile Include="..\Sophia\core\log\s3LogHTML.cpp" />
-    <ClCompile Include="..\sophia\core\s3Settings.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\include\Common\t3Timer.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Matri4x4.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Quaternion.cpp" />
+    <ClCompile Include="..\test\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Sophia\core\log\s3Log.h" />
-    <ClInclude Include="..\Sophia\core\log\s3LogFile.h" />
-    <ClInclude Include="..\Sophia\core\log\s3LogHTML.h" />
-    <ClInclude Include="..\sophia\core\s3Settings.h" />
-    <ClInclude Include="..\Sophia\Sophia.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\include\Common\t3Timer.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Math.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3MathSettings.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Matri4x4.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Quaternion.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector2.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector3.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector4.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Math.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Matrix4x4.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector2.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector3.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector4.inl" />
+    <ClInclude Include="..\test\test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

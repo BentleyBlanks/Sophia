@@ -1,8 +1,4 @@
 #include <Sophia.h>
-#include <core/s3Settings.h>
-#include <core/log/s3Log.h>
-#include <Common/t3Timer.h>
-#include <t3Math/core/t3Vector3.h>
 
 int main()
 {
