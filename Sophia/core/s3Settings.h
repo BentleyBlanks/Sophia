@@ -5,6 +5,7 @@
 // refer to http://www.ogre3d.org/docs/api/html/OgrePlatform_8h-source.html
 #if defined( __WIN32__ ) || defined( _WIN32 )
 #define S3_PLATFORM_WINDOWS
+#include <windows.h>
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
@@ -54,6 +55,10 @@
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
+
+//--! https://stackoverflow.com/questions/20446373/cin-ignorenumeric-limitsstreamsizemax-n-max-not-recognize-it?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+// After all the includes, before any code
+#undef max
 
 template<typename T>
 void S3_SAFE_DELETE(T*& a)

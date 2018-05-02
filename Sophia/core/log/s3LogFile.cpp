@@ -130,7 +130,7 @@ void s3LogFile::log(s3LogLevel logLevel, const char* prefix, const char* suffix,
         // messageBuffer:[hour]:[minute]:[second] message'
         vsprintf(contentBuffer, messageBuffer, args);
         // allocate true content array
-        int t = strlen(contentBuffer);
+        int t = (int)strlen(contentBuffer);
         content = new char[t + 1];
         strncpy(content, contentBuffer, t);
         content[t] = '\0';
@@ -239,7 +239,7 @@ void s3LogFile::log(s3LogLevel logLevel, const char* message, va_list args)
     va_end(temp_args);
 #endif
 
-    // µÍÐ§ Ð´µÄÀÃ¡­¡­
+    //--! bad implement
     // save to file
     if(ofile != NULL)
     {
@@ -259,7 +259,7 @@ void s3LogFile::log(s3LogLevel logLevel, const char* message, va_list args)
         // messageBuffer:[hour]:[minute]:[second] message'
         vsprintf(contentBuffer, messageBuffer, args);
         // allocate true content array
-        int t = strlen(contentBuffer);
+        int t = (int)strlen(contentBuffer);
         content = new char[t + 1];
         strncpy(content, contentBuffer, t);
         content[t] = '\0';

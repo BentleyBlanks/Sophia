@@ -13,6 +13,13 @@ int main()
     s3Log::success("Cost Time: %fs\n", timer.difference());
 
     a.print();
-    getchar();
+
+    s3App app;
+    if(!app.init())
+        return 0;
+
+    app.run();
+
+    //getchar();
     return 0;
 }

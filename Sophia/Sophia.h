@@ -6,3 +6,5 @@
 #include <core/log/s3Log.h>
 #include <core/log/s3LogFile.h>
 #include <core/log/s3LogHTML.h>
+
+#include <app/s3App.h>

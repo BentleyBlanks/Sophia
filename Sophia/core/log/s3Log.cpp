@@ -91,7 +91,7 @@ void s3Log::log(s3LogLevel logLevel, const char* message, va_list args)
         // messageBuffer:[hour]:[minute]:[second] message'
         vsprintf(contentBuffer, messageBuffer, args);
         // allocate true content array
-        int t = strlen(contentBuffer);
+        int t = (int)strlen(contentBuffer);
         content = new char[t + 1];
         strncpy(content, contentBuffer, t);
         content[t] = '\0';

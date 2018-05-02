@@ -95,6 +95,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\include;..\Sophia\thirdparty\t3DataStructures\include;..\Sophia</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>t3Mathd.vs2015.x86.lib;t3DataStructuresd.vs2015.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -107,6 +108,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\include;..\Sophia\thirdparty\t3DataStructures\include;..\Sophia</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>t3Mathd.vs2015.x64.lib;t3DataStructuresd.vs2015.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -121,6 +123,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\include;..\Sophia\thirdparty\t3DataStructures\include;..\Sophia</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -137,6 +140,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\include;..\Sophia\thirdparty\t3DataStructures\include;..\Sophia</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -146,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sophia\app\s3App.cpp" />
+    <ClCompile Include="..\Sophia\app\s3Window.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3Log.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3LogFile.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3LogHTML.cpp" />
@@ -155,6 +161,8 @@
     <ClCompile Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Sophia\app\s3App.h" />
+    <ClInclude Include="..\Sophia\app\s3Window.h" />
     <ClInclude Include="..\Sophia\core\log\s3Log.h" />
     <ClInclude Include="..\Sophia\core\log\s3LogFile.h" />
     <ClInclude Include="..\Sophia\core\log\s3LogHTML.h" />
