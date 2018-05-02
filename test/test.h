@@ -1,4 +1,4 @@
-#include <Sophia.h>
+﻿#include <Sophia.h>
 
 int main()
 {
@@ -20,6 +20,5 @@ int main()
 
     app.run();
 
-    //getchar();
     return 0;
 }

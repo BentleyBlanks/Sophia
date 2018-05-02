@@ -1,4 +1,4 @@
-#include <app/s3Window.h>
+﻿#include <app/s3Window.h>
 
 s3Window::s3Window(const char * caption, WNDPROC proc, const t3Vector2f& size, const t3Vector2f& pos)
 {

@@ -1,4 +1,4 @@
-#pragma once 
+ï»¿#pragma once 
 
 #include <core/s3Settings.h>
 
@@ -53,7 +53,7 @@ private:
 };
 
 
-// º¯Êýµ÷ÓÃerror
+// å‡½æ•°è°ƒç”¨error
 #define a3FunctionError(errorMessage) a3FunctionError_<int>(std::string(__FUNCTION__), errorMessage)
 
 #define a3FunctionErrorArg(argName, arg, errorMessage) a3FunctionError_(std::string(__FUNCTION__), argName, arg, errorMessage)
@@ -61,12 +61,12 @@ private:
 template<class T>
 void a3FunctionError_(std::string functionName, std::string argName, T arg, std::string errorMessage)
 {
-    std::cout << "Error: " << "happened when excute: " << functionName << "() with parameter£º" << argName << " = " << arg << "and error message: " << errorMessage
+    std::cout << "Error: " << "happened when excute: " << functionName << "() with parameterï¼š" << argName << " = " << arg << "and error message: " << errorMessage
         << std::endl;
 }
 
 template<class T>
 void a3FunctionError_(std::string functionName, std::string errorMessage)
 {
-    std::cout << "Error: " << "happened when excute: " << functionName << "() with error message£º" << errorMessage << std::endl;
+    std::cout << "Error: " << "happened when excute: " << functionName << "() with error messageï¼š" << errorMessage << std::endl;
 }

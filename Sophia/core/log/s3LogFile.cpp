@@ -1,4 +1,4 @@
-#include <core/log/s3LogFile.h>
+ï»¿#include <core/log/s3LogFile.h>
 #include <stddef.h>
 #include <assert.h>
 #include <float.h>
@@ -111,7 +111,7 @@ void s3LogFile::log(s3LogLevel logLevel, const char* prefix, const char* suffix,
     va_end(temp_args);
 #endif
 
-    // µÍÐ§ Ð´µÄÀÃ¡­¡­
+    // ä½Žæ•ˆ å†™çš„çƒ‚â€¦â€¦
     // save to file
     if(ofile != NULL)
     {

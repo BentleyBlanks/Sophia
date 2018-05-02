@@ -1,4 +1,4 @@
-#include <core/log/s3Log.h>
+﻿#include <core/log/s3Log.h>
 #include <stddef.h>
 #include <assert.h>
 #include <float.h>

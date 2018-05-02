@@ -1,4 +1,4 @@
-#include <core/s3Settings.h>
+﻿#include <core/s3Settings.h>
 #include <stddef.h>
 #include <assert.h>
 #include <float.h>
@@ -19,7 +19,7 @@ std::string s3Version::get()
 
 void s3Version::print()
 {
-    std::cout << "Atmos�汾:" << type << " " << major << "." << minor << "." << revision << std::endl;
+    std::cout << "Atmos版本:" << type << " " << major << "." << minor << "." << revision << std::endl;
 }
 
 // Version Changes Level

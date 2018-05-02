@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <t3Math/core/t3Vector2.h>
 #include <core/s3Settings.h>
 

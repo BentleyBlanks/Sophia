@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #pragma once
 
 // ------------------------Platforms------------------------
@@ -129,7 +129,7 @@ void S3_SAFE_DELETE_1DARRAY(T*& pointer)
 #define S3_ENABLE_DEPRECATION
 #endif
 
-// ∂œ—‘
+// Êñ≠Ë®Ä
 #ifdef NDEBUG
 #define s3Assert(expr) ((void)0)
 #else
@@ -191,5 +191,5 @@ struct s3Version
     std::string type;   // build type
 };
 
-// µ±«∞∞Ê±æ∫≈
+// ÂΩìÂâçÁâàÊú¨Âè∑
 extern s3Version atmosVersion;

@@ -1,11 +1,11 @@
-#include <app/s3App.h>
+﻿#include <app/s3App.h>
 #include <app/s3Window.h>
 #include <core/s3Settings.h>
 
 // testing
 #include <core/log/s3Log.h>
 
-LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
     {
@@ -42,7 +42,7 @@ s3App::~s3App()
 
 bool s3App::init()
 {
-    window = new s3Window("Sophia", WindowProc, t3Vector2f(1280, 720), t3Vector2f(100, 100));
+    window = new s3Window("Sophia", windowProc, t3Vector2f(1280, 720), t3Vector2f(100, 100));
     if(!window)	
         return false;
 
