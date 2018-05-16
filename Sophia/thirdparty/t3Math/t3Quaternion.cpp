@@ -1,6 +1,6 @@
-#include <t3Math/core/t3Quaternion.h>
-#include <t3Math/core/t3Matri4x4.h>
-#include <t3Math/core/t3Math.h>
+#include <t3Quaternion.h>
+#include <t3Matri4x4.h>
+#include <t3Math.h>
 
 void t3Quaternion::set(const t3Matrix4x4& matrix)
 {

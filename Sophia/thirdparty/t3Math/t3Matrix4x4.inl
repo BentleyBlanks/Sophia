@@ -1,7 +1,7 @@
 #ifndef T3_MATRIX4X4_INL
 #define T3_MATRIX4X4_INL
 
-#include <t3Math/core/t3Matri4x4.h>
+#include <t3Matri4x4.h>
 #include <iostream>
 #include <iomanip>
 
@@ -341,7 +341,7 @@ inline void t3Matrix4x4::preMultTranslate(const t3Vector3f& v)
 /// and multiplying this Matrix by it in a post-multiplication manner (M mult T)
 inline void t3Matrix4x4::postMultTranslate(const t3Vector3f& v)
 {
-    for(std::size_t i = 0; i < 3; ++i)
+    for(int i = 0; i < 3; ++i)
     {
         float tmp = v.getPtr()[i];
         if(tmp == 0)

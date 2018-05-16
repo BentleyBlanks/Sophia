@@ -1,8 +1,8 @@
 #ifndef T3_QUATERNION_H
 #define T3_QUATERNION_H
 
-#include <t3Math/core/t3Vector3.h>
-#include <t3Math/core/t3Vector4.h>
+#include <t3Vector3.h>
+#include <t3Vector4.h>
 #include <cmath>
 
 #if (_MSC_VER)       

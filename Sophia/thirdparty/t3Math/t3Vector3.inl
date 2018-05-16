@@ -1,7 +1,7 @@
 #ifndef T3_VECTOR3_INL
 #define T3_VECTOR3_INL
 
-#include <t3Math/core/t3Vector3.h>
+#include <t3Vector3.h>
 
 
 // -----------------------Implementation-----------------------

@@ -1,7 +1,7 @@
 #ifndef T3_MATH_INL
 #define T3_MATH_INL
 
-#include <t3Math/core/t3Math.h>
+#include <t3Math.h>
 
 #include <assert.h> 
 #include <math.h>

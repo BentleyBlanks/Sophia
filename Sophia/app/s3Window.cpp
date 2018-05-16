@@ -28,10 +28,10 @@ s3Window::s3Window(const char * caption, WNDPROC proc, const t3Vector2f& size, c
                             wc.lpszClassName,
                             caption,
                             style,
-                            (int) position.x,
-                            (int) position.y,
-                            (int) size.x,
-                            (int) size.y,
+                            (int32) position.x,
+                            (int32) position.y,
+                            (int32) size.x,
+                            (int32) size.y,
                             NULL,
                             NULL,
                             NULL,
@@ -54,7 +54,7 @@ t3Vector2f s3Window::getCursorPosition()
     GetCursorPos(&p);
     ScreenToClient(hWnd, &p);
 
-    return t3Vector2f(static_cast< float >(p.x), static_cast< float >(p.y));
+    return t3Vector2f(static_cast< float32 >(p.x), static_cast< float32 >(p.y));
 }
 
 t3Vector2f s3Window::getWindowSize()
@@ -62,7 +62,7 @@ t3Vector2f s3Window::getWindowSize()
     return size;
 }
 
-void s3Window::resize(int width, int height)
+void s3Window::resize(int32 width, int32 height)
 {
 }
 
@@ -71,10 +71,10 @@ t3Vector2f s3Window::getWindowPosition()
     return position;
 }
 
-void s3Window::setWindowPosition(int x, int y)
+void s3Window::setWindowPosition(int32 x, int32 y)
 {
-    position.x = (float) x;
-    position.y = (float) y;
+    position.x = (float32) x;
+    position.y = (float32) y;
 
     adjustWindow();
 }

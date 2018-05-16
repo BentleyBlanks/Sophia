@@ -1,9 +1,9 @@
 ﻿#ifndef T3_MATRIX4X4_H
 #define T3_MATRIX4X4_H
 
-#include <t3Math/core/t3Vector3.h>
-#include <t3Math/core/t3Vector4.h>
-#include <t3Math/core/t3Quaternion.h>
+#include <t3Vector3.h>
+#include <t3Vector4.h>
+#include <t3Quaternion.h>
 #include <cmath>
 
 class t3Matrix4x4
@@ -277,13 +277,13 @@ public:
     /// \brief Write data with `matrix(row,col)=number`
     float& operator()(std::size_t row, std::size_t col)
     {
-        return _mat[row][col];
+        return _mat[(int) row][(int)col];
     }
 
     /// \brief Read data with `matrix(row, col)`
     float operator()(std::size_t row, std::size_t col) const
     {
-        return _mat[row][col];
+        return _mat[(int) row][(int) col];
     }
 
     /// \brief returns a copy of row i
@@ -634,6 +634,6 @@ public:
 
 };
 
-#include <t3Math/core/t3Matrix4x4.inl>
+#include <t3Matrix4x4.inl>
 
 #endif

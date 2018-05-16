@@ -15,7 +15,7 @@ README~
 #*.sln
 #*.vcxproj
 #*.filters
-
+*.cache
 *.user
 *.psess
 

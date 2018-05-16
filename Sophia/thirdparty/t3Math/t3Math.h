@@ -1,7 +1,7 @@
 #ifndef T3_MATH_H
 #define T3_MATH_H
 
-#include <t3Math/core/t3MathSettings.h>
+#include <t3MathSettings.h>
 
 // --!http://anarchy.cn/manual/11/VisionAPI/classhkvMath.html 
 class t3Math
@@ -295,6 +295,6 @@ public:
 };
 
 
-#include <t3Math/core/t3Math.inl>
+#include <t3Math.inl>
 
 #endif

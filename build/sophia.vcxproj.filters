@@ -39,19 +39,28 @@
     <ClCompile Include="..\Sophia\core\log\s3Log.cpp">
       <Filter>Sophia\core\log</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Matri4x4.cpp">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Quaternion.cpp">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\include\Common\t3Timer.cpp">
-      <Filter>Sophia\thirdparty\t3DataStructures\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sophia\app\s3Window.cpp">
       <Filter>Sophia\app</Filter>
     </ClCompile>
     <ClCompile Include="..\Sophia\app\s3App.cpp">
+      <Filter>Sophia\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\app\s3Renderer.cpp">
+      <Filter>Sophia\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp">
+      <Filter>Sophia\thirdparty\t3DataStructures\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matri4x4.cpp">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3Callback.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\app\s3CallbackManager.cpp">
       <Filter>Sophia\app</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,51 +80,60 @@
     <ClInclude Include="..\Sophia\Sophia.h">
       <Filter>Sophia</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Math.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3MathSettings.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Matri4x4.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Quaternion.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector2.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector3.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector4.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\include\Common\t3Timer.h">
-      <Filter>Sophia\thirdparty\t3DataStructures\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sophia\app\s3Window.h">
       <Filter>Sophia\app</Filter>
     </ClInclude>
     <ClInclude Include="..\Sophia\app\s3App.h">
       <Filter>Sophia\app</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sophia\app\s3Renderer.h">
+      <Filter>Sophia\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.h">
+      <Filter>Sophia\thirdparty\t3DataStructures\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3MathSettings.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Matri4x4.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Quaternion.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector2.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector3.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector4.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Math.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3Callback.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\app\s3CallbackManager.h">
+      <Filter>Sophia\app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Math.inl">
+    <None Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.inl">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </None>
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Matrix4x4.inl">
+    <None Include="..\Sophia\thirdparty\t3Math\t3Vector2.inl">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </None>
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector2.inl">
+    <None Include="..\Sophia\thirdparty\t3Math\t3Vector3.inl">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </None>
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector3.inl">
+    <None Include="..\Sophia\thirdparty\t3Math\t3Vector4.inl">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </None>
-    <None Include="..\Sophia\thirdparty\t3Math\include\t3Math\core\t3Vector4.inl">
+    <None Include="..\Sophia\thirdparty\t3Math\t3Math.inl">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </None>
   </ItemGroup>

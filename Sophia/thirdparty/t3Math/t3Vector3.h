@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include <t3Math/core/t3Math.h>
+#include <t3Math.h>
 
 template <class Type>
 class t3Vector3
@@ -191,7 +191,7 @@ T3_FORCE_INLINE t3Vector3<Type> operator/(float scalar, const t3Vector3<Type>& v
     return t3Vector3<Type>(scalar / vector.x, scalar / vector.y, scalar / vector.z);
 }
 
-#include <t3Math/core/t3Vector3.inl>
+#include <t3Vector3.inl>
 
 // 特化
 typedef t3Vector3<double> t3Vector3d;

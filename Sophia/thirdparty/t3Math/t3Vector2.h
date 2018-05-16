@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <t3Math/core/t3MathSettings.h>
+#include <t3MathSettings.h>
 
 template <class Type>
 class t3Vector2
@@ -88,7 +88,7 @@ public:
 
 };
 
-#include <t3Math/core/t3Vector2.inl>
+#include <t3Vector2.inl>
 
 // 特化
 typedef t3Vector2<double> t3Vector2d;

@@ -1,7 +1,7 @@
 #ifndef T3_VECTOR2_INL
 #define T3_VECTOR2_INL
 
-#include <t3Math/core/t3Vector2.h>
+#include <t3Vector2.h>
 #include <string>
 
 template <class Type>

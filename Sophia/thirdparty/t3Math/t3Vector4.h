@@ -1,7 +1,7 @@
 ﻿#ifndef T3_VECTOR4_H
 #define T3_VECTOR4_H
 
-#include <t3Math/core/t3MathSettings.h>
+#include <t3MathSettings.h>
 #include <string>
 
 template <class Type>
@@ -120,7 +120,7 @@ inline t3Vector4<Type> operator*(float f, const t3Vector4<Type>& vec);
 template<typename Type>
 inline t3Vector4<Type> operator/(float f, const t3Vector4<Type>& vec);
 
-#include <t3Math/core/t3Vector4.inl>
+#include <t3Vector4.inl>
 
 // 特化
 typedef t3Vector4<double> t3Vector4d;

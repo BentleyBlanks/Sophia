@@ -1,7 +1,7 @@
 #ifndef T3_VECTOR4_INL
 #define T3_VECTOR4_INL
 
-#include <t3Math/core/t3Vector4.h>
+#include <t3Vector4.h>
 
 template<typename Type>
 inline t3Vector4<Type>::t3Vector4() : x(0), y(0), z(0), w(0) {}

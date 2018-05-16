@@ -1,5 +1,7 @@
 ﻿#include <app/s3App.h>
+#include <app/s3Renderer.h>
 #include <app/s3Window.h>
+#include <app/s3CallbackManager.h>
 #include <core/s3Settings.h>
 
 // testing
@@ -42,9 +44,19 @@ s3App::~s3App()
 
 bool s3App::init()
 {
+    s3CallbackInit();
+
     window = new s3Window("Sophia", windowProc, t3Vector2f(1280, 720), t3Vector2f(100, 100));
     if(!window)	
         return false;
+
+    // Window correlation
+    RECT clientArea;
+    GetClientRect(window->getHandle(), &clientArea);
+    int width = clientArea.right - clientArea.left;
+    int height = clientArea.bottom - clientArea.top;
+
+    if(!s3Renderer::get().init(window->getHandle(), width, height))	return false;
 
     return true;
 }
@@ -52,11 +64,21 @@ bool s3App::init()
 void s3App::shutdown()
 {
     S3_SAFE_DELETE(window);
+    s3Renderer::get().shutdown();
+
+    s3CallbackDeinit();
 }
 
 void s3App::render()
 {
-    s3Log::success("Hi Sophia\n");
+    s3CallbackManager::callBack.onUpdate.trigger();
+
+    s3Renderer::get().clear(t3Vector4f(75.f, 75.f, 75.f, 75.f));
+
+    s3CallbackManager::callBack.onBeginRender.trigger();
+    s3CallbackManager::callBack.onEndRender.trigger();
+
+    s3Renderer::get().present(0, 0);
 }
 
 void s3App::run()

@@ -1,5 +1,24 @@
 ﻿#pragma once
-#pragma once
+
+// ------------------------Header------------------------
+#include <iostream>
+#include <sstream>
+// std's lib
+#include <string>
+#include <vector>
+#include <stdint.h>
+#include <stdlib.h>
+// min&max function
+#include <algorithm>
+#include <assert.h>
+#include <math.h>
+// DirectX 
+#include <d3d11.h>
+#include <d3dCompiler.h>
+
+//--! https://stackoverflow.com/questions/20446373/cin-ignorenumeric-limitsstreamsizemax-n-max-not-recognize-it?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+// After all the includes, before any code
+#undef max
 
 // ------------------------Platforms------------------------
 // refer to http://www.ogre3d.org/docs/api/html/OgrePlatform_8h-source.html
@@ -44,22 +63,54 @@
 #define S3_PLATFORM_LINUX
 #endif
 
-#include <iostream>
-#include <sstream>
-// std's lib
-#include <string>
-#include <vector>
-#include <stdint.h>
-#include <stdlib.h>
-// min&max function
-#include <algorithm>
-#include <assert.h>
-#include <math.h>
 
-//--! https://stackoverflow.com/questions/20446373/cin-ignorenumeric-limitsstreamsizemax-n-max-not-recognize-it?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-// After all the includes, before any code
-#undef max
+// ------------------------Type Renaming------------------------
+#ifndef int64
+#define int64	signed long long
+#endif
 
+#ifndef uint64
+#define uint64	unsigned long long
+#endif
+
+#ifndef int32
+#define int32	int
+#endif
+
+#ifndef uint32
+#define uint32	unsigned int
+#endif
+
+#ifndef int16
+#define int16	signed short
+#endif
+
+#ifndef uint16
+#define uint16	unsigned short
+#endif
+
+#ifndef int8
+#define int8	signed char
+#endif
+
+#ifndef uint8
+#define uint8	unsigned char
+#endif
+
+#ifndef float32
+#define float32	float
+#endif
+
+#ifndef float64
+#define float64	double
+#endif
+
+#ifndef ushort
+#define ushort	unsigned short int
+#endif
+
+
+// ------------------------Macro Function------------------------
 template<typename T>
 void S3_SAFE_DELETE(T*& a)
 {
@@ -80,56 +131,21 @@ void S3_SAFE_DELETE_1DARRAY(T*& pointer)
     }
 }
 
+template<typename T>
+void S3_SAFE_RELEASE(T*& x)
+{
+    if(x)
+    {
+        x->Release(); 
+        x = nullptr;
+    }
+}
+
 // ------------------------Assert------------------------
 #ifndef S3ASSERT
 #define S3ASSERT(exp, errorMessage) assert(exp && errorMessage)
 #endif
 
-// ------------------------Deprecated Macro------------------------
-#ifdef S3_IGNORE_DEPRECATION_GLOBALLY
-
-#define S3_DEPRECATED
-#define S3_DEPRECATED
-#define S3_DISABLE_DEPRECATION
-#define S3_ENABLE_DEPRECATION
-
-#endif
-
-// GCC
-#if defined(__GCC__) || defined(__SNC__) || defined(__GNUC__)
-#define S3_DEPRECATED __attribute__ ((deprecated))
-
-///<MSVC 7.0
-#elif defined(_MSC_VER) && (_MSC_VER >= 1300)
-#define  S3_DEPRECATED __declspec(deprecated)
-
-#else
-///< CWCC doesn't seem to have such a 'marker' facility.
-#define S3_DEPRECATED 
-#endif
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1300) ///<MSVC 7.0
-// On Windows this macro will mark code as deprecated.
-#define S3_DEPRECATED __declspec(deprecated)
-
-// This macro will temporarily disable the deprecated warning, allowing you to use deprecated code without getting a warning.
-#define S3_DISABLE_DEPRECATION \
-    __pragma (warning(push)) \
-    __pragma (warning(disable : 4996))
-
-// This macro will enable the deprecated warning again, this should be used at the end of a code block which had this warning disabled.
-#define S3_ENABLE_DEPRECATION \
-    __pragma (warning(pop))
-#else
-// On Non-Windows platforms this macro is ignored.
-#define S3_DEPRECATED
-// On Non-Windows platforms this macro is ignored.
-#define S3_DISABLE_DEPRECATION
-// On Non-Windows platforms this macro is ignored.
-#define S3_ENABLE_DEPRECATION
-#endif
-
-// 断言
 #ifdef NDEBUG
 #define s3Assert(expr) ((void)0)
 #else
@@ -138,6 +154,7 @@ void S3_SAFE_DELETE_1DARRAY(T*& pointer)
         printf("Assertion \"%s\" failed in %s, line %d", \
                #expr, __FILE__, __LINE__))
 #endif // NDEBUG
+
 
 // ------------------------Math Constants------------------------
 #ifndef PI
@@ -149,11 +166,6 @@ void S3_SAFE_DELETE_1DARRAY(T*& pointer)
 
 #define S3_EXIT(value) std::exit(value);
 
-#ifndef S3_INFINITY
-#define S3_INFINITY FLT_MAX
-#endif
-
-// math
 #ifndef S3_DEGREE_TO_RADIAN
 #define S3_DEGREE_TO_RADIAN (PI/180.0f)
 #endif
@@ -164,13 +176,45 @@ void S3_SAFE_DELETE_1DARRAY(T*& pointer)
 
 // Correct the computation of float error 
 #define S3_EPSILON 1e-4f
-#define S3_EPSILON_INT 0
 #define S3_EPSILON_FLOAT 1e-6f
 #define S3_EPSILON_DOUBLE 1e-8
-// for shadow ray testing
-#define S3_EPSILON_SHADOW 1e-3f
-//for roundoff errors
-#define S3_EPSILON_DELTA 1e-3f
+
+// Maximim Constants
+#ifndef S3_MAX_INT8
+#define S3_MAX_INT8	((int8)		0x7f)
+#endif
+
+#ifndef S3_MAX_INT16
+#define S3_MAX_INT16	((int16)	0x7fff)
+#endif
+
+#ifndef S3_MAX_INT32
+#define S3_MAX_INT32	((int32)	0x7fffffff)
+#endif
+
+#ifndef S3_MAX_INT64
+#define S3_MAX_INT64	((int64)	0x7fffffffffffffff)
+#endif
+
+#ifndef S3_MAX_UINT8
+#define S3_MAX_UINT8	((uint8)	0xff)
+#endif
+
+#ifndef S3_MAX_UINT16
+#define S3_MAX_UINT16	((uint16)	0xffff)
+#endif
+
+#ifndef S3_MAX_UINT32
+#define S3_MAX_UINT32	((uint32)	0xffffffff)
+#endif
+
+#ifndef S3_MAX_UINT64
+#define S3_MAX_UINT64	((uint64)	0xffffffffffffffff)
+#endif
+
+#ifndef S3_INFINITY
+#define S3_INFINITY FLT_MAX
+#endif
 
 // ------------------------Version------------------------
 // Sophia's Verision info

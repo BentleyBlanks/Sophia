@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <t3Math/core/t3Vector2.h>
+#include <t3Vector2.h>
 #include <core/s3Settings.h>
 
 class s3Window
@@ -10,10 +10,10 @@ public:
 
     t3Vector2f getCursorPosition();
     t3Vector2f getWindowSize();
-    void resize(int width, int height);
+    void resize(int32 width, int32 height);
 
     t3Vector2f getWindowPosition();
-    void setWindowPosition(int x, int y);
+    void setWindowPosition(int32 x, int32 y);
 
     HWND getHandle();
 

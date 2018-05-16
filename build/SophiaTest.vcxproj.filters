@@ -11,7 +11,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\test\test.h">
+    <ClInclude Include="..\test\minecraft.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>
   </ItemGroup>

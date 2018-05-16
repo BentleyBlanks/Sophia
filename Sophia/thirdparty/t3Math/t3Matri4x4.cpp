@@ -1,4 +1,4 @@
-﻿#include <t3Math/core/t3Matri4x4.h>
+﻿#include <t3Matri4x4.h>
 #include <limits>
 #include <stdlib.h>
 
@@ -962,15 +962,15 @@ typedef struct
 
 enum QuatPart { X, Y, Z, W };
 
-#define SQRTHALF (0.7071067811865475244)
-static t3Quaternion qxtoz(0, SQRTHALF, 0, SQRTHALF);
-static t3Quaternion qytoz(SQRTHALF, 0, 0, SQRTHALF);
-static t3Quaternion qppmm(0.5, 0.5, -0.5, -0.5);
-static t3Quaternion qpppp(0.5, 0.5, 0.5, 0.5);
-static t3Quaternion qmpmm(-0.5, 0.5, -0.5, -0.5);
-static t3Quaternion qpppm(0.5, 0.5, 0.5, -0.5);
-static t3Quaternion q0001(0.0, 0.0, 0.0, 1.0);
-static t3Quaternion q1000(1.0, 0.0, 0.0, 0.0);
+#define SQRTHALF (0.7071067811865475244f)
+static t3Quaternion qxtoz(.0f, SQRTHALF, .0f, SQRTHALF);
+static t3Quaternion qytoz(SQRTHALF, .0f, .0f, SQRTHALF);
+static t3Quaternion qppmm(0.5f, 0.5f, -0.5f, -0.5f);
+static t3Quaternion qpppp(0.5f, 0.5f, 0.5f, 0.5f);
+static t3Quaternion qmpmm(-0.5f, 0.5f, -0.5f, -0.5f);
+static t3Quaternion qpppm(0.5f, 0.5f, 0.5f, -0.5f);
+static t3Quaternion q0001(0.0f, 0.0f, 0.0f, 1.0f);
+static t3Quaternion q1000(1.0f, 0.0f, 0.0f, 0.0f);
 
 /** Copy nxn matrix A to C using "gets" for assignment **/
 #define matrixCopy(C, gets, A, n) {int i, j; for (i=0;i<n;i++) for (j=0;j<n;j++)\
