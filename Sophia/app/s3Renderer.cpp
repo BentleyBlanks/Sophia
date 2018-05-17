@@ -244,3 +244,18 @@ ID3D11DeviceContext* s3Renderer::getDeviceContext()
 {
     return deviceContext;
 }
+
+IDXGISwapChain * s3Renderer::getSwapChain()
+{
+    return swapChain;
+}
+
+ID3D11RenderTargetView * s3Renderer::getRenderTargetView()
+{
+    return renderTargetView;
+}
+
+ID3D11DepthStencilView * s3Renderer::getDepthStencilView()
+{
+    return depthStencilView;
+}

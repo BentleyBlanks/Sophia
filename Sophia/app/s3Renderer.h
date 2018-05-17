@@ -17,6 +17,9 @@ public:
     // DirectX
     ID3D11Device* getDevice();
     ID3D11DeviceContext* getDeviceContext();
+    IDXGISwapChain* getSwapChain();
+    ID3D11RenderTargetView* getRenderTargetView();
+    ID3D11DepthStencilView* getDepthStencilView();
 private:
     s3Renderer();
 
@@ -24,6 +27,7 @@ private:
     ID3D11Device* device;
     ID3D11DeviceContext* deviceContext;
     IDXGISwapChain* swapChain;
+
     ID3D11RenderTargetView* renderTargetView;
     ID3D11DepthStencilView* depthStencilView;
 };

@@ -25,6 +25,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_SIZE:
     {
+        s3Renderer::get().resize((int) LOWORD(lParam), (int) HIWORD(lParam));
         return 0;
     }
     }

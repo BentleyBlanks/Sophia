@@ -25,6 +25,9 @@
     <Filter Include="Sophia\thirdparty\t3Math">
       <UniqueIdentifier>{61d307a8-400f-4769-b100-d96ab075779f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\shaders">
+      <UniqueIdentifier>{8ad97765-faa6-472a-a909-75a9a60f055d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -51,9 +54,6 @@
     <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp">
       <Filter>Sophia\thirdparty\t3DataStructures\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matri4x4.cpp">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </ClCompile>
@@ -61,6 +61,12 @@
       <Filter>Sophia\core</Filter>
     </ClCompile>
     <ClCompile Include="..\Sophia\app\s3CallbackManager.cpp">
+      <Filter>Sophia\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.cpp">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\app\s3Utils.cpp">
       <Filter>Sophia\app</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,9 +101,6 @@
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3MathSettings.h">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Matri4x4.h">
-      <Filter>Sophia\thirdparty\t3Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Quaternion.h">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </ClInclude>
@@ -119,6 +122,12 @@
     <ClInclude Include="..\Sophia\app\s3CallbackManager.h">
       <Filter>Sophia\app</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.h">
+      <Filter>Sophia\thirdparty\t3Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\app\s3Utils.h">
+      <Filter>Sophia\app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.inl">
@@ -136,5 +145,13 @@
     <None Include="..\Sophia\thirdparty\t3Math\t3Math.inl">
       <Filter>Sophia\thirdparty\t3Math</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Sophia\shaders\pixel.hlsl">
+      <Filter>Sophia\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\vertex.hlsl">
+      <Filter>Sophia\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

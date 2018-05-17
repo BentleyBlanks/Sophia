@@ -1,7 +1,7 @@
 #ifndef T3_MATRIX4X4_INL
 #define T3_MATRIX4X4_INL
 
-#include <t3Matri4x4.h>
+#include <t3Matrix4x4.h>
 #include <iostream>
 #include <iomanip>
 

@@ -1,4 +1,4 @@
-﻿#include <t3Matri4x4.h>
+﻿#include <t3Matrix4x4.h>
 #include <limits>
 #include <stdlib.h>
 

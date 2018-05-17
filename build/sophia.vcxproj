@@ -173,6 +173,7 @@
     <ClCompile Include="..\Sophia\app\s3App.cpp" />
     <ClCompile Include="..\Sophia\app\s3CallbackManager.cpp" />
     <ClCompile Include="..\Sophia\app\s3Renderer.cpp" />
+    <ClCompile Include="..\Sophia\app\s3Utils.cpp" />
     <ClCompile Include="..\Sophia\app\s3Window.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3Log.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3LogFile.cpp" />
@@ -180,13 +181,14 @@
     <ClCompile Include="..\Sophia\core\s3Callback.cpp" />
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matri4x4.cpp" />
+    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sophia\app\s3App.h" />
     <ClInclude Include="..\Sophia\app\s3CallbackManager.h" />
     <ClInclude Include="..\Sophia\app\s3Renderer.h" />
+    <ClInclude Include="..\Sophia\app\s3Utils.h" />
     <ClInclude Include="..\Sophia\app\s3Window.h" />
     <ClInclude Include="..\Sophia\core\log\s3Log.h" />
     <ClInclude Include="..\Sophia\core\log\s3LogFile.h" />
@@ -197,7 +199,7 @@
     <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Math.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3MathSettings.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Matri4x4.h" />
+    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Quaternion.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector2.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector3.h" />
@@ -209,6 +211,20 @@
     <None Include="..\Sophia\thirdparty\t3Math\t3Vector2.inl" />
     <None Include="..\Sophia\thirdparty\t3Math\t3Vector3.inl" />
     <None Include="..\Sophia\thirdparty\t3Math\t3Vector4.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Sophia\shaders\pixel.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\vertex.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
