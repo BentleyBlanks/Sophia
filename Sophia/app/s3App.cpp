@@ -74,7 +74,7 @@ void s3App::render()
 {
     s3CallbackManager::callBack.onUpdate.trigger();
 
-    s3Renderer::get().clear(t3Vector4f(75.f, 75.f, 75.f, 75.f));
+    s3Renderer::get().clear(t3Vector4f(.75f, .75f, .75f, 1.0f));
 
     s3CallbackManager::callBack.onBeginRender.trigger();
     s3CallbackManager::callBack.onEndRender.trigger();
@@ -101,4 +101,9 @@ void s3App::run()
 
         render();
     }
+}
+
+s3Window * s3App::getWindow()
+{
+    return window;
 }

@@ -11,6 +11,8 @@ public:
     bool init();
     void run();
 
+    s3Window* getWindow();
+
 private:
     void shutdown();
     void render();

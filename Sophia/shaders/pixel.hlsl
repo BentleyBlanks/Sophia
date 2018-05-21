@@ -5,5 +5,5 @@ struct input
 
 float4 main(input i) : SV_TARGET
 {
-    return float4(1, 0, 0, 1);
+    return i.color;
 }

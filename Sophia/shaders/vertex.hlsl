@@ -29,7 +29,8 @@ output main(input i)
 {
     output o;
 
-    o.position = float4(1, 0, 0, 1);
+    matrix mvp = mul(projectionMatrix, mul(viewMatrix, worldMatrix));
+    o.position = mul(mvp, float4(i.position, 1.0f));
     o.color = float4(i.color, 1.0f);
 
     return o;
