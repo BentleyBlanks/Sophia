@@ -43,11 +43,11 @@ s3App::~s3App()
     S3_SAFE_DELETE(window);
 }
 
-bool s3App::init()
+bool s3App::init(const t3Vector2f& size, const t3Vector2f& pos)
 {
     s3CallbackInit();
 
-    window = new s3Window("Sophia", windowProc, t3Vector2f(1280, 720), t3Vector2f(100, 100));
+    window = new s3Window("Sophia", windowProc, size, pos);
     if(!window)	
         return false;
 

@@ -10,7 +10,7 @@ cbuffer frame : register(b1)
 
 cbuffer object : register(b2)
 {
-    matrix worldMatrix;
+    matrix modelMatrix;
 }
 
 struct input
@@ -29,8 +29,14 @@ output main(input i)
 {
     output o;
 
-    matrix mvp = mul(projectionMatrix, mul(viewMatrix, worldMatrix));
-    o.position = mul(mvp, float4(i.position, 1.0f));
+    // column-major matrix(transpose of the matrix on CPU)
+    matrix mvp = mul(mul(modelMatrix, viewMatrix), projectionMatrix);
+    o.position = mul(float4(i.position, 1.0f), mvp);
+
+    // row-major matrix
+    //matrix mvp = mul(projectionMatrix, mul(viewMatrix, modelMatrix));
+    //o.position = mul(mvp, float4(i.position, 1.0f));
+
     o.color = float4(i.color, 1.0f);
 
     return o;

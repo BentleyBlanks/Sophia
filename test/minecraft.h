@@ -1,6 +1,7 @@
 ﻿#include <Sophia.h>
 #include <core/log/s3Log.h>
 #include <t3Vector3.h>
+#include <t3Vector2.h>
 #include <t3Matrix4x4.h>
 #include <t3Math.h>
 
@@ -56,8 +57,9 @@ ID3D11InputLayout* inputLayout = nullptr;
 ID3D11DepthStencilState* depthStencilState = nullptr;
 ID3D11RasterizerState* rasterizerState = nullptr;
 
-int width = 0, height = 0;
-t3Matrix4x4 projectionMatrix, cameraToWorld, worldToCamera, objectToWorld, worldToObject;
+float32 width = 0, height = 0;
+t3Matrix4x4 projectionMatrix, worldToCamera, objectToWorld, worldToObject;
+s3Camera* camera = nullptr;
 
 class s3Minecraft : public s3CallbackHandle
 {
@@ -65,15 +67,7 @@ public:
     void onHandle(const s3CallbackUserData* userData)
     {
         // update
-        t3Vector3f origin(0, 0, -10), lookAt(0, 0, 0), cameraUp(0, 1, 0);
-        t3Vector3f direction = (lookAt - origin).getNormalized();;
-        t3Vector3f right = cameraUp.getCrossed(direction).getNormalized();
-        t3Vector3f up = direction.getCrossed(right).getNormalized();;
-        cameraToWorld.set(right.x, up.x, direction.x, origin.x,
-                          right.y, up.y, direction.y, origin.y,
-                          right.z, up.z, direction.z, origin.z,
-                          0, 0, 0, 1);
-        worldToCamera = cameraToWorld.getInverse();
+        worldToCamera = camera->getWorldToCamera();
         deviceContext->UpdateSubresource(constantBuffers[FRAME], 0, nullptr, &worldToCamera, 0, 0);
 
         worldToObject.makeIdentityMatrix();
@@ -225,32 +219,7 @@ void createConstantBuffers()
     }
 
     // bind the perspective matrix
-    float aspect = width / height;
-    float nearZ = 0.1f, farZ = 100.0f;
-    float halfFov = t3Math::Deg2Rad(45.0f) / 2.0f;
-    float tanHalfFov = t3Math::sinRad(halfFov) / t3Math::cosRad(halfFov);
-    float rangeZ = farZ - nearZ;
-    float A = farZ / rangeZ, B = -nearZ * farZ / rangeZ;
-
-    projectionMatrix._mat[0][0] = 1.0f / (aspect * tanHalfFov);
-    projectionMatrix._mat[0][1] = 0.0f;
-    projectionMatrix._mat[0][2] = 0.0f;
-    projectionMatrix._mat[0][3] = 0.0f;
-
-    projectionMatrix._mat[1][0] = 0.0f;
-    projectionMatrix._mat[1][1] = 1.0f / tanHalfFov;
-    projectionMatrix._mat[1][2] = 0.0f;
-    projectionMatrix._mat[1][3] = 0.0f;
-
-    projectionMatrix._mat[2][0] = 0.0f;
-    projectionMatrix._mat[2][1] = 0.0f;
-    projectionMatrix._mat[2][2] = A;
-    projectionMatrix._mat[2][3] = 1.0f;
-
-    projectionMatrix._mat[3][0] = 0.0f;
-    projectionMatrix._mat[3][1] = 0.0f;
-    projectionMatrix._mat[3][2] = B;
-    projectionMatrix._mat[3][3] = 0.0f;
+    projectionMatrix = camera->getProjectionMatrix();
 
     deviceContext->UpdateSubresource(constantBuffers[APPLIATION], 0, nullptr, &projectionMatrix, 0, 0);
 }
@@ -367,7 +336,7 @@ int main()
     s3CallbackManager::callBack.onBeginRender += mc;
 
     s3App app;
-    if(!app.init())
+    if(!app.init(t3Vector2f(1280, 720), t3Vector2f(100, 100)))
         return 0;
 
     s3Window* window = app.getWindow();
@@ -379,6 +348,10 @@ int main()
     deviceContext = renderer.getDeviceContext();
     renderTargetView = renderer.getRenderTargetView();
     depthStencilView = renderer.getDepthStencilView();
+
+    camera = new s3Camera(t3Vector3f(0, 0, -10), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
+                                 width / height, 45, 0.1f, 100.0f);
+
 
     createVertexIndexBuffer();
     createStates();

@@ -170,6 +170,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sophia\3d\s3Camera.cpp" />
     <ClCompile Include="..\Sophia\app\s3App.cpp" />
     <ClCompile Include="..\Sophia\app\s3CallbackManager.cpp" />
     <ClCompile Include="..\Sophia\app\s3Renderer.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Sophia\3d\s3Camera.h" />
     <ClInclude Include="..\Sophia\app\s3App.h" />
     <ClInclude Include="..\Sophia\app\s3CallbackManager.h" />
     <ClInclude Include="..\Sophia\app\s3Renderer.h" />

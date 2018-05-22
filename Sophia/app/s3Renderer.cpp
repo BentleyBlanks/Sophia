@@ -47,6 +47,7 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     scd.BufferDesc.Height = height;
     scd.BufferDesc.Width = width;
     scd.BufferDesc.RefreshRate.Numerator = 60;
+    scd.BufferDesc.RefreshRate.Denominator = 1;
     scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
     scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;

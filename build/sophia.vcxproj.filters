@@ -28,6 +28,9 @@
     <Filter Include="Sophia\shaders">
       <UniqueIdentifier>{8ad97765-faa6-472a-a909-75a9a60f055d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\3d">
+      <UniqueIdentifier>{40644aee-152b-4bf2-aef9-74c0b163b674}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -68,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\app\s3Utils.cpp">
       <Filter>Sophia\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\3d\s3Camera.cpp">
+      <Filter>Sophia\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="..\Sophia\app\s3Utils.h">
       <Filter>Sophia\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\3d\s3Camera.h">
+      <Filter>Sophia\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
