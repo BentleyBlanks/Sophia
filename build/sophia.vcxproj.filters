@@ -75,6 +75,12 @@
     <ClCompile Include="..\Sophia\3d\s3Camera.cpp">
       <Filter>Sophia\3d</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3Event.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3MathHepler.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\sophia\core\s3Settings.h">
@@ -136,6 +142,12 @@
     </ClInclude>
     <ClInclude Include="..\Sophia\3d\s3Camera.h">
       <Filter>Sophia\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3Event.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3MathHepler.h">
+      <Filter>Sophia\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

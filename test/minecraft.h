@@ -352,7 +352,6 @@ int main()
     camera = new s3Camera(t3Vector3f(0, 0, -10), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
                                  width / height, 45, 0.1f, 100.0f);
 
-
     createVertexIndexBuffer();
     createStates();
     createConstantBuffers();

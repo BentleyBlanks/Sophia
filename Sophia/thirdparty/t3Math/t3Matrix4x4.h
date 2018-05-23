@@ -632,6 +632,8 @@ public:
 
     /// \}
 
+    /// For Debug
+    void print(const char* name = NULL);
 };
 
 #include <t3Matrix4x4.inl>

@@ -1,6 +1,7 @@
 ﻿#include <t3Matrix4x4.h>
 #include <limits>
 #include <stdlib.h>
+#include <iostream>
 
 #if (_MSC_VER)
 #undef min
@@ -1570,6 +1571,17 @@ void t3Matrix4x4::decompose(t3Vector3f& t,
     s.z = parts.k.z() * mul;
 
     so.set(parts.u.x(), parts.u.y(), parts.u.z(), parts.u.w());
+}
+
+void t3Matrix4x4::print(const char* name)
+{
+    if (name)
+        printf("%s:", name);
+
+    printf("[%.2f, %.2f, %.2f, %.2f,\n", _mat[0][0], _mat[0][1], _mat[0][2], _mat[0][3]);
+    printf("   %.2f, %.2f, %.2f, %.2f,\n", _mat[1][0], _mat[1][1], _mat[1][2], _mat[1][3]);
+    printf("   %.2f, %.2f, %.2f, %.2f,\n", _mat[2][0], _mat[2][1], _mat[2][2], _mat[2][3]);
+    printf("   %.2f, %.2f, %.2f, %.2f]\n", _mat[3][0], _mat[3][1], _mat[3][2], _mat[3][3]);
 }
 
 #undef SET_ROW

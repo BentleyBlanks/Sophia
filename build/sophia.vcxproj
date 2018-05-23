@@ -180,6 +180,8 @@
     <ClCompile Include="..\Sophia\core\log\s3LogFile.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3LogHTML.cpp" />
     <ClCompile Include="..\Sophia\core\s3Callback.cpp" />
+    <ClCompile Include="..\Sophia\core\s3Event.cpp" />
+    <ClCompile Include="..\Sophia\core\s3MathHepler.cpp" />
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.cpp" />
@@ -196,6 +198,8 @@
     <ClInclude Include="..\Sophia\core\log\s3LogFile.h" />
     <ClInclude Include="..\Sophia\core\log\s3LogHTML.h" />
     <ClInclude Include="..\Sophia\core\s3Callback.h" />
+    <ClInclude Include="..\Sophia\core\s3Event.h" />
+    <ClInclude Include="..\Sophia\core\s3MathHepler.h" />
     <ClInclude Include="..\sophia\core\s3Settings.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.h" />

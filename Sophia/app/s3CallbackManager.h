@@ -10,6 +10,13 @@ public:
     s3Callback onBeginRender;
     s3Callback onEndRender;
     s3Callback onUpdate;
+
+    s3Callback onMousePressed;
+    s3Callback onMouseMoved;
+    s3Callback onMouseReleased;
+    s3Callback onMouseScrolled;
+    s3Callback onKeyPressed;
+    s3Callback onKeyReleased;
 };
 
 class s3CallbackManager
