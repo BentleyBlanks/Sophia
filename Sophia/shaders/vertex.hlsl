@@ -16,12 +16,16 @@ cbuffer object : register(b2)
 struct input
 {
     float3 position : POSITION;
+    float3 normal : NORMAL;
+    float2 texCoord : TEXCOORD;
     float3 color : COLOR;
 };
 
 struct output
 {
     float4 color : COLOR;
+    float3 normal : NORMAL;
+    float2 texCoord : TEXCOORD;
     float4 position : SV_POSITION;
 };
 
@@ -32,6 +36,8 @@ output main(input i)
     // column-major matrix(transpose of the matrix on CPU)
     matrix mvp = mul(mul(modelMatrix, viewMatrix), projectionMatrix);
     o.position = mul(float4(i.position, 1.0f), mvp);
+    o.normal = i.normal;
+    o.texCoord = i.texCoord;
 
     // row-major matrix
     //matrix mvp = mul(projectionMatrix, mul(viewMatrix, modelMatrix));

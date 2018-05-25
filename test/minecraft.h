@@ -4,6 +4,7 @@
 #include <t3Vector2.h>
 #include <t3Matrix4x4.h>
 #include <t3Math.h>
+#include <core/s3Random.h>
 
 enum constanBuffer
 {
@@ -13,38 +14,38 @@ enum constanBuffer
     NUM
 };
 
-struct vertex
-{
-    t3Vector3f position;
-    t3Vector3f color;
-};
+//struct vertex
+//{
+//    t3Vector3f position;
+//    t3Vector3f color;
+//};
 
-vertex vertices[8] =
-{
-    {t3Vector3f(-1.0f, -1.0f, -1.0f), t3Vector3f(0.0f, 0.0f, 0.0f)}, // 0
-    {t3Vector3f(-1.0f,  1.0f, -1.0f), t3Vector3f(0.0f, 1.0f, 0.0f)}, // 1
-    {t3Vector3f(1.0f,  1.0f, -1.0f), t3Vector3f(1.0f, 1.0f, 0.0f)}, // 2
-    {t3Vector3f(1.0f, -1.0f, -1.0f), t3Vector3f(1.0f, 0.0f, 0.0f)}, // 3
-    {t3Vector3f(-1.0f, -1.0f,  1.0f), t3Vector3f(0.0f, 0.0f, 1.0f)}, // 4
-    {t3Vector3f(-1.0f,  1.0f,  1.0f), t3Vector3f(0.0f, 1.0f, 1.0f)}, // 5
-    {t3Vector3f(1.0f,  1.0f,  1.0f), t3Vector3f(1.0f, 1.0f, 1.0f)}, // 6
-    {t3Vector3f(1.0f, -1.0f,  1.0f), t3Vector3f(1.0f, 0.0f, 1.0f)}  // 7
-};
+//vertex vertices[8] =
+//{
+//    {t3Vector3f(-1.0f, -1.0f, -1.0f), t3Vector3f(0.0f, 0.0f, 0.0f)}, // 0
+//    {t3Vector3f(-1.0f,  1.0f, -1.0f), t3Vector3f(0.0f, 1.0f, 0.0f)}, // 1
+//    {t3Vector3f(1.0f,  1.0f, -1.0f), t3Vector3f(1.0f, 1.0f, 0.0f)}, // 2
+//    {t3Vector3f(1.0f, -1.0f, -1.0f), t3Vector3f(1.0f, 0.0f, 0.0f)}, // 3
+//    {t3Vector3f(-1.0f, -1.0f,  1.0f), t3Vector3f(0.0f, 0.0f, 1.0f)}, // 4
+//    {t3Vector3f(-1.0f,  1.0f,  1.0f), t3Vector3f(0.0f, 1.0f, 1.0f)}, // 5
+//    {t3Vector3f(1.0f,  1.0f,  1.0f), t3Vector3f(1.0f, 1.0f, 1.0f)}, // 6
+//    {t3Vector3f(1.0f, -1.0f,  1.0f), t3Vector3f(1.0f, 0.0f, 1.0f)}  // 7
+//};
 
-uint32 indicies[36] =
-{
-    0, 1, 2, 0, 2, 3,
-    4, 6, 5, 4, 7, 6,
-    4, 5, 1, 4, 1, 0,
-    3, 2, 6, 3, 6, 7,
-    1, 5, 6, 1, 6, 2,
-    4, 0, 3, 4, 3, 7
-};
+//uint32 indicies[36] =
+//{
+//    0, 1, 2, 0, 2, 3,
+//    4, 6, 5, 4, 7, 6,
+//    4, 5, 1, 4, 1, 0,
+//    3, 2, 6, 3, 6, 7,
+//    1, 5, 6, 1, 6, 2,
+//    4, 0, 3, 4, 3, 7
+//};
 
 ID3D11RenderTargetView* renderTargetView = nullptr;
 ID3D11DepthStencilView* depthStencilView = nullptr; 
 
-ID3D11Buffer *indexBuffer = nullptr, *vertexBuffer = nullptr;
+//ID3D11Buffer *indexBuffer = nullptr, *vertexBuffer = nullptr;
 ID3D11Buffer *constantBuffers[NUM];
 
 ID3D11Device* device = nullptr;
@@ -57,6 +58,13 @@ ID3D11InputLayout* inputLayout = nullptr;
 ID3D11DepthStencilState* depthStencilState = nullptr;
 ID3D11RasterizerState* rasterizerState = nullptr;
 
+// Texture
+//ID3D11ShaderResourceView* textureSRV;
+//ID3D11SamplerState* samplerState;
+s3Image* image;
+
+s3Mesh *sphere, *cube;
+
 float32 width = 0, height = 0;
 t3Matrix4x4 projectionMatrix, worldToCamera, objectToWorld, worldToObject;
 s3Camera* camera = nullptr;
@@ -66,6 +74,9 @@ class s3Minecraft : public s3CallbackHandle
 public:
     void onHandle(const s3CallbackUserData* userData)
     {
+        ID3D11ShaderResourceView* textureSRV = image->getShaderResouceView();
+        ID3D11SamplerState* samplerState = image->getSamplerState();
+
         // update
         worldToCamera = camera->getWorldToCamera();
         deviceContext->UpdateSubresource(constantBuffers[FRAME], 0, nullptr, &worldToCamera, 0, 0);
@@ -75,75 +86,159 @@ public:
         deviceContext->UpdateSubresource(constantBuffers[OBJECT], 0, nullptr, &objectToWorld, 0, 0);
 
         // render
-        uint32 vertexStride = sizeof(vertex);
-        uint32 offset = 0;
-
-        deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
         deviceContext->IASetInputLayout(inputLayout);
-        deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-        deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-        deviceContext->VSSetShader(vertexShader, nullptr, 0);
-        deviceContext->VSSetConstantBuffers(0, 3, constantBuffers);
 
         deviceContext->RSSetState(rasterizerState);
 
-        deviceContext->PSSetShader(pixelShader, nullptr, 0);
+        // vs
+        deviceContext->VSSetShader(vertexShader, nullptr, 0);
+        deviceContext->VSSetConstantBuffers(0, 3, constantBuffers);
 
+        // ps
+        deviceContext->PSSetShader(pixelShader, nullptr, 0);
+        deviceContext->PSSetSamplers(0, 1, &samplerState);
+        deviceContext->PSSetShaderResources(0, 1, &textureSRV);
+
+        // OM
         deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
         deviceContext->OMSetDepthStencilState(depthStencilState, 1);
 
-        deviceContext->DrawIndexed(_countof(indicies), 0, 0);
+        //sphere->draw(deviceContext);
+        cube->draw(deviceContext);
     }
 };
 
-void createVertexIndexBuffer()
-{
-    // resource loaded
-    // vertex buffer
-    D3D11_BUFFER_DESC vertexBufferDesc;
-    ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vertexBufferDesc.ByteWidth = sizeof(vertex) * _countof(vertices);
-    vertexBufferDesc.CPUAccessFlags = 0;
-    vertexBufferDesc.MiscFlags = 0;
-    vertexBufferDesc.StructureByteStride = 0;
-    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+//void createVertexIndexBuffer()
+//{
+//    // resource loaded
+//    // vertex buffer
+//    D3D11_BUFFER_DESC vertexBufferDesc;
+//    ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+//    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+//    vertexBufferDesc.ByteWidth = sizeof(vertex) * _countof(vertices);
+//    vertexBufferDesc.CPUAccessFlags = 0;
+//    vertexBufferDesc.MiscFlags = 0;
+//    vertexBufferDesc.StructureByteStride = 0;
+//    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+//
+//    // bind buffer's data
+//    D3D11_SUBRESOURCE_DATA resourceData;
+//    ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
+//    resourceData.pSysMem = vertices;
+//
+//    // create vertex buffer
+//    HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &resourceData, &vertexBuffer);
+//    if(FAILED(hr))
+//    {
+//        s3Log::error("Failed to create vertex buffer.\n");
+//        return;
+//    }
+//
+//    // index buffer
+//    D3D11_BUFFER_DESC indexBufferDesc;
+//    ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+//    indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+//    indexBufferDesc.ByteWidth = sizeof(int32) * _countof(indicies);
+//    indexBufferDesc.CPUAccessFlags = 0;
+//    indexBufferDesc.MiscFlags = 0;
+//    indexBufferDesc.StructureByteStride = 0;
+//    indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+//
+//    // bind buffer's data
+//    resourceData.pSysMem = indicies;
+//
+//    // create index buffer
+//    hr = device->CreateBuffer(&indexBufferDesc, &resourceData, &indexBuffer);
+//    if(FAILED(hr))
+//    {
+//        s3Log::error("Failed to create index buffer.\n");
+//        return;
+//    }
+//}
 
-    // bind buffer's data
-    D3D11_SUBRESOURCE_DATA resourceData;
-    ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-    resourceData.pSysMem = vertices;
-
-    // create vertex buffer
-    HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &resourceData, &vertexBuffer);
-    if(FAILED(hr))
-    {
-        s3Log::error("Failed to create vertex buffer.\n");
-        return;
-    }
-
-    // index buffer
-    D3D11_BUFFER_DESC indexBufferDesc;
-    ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-    indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    indexBufferDesc.ByteWidth = sizeof(int32) * _countof(indicies);
-    indexBufferDesc.CPUAccessFlags = 0;
-    indexBufferDesc.MiscFlags = 0;
-    indexBufferDesc.StructureByteStride = 0;
-    indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
-    // bind buffer's data
-    resourceData.pSysMem = indicies;
-
-    // create index buffer
-    hr = device->CreateBuffer(&indexBufferDesc, &resourceData, &indexBuffer);
-    if(FAILED(hr))
-    {
-        s3Log::error("Failed to create index buffer.\n");
-        return;
-    }
-}
+//void createTexture()
+//{
+//    ID3D11Texture2D* texture2d;
+//
+//    const int32 width = 128, height = 128;
+//
+//    t3Vector3f data[width * height];
+//    
+//    for (int32 i = 0; i < width * height; i++)
+//    {
+//        data[i].x = s3Random::randomFloat();
+//        data[i].y = s3Random::randomFloat();
+//        data[i].z = s3Random::randomFloat();
+//    }
+//
+//    D3D11_TEXTURE2D_DESC textureDesc;
+//    ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+//
+//    textureDesc.ArraySize = 1;
+//    textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+//    textureDesc.CPUAccessFlags = 0;
+//    textureDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+//    textureDesc.Width = width;
+//    textureDesc.Height = height;
+//    textureDesc.MipLevels = 1;
+//    textureDesc.MiscFlags = 0;
+//    textureDesc.SampleDesc.Quality = 0;
+//    textureDesc.SampleDesc.Count = 1;
+//    textureDesc.Usage = D3D11_USAGE_DEFAULT;
+//
+//    // Bind Data to Texture2D
+//    D3D11_SUBRESOURCE_DATA initData;
+//    ZeroMemory(&initData, sizeof(D3D11_SUBRESOURCE_DATA));
+//    initData.pSysMem = data;
+//    initData.SysMemPitch = sizeof(data[0]) * width;
+//    initData.SysMemSlicePitch = 0;
+//
+//    HRESULT hr = device->CreateTexture2D(&textureDesc, &initData, &texture2d);
+//    if (FAILED(hr))
+//    {
+//        s3Log::error("Failed to Create Texture2D\n");
+//        return;
+//    }
+//
+//    // Create texture's relative shader resource view
+//    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+//    ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+//    srvDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+//    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+//    srvDesc.Texture2D.MipLevels = 1;
+//    srvDesc.Texture2D.MostDetailedMip = 0;
+//
+//    hr = device->CreateShaderResourceView(texture2d, &srvDesc, &textureSRV);
+//    if (FAILED(hr))
+//    {
+//        s3Log::error("Failed to Create Shader Resource View\n");
+//        return;
+//    }
+//
+//    // Sampler State for texture sampling
+//    D3D11_SAMPLER_DESC samplerDesc;
+//    ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+//    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+//    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+//    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+//    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+//    samplerDesc.MipLODBias = 0.0f;
+//    samplerDesc.MaxAnisotropy = 1;
+//    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+//    samplerDesc.BorderColor[0] = 1.0f;
+//    samplerDesc.BorderColor[1] = 1.0f;
+//    samplerDesc.BorderColor[2] = 1.0f;
+//    samplerDesc.BorderColor[3] = 1.0f;
+//    samplerDesc.MinLOD = -FLT_MAX;
+//    samplerDesc.MaxLOD = FLT_MAX;
+//
+//    hr = device->CreateSamplerState(&samplerDesc, &samplerState);
+//    if (FAILED(hr))
+//    {
+//        s3Log::error("Failed to create Sampler State\n");
+//        return;
+//    }
+//}
 
 void createStates()
 {
@@ -265,16 +360,9 @@ void createShaders()
                                nullptr,
                                &vertexShader);
 
-    // input layout for vertex shader
-    D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc[] =
-    {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(vertex, position), D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(vertex, color), D3D11_INPUT_PER_VERTEX_DATA, 0}
-    };
-
     hr = device->CreateInputLayout(
-        vertexLayoutDesc,
-        _countof(vertexLayoutDesc),
+        s3VertexPNT::inputDesc,
+        4,
         shaderBlob->GetBufferPointer(),
         shaderBlob->GetBufferSize(),
         &inputLayout);
@@ -323,8 +411,8 @@ void destroy()
     S3_SAFE_RELEASE(constantBuffers[APPLIATION]);
     S3_SAFE_RELEASE(constantBuffers[FRAME]);
     S3_SAFE_RELEASE(constantBuffers[OBJECT]);
-    S3_SAFE_RELEASE(indexBuffer);
-    S3_SAFE_RELEASE(vertexBuffer);
+    //S3_SAFE_RELEASE(indexBuffer);
+    //S3_SAFE_RELEASE(vertexBuffer);
     S3_SAFE_RELEASE(inputLayout);
     S3_SAFE_RELEASE(vertexShader);
     S3_SAFE_RELEASE(pixelShader);
@@ -352,7 +440,14 @@ int main()
     camera = new s3Camera(t3Vector3f(0, 0, -10), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
                                  width / height, 45, 0.1f, 100.0f);
 
-    createVertexIndexBuffer();
+    sphere = s3Mesh::createSphere(renderer.getDeviceContext(), 2);
+    cube = s3Mesh::createCube(renderer.getDeviceContext(), 2);
+
+    image = new s3Image();
+    image->load(device, "../resources/1.png");
+
+    //createVertexIndexBuffer();
+    //createTexture();
     createStates();
     createConstantBuffers();
     createShaders();

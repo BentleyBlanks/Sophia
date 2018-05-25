@@ -31,6 +31,9 @@
     <Filter Include="Sophia\3d">
       <UniqueIdentifier>{40644aee-152b-4bf2-aef9-74c0b163b674}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\thirdparty\lodepng">
+      <UniqueIdentifier>{0906d53c-ba0d-4ef6-9513-39c6b33a4e78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -79,6 +82,18 @@
       <Filter>Sophia\core</Filter>
     </ClCompile>
     <ClCompile Include="..\Sophia\core\s3MathHepler.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\lodepng\lodepng.cpp">
+      <Filter>Sophia\thirdparty\lodepng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\3d\s3Mesh.cpp">
+      <Filter>Sophia\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3Random.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3Image.cpp">
       <Filter>Sophia\core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,6 +162,18 @@
       <Filter>Sophia\core</Filter>
     </ClInclude>
     <ClInclude Include="..\Sophia\core\s3MathHepler.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\lodepng\lodepng.h">
+      <Filter>Sophia\thirdparty\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\3d\s3Mesh.h">
+      <Filter>Sophia\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3Random.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3Image.h">
       <Filter>Sophia\core</Filter>
     </ClInclude>
   </ItemGroup>

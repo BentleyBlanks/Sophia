@@ -13,6 +13,10 @@ t3Matrix4x4 makeRotationMatrix(float angle, s3Axis axis);
 
 t3Matrix4x4 makeRotationMatrix(float angle, const t3Vector3f& axis);
 
+t3Matrix4x4 makeRotationMatrix(float angle, const t3Vector3f& origin, const t3Vector3f& axis);
+
 t3Matrix4x4 makeTranslationMatrix(const t3Vector3f& t);
 
 t3Matrix4x4 makeScaleMatrix(const t3Vector3f& s);
+
+void s3ScalarSinCos(float* pSin, float* pCos, float  Value);

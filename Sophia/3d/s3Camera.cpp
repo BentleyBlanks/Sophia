@@ -4,7 +4,7 @@
 #include <app/s3CallbackManager.h>
 #include <core/s3MathHepler.h>
 
-#define TEST
+//#define TEST
 
 class s3Camera::s3CameraHandle : public s3CallbackHandle
 {
@@ -56,8 +56,7 @@ public:
             {
                 if (mouseEvent->offsetX != 0)
                 {
-                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetX * 0.1f, up);
-                    //a.print("a");
+                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetX * 0.05f, origin, up);
 
                     // rotate 2 axis
                     direction = direction * a;
@@ -66,7 +65,7 @@ public:
                 
                 if (mouseEvent->offsetY != 0)
                 {
-                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetY * 0.1f, right);
+                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetY * 0.05f, origin, right);
 
                     // rotate 2 axis
                     direction = direction * a;

@@ -98,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -134,7 +134,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -155,7 +155,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -171,11 +171,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Sophia\3d\s3Camera.cpp" />
+    <ClCompile Include="..\Sophia\3d\s3Mesh.cpp" />
     <ClCompile Include="..\Sophia\app\s3App.cpp" />
     <ClCompile Include="..\Sophia\app\s3CallbackManager.cpp" />
     <ClCompile Include="..\Sophia\app\s3Renderer.cpp" />
     <ClCompile Include="..\Sophia\app\s3Utils.cpp" />
     <ClCompile Include="..\Sophia\app\s3Window.cpp" />
+    <ClCompile Include="..\Sophia\core\s3Image.cpp" />
+    <ClCompile Include="..\Sophia\core\s3Random.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3Log.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3LogFile.cpp" />
     <ClCompile Include="..\Sophia\core\log\s3LogHTML.cpp" />
@@ -183,17 +186,21 @@
     <ClCompile Include="..\Sophia\core\s3Event.cpp" />
     <ClCompile Include="..\Sophia\core\s3MathHepler.cpp" />
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
+    <ClCompile Include="..\Sophia\thirdparty\lodepng\lodepng.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sophia\3d\s3Camera.h" />
+    <ClInclude Include="..\Sophia\3d\s3Mesh.h" />
     <ClInclude Include="..\Sophia\app\s3App.h" />
     <ClInclude Include="..\Sophia\app\s3CallbackManager.h" />
     <ClInclude Include="..\Sophia\app\s3Renderer.h" />
     <ClInclude Include="..\Sophia\app\s3Utils.h" />
     <ClInclude Include="..\Sophia\app\s3Window.h" />
+    <ClInclude Include="..\Sophia\core\s3Image.h" />
+    <ClInclude Include="..\Sophia\core\s3Random.h" />
     <ClInclude Include="..\Sophia\core\log\s3Log.h" />
     <ClInclude Include="..\Sophia\core\log\s3LogFile.h" />
     <ClInclude Include="..\Sophia\core\log\s3LogHTML.h" />
@@ -202,6 +209,7 @@
     <ClInclude Include="..\Sophia\core\s3MathHepler.h" />
     <ClInclude Include="..\sophia\core\s3Settings.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
+    <ClInclude Include="..\Sophia\thirdparty\lodepng\lodepng.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Math.h" />
     <ClInclude Include="..\Sophia\thirdparty\t3Math\t3MathSettings.h" />

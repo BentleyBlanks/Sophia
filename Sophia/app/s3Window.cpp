@@ -64,6 +64,8 @@ t3Vector2f s3Window::getWindowSize()
 
 void s3Window::resize(int32 width, int32 height)
 {
+    size.x = (float32) width;
+    size.y = (float32) height;
 }
 
 t3Vector2f s3Window::getWindowPosition()
