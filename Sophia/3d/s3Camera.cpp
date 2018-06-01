@@ -9,7 +9,7 @@
 class s3Camera::s3CameraHandle : public s3CallbackHandle
 {
 public:
-    s3CameraHandle(s3Camera* camera) : camera(camera), speed(0.08f) {}
+    s3CameraHandle(s3Camera* camera) : camera(camera), speed(50.0f) {}
 
     void onHandle(const s3CallbackUserData* data)
     {
@@ -50,31 +50,31 @@ public:
         else if (data->sender == &s3CallbackManager::callBack.onMouseMoved)
         {
             s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
-
-            // dragged(move + pressed)
-            if (mouseEvent->type == s3MouseEvent::s3ButtonType::LEFT)
-            {
-                if (mouseEvent->offsetX != 0)
-                {
-                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetX * 0.05f, origin, up);
-
-                    // rotate 2 axis
-                    direction = direction * a;
-                    right = right * a;
-                }
-                
-                if (mouseEvent->offsetY != 0)
-                {
-                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetY * 0.05f, origin, right);
-
-                    // rotate 2 axis
-                    direction = direction * a;
-                    up = up * a;
-                }
-#ifdef TEST
-                mouseEvent->print(2);
-#endif
-            }
+//
+//            // dragged(move + pressed)
+//            if (mouseEvent->type == s3MouseEvent::s3ButtonType::LEFT)
+//            {
+//                if (mouseEvent->offsetX != 0)
+//                {
+//                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetX * 0.05f, origin, up);
+//
+//                    // rotate 2 axis
+//                    direction = direction * a;
+//                    right = right * a;
+//                }
+//                
+//                if (mouseEvent->offsetY != 0)
+//                {
+//                    t3Matrix4x4 a = makeRotationMatrix(mouseEvent->offsetY * 0.05f, origin, right);
+//
+//                    // rotate 2 axis
+//                    direction = direction * a;
+//                    up = up * a;
+//                }
+//#ifdef TEST
+//                mouseEvent->print(2);
+//#endif
+//            }
         }
         else if (data->sender == &s3CallbackManager::callBack.onMousePressed)
         {

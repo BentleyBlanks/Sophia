@@ -34,6 +34,9 @@
     <Filter Include="Sophia\thirdparty\lodepng">
       <UniqueIdentifier>{0906d53c-ba0d-4ef6-9513-39c6b33a4e78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\thirdparty\imgui">
+      <UniqueIdentifier>{38f23717-e17a-4f8e-87ee-28ce7faa8837}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -95,6 +98,18 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\core\s3Image.cpp">
       <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\imgui\imgui.cpp">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3Gui.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_demo.cpp">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_draw.cpp">
+      <Filter>Sophia\thirdparty\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +190,27 @@
     </ClInclude>
     <ClInclude Include="..\Sophia\core\s3Image.h">
       <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\imgui\imgui.h">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3Gui.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\imgui\imconfig.h">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\imgui\imgui_internal.h">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\imgui\stb_rect_pack.h">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\imgui\stb_textedit.h">
+      <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\imgui\stb_truetype.h">
+      <Filter>Sophia\thirdparty\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

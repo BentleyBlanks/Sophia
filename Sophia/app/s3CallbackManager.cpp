@@ -1,6 +1,9 @@
 ﻿#include <app/s3CallbackManager.h>
 #include <core/log/s3Log.h>
 #include <core/s3Event.h>
+#include <core/s3Gui.h>
+#include <app/s3Renderer.h>
+#include <imgui.h>
 
 s3Callbacks s3CallbackManager::callBack;
 
@@ -15,6 +18,22 @@ public:
             s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
             if (keyEvent->keyCode == s3KeyCode::EscapeKey)
                 exit(0);
+        }
+        else if (data->sender == &s3CallbackManager::callBack.onEngineInit)
+        {
+            s3ImGuiInit(data->userData, s3Renderer::get().getDevice(), s3Renderer::get().getDeviceContext());
+        }
+        else if (data->sender == &s3CallbackManager::callBack.onEngineDeinit)
+        {
+            s3ImGuiShutdown();
+        }
+        else if (data->sender == &s3CallbackManager::callBack.onBeginRender)
+        {
+            s3ImGuiBeginRender();
+        }
+        else if (data->sender == &s3CallbackManager::callBack.onEndRender)
+        {
+            s3ImGuiEndRender();
         }
     }
 };

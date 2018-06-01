@@ -5,11 +5,17 @@
 #include <core/s3Settings.h>
 #include <core/s3Event.h>
 
+#include <imgui.h>
+
 // testing
 #include <core/log/s3Log.h>
 
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
+        return true;
+
     typedef s3MouseEvent::s3ButtonType s3ButtonType;
     switch(msg)
     {
@@ -273,6 +279,11 @@ void s3App::render()
 
 void s3App::run()
 {
+    // init engine with hwnd
+    s3CallbackUserData userData;
+    userData.userData = window->getHandle();
+    s3CallbackManager::callBack.onEngineInit.trigger(&userData);
+
     MSG msg;
     while(true)
     {

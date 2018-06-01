@@ -69,7 +69,7 @@ float32 width = 0, height = 0;
 t3Matrix4x4 projectionMatrix, worldToCamera, objectToWorld, worldToObject;
 s3Camera* camera = nullptr;
 
-class s3Minecraft : public s3CallbackHandle
+class s3Sky : public s3CallbackHandle
 {
 public:
     void onHandle(const s3CallbackUserData* userData)
@@ -420,7 +420,7 @@ void destroy()
 
 int main()
 {
-    s3Minecraft mc;
+    s3Sky mc;
     s3CallbackManager::callBack.onBeginRender += mc;
 
     s3App app;

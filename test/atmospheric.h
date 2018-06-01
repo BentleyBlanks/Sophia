@@ -5,6 +5,7 @@
 #include <t3Vector2.h>
 #include <t3Matrix4x4.h>
 #include <t3Math.h>
+#include <imgui.h>
 
 // fullscreen triangle
 //struct vertex
@@ -74,6 +75,26 @@ s3Camera* camera = nullptr;
 class s3Sky : public s3CallbackHandle
 {
 public:
+    void guiRender()
+    {
+        bool show_demo_window = true;
+        bool show_another_window = false;
+        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+        ImGui::Begin("HHHH");
+        {
+            ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+
+
+            if (show_demo_window)
+            {
+                ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+                ImGui::ShowDemoWindow(&show_demo_window);
+            }
+            ImGui::End();
+        }
+    }
+
     void onHandle(const s3CallbackUserData* userData)
     {
         // IA
@@ -105,6 +126,9 @@ public:
         deviceContext->OMSetDepthStencilState(depthStencilState, 1);
 
         deviceContext->Draw(3, 0);
+
+        // gui
+        guiRender();
     }
 };
 
@@ -319,9 +343,6 @@ void destroy()
 
 int main()
 {
-    s3Sky mc;
-    s3CallbackManager::callBack.onBeginRender += mc;
-
     s3App app;
     if (!app.init(t3Vector2f(1280, 720), t3Vector2f(100, 100)))
         return 0;
@@ -345,6 +366,9 @@ int main()
     createStates();
     createConstantBuffers();
     createShaders();
+
+    s3Sky mc;
+    s3CallbackManager::callBack.onBeginRender += mc;
 
     app.run();
 
