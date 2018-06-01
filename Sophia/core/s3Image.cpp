@@ -10,6 +10,7 @@ s3Image::s3Image()
 
 s3Image::~s3Image()
 {
+    imageData.clear();
 }
 
 bool s3Image::load(ID3D11Device* device, const std::string & filePath)
@@ -34,11 +35,6 @@ bool s3Image::load(ID3D11Device* device, const std::string & filePath)
     {
         for (int32 j = 0; j < width; j++)
         {
-            //s3Log::print("r: %d, ", image[i * width + j + 0]);
-            //s3Log::print("g: %d, ", image[i * width + j + 1]);
-            //s3Log::print("b: %d, ", image[i * width + j + 2]);
-            //s3Log::print("a: %d, ", image[i * width + j + 3]);
-
             imageData.push_back(t3Vector3f(image[(i * width + j) * 4 + 0] / 255.0f,
                                            image[(i * width + j) * 4 + 1] / 255.0f,
                                            image[(i * width + j) * 4 + 2] / 255.0f));

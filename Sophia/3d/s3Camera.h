@@ -22,14 +22,14 @@ public:
     float32 getAspectRatio() const;
     float32 getNearZ() const;
     float32 getFarZ() const;
-    float32 getFov() const;
+    float32 getFovY() const;
 
 private:
     void handleInit();
     void handleDeinit();
 
     // degree
-    float32 fov;
+    float32 fovY;
     float32 aspectRatio;
     float32 nearZ, farZ;
 

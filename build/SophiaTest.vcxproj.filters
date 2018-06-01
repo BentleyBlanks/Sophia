@@ -14,5 +14,8 @@
     <ClInclude Include="..\test\minecraft.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\atmospheric.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

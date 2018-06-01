@@ -149,6 +149,7 @@
     <ClCompile Include="..\test\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\test\atmospheric.h" />
     <ClInclude Include="..\test\minecraft.h" />
   </ItemGroup>
   <ItemGroup>

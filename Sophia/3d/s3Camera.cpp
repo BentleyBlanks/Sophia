@@ -146,12 +146,12 @@ s3Camera::~s3Camera()
 void s3Camera::setProjectionMatrix(float32 aspectRatio, float32 fovDeg, float32 nearZ, float32 farZ)
 {
     this->aspectRatio = aspectRatio;
-    this->fov = fovDeg;
+    this->fovY = fovDeg;
     this->nearZ = nearZ;
     this->farZ = farZ;
 
-    float halfFov = t3Math::Deg2Rad(fov / 2.0f);
-    float tanHalfFov = t3Math::sinRad(halfFov) / t3Math::cosRad(halfFov);
+    float halfFov = t3Math::Deg2Rad(fovY / 2.0f);
+    float tanHalfFov = t3Math::tanRad(halfFov);
     float rangeZ = farZ - nearZ;
     float A = farZ / rangeZ, B = -nearZ * farZ / rangeZ;
 
@@ -226,7 +226,7 @@ float32 s3Camera::getFarZ() const
     return farZ;
 }
 
-float32 s3Camera::getFov() const
+float32 s3Camera::getFovY() const
 {
-    return fov;
+    return fovY;
 }

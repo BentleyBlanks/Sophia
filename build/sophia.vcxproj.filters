@@ -201,5 +201,11 @@
     <FxCompile Include="..\Sophia\shaders\vertex.hlsl">
       <Filter>Sophia\shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\skyPixel.hlsl">
+      <Filter>Sophia\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\skyVert.hlsl">
+      <Filter>Sophia\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

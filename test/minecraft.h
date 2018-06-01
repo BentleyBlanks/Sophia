@@ -441,7 +441,7 @@ int main()
                                  width / height, 45, 0.1f, 100.0f);
 
     sphere = s3Mesh::createSphere(renderer.getDeviceContext(), 2);
-    cube = s3Mesh::createCube(renderer.getDeviceContext(), 2);
+    //cube = s3Mesh::createCube(renderer.getDeviceContext(), 2);
 
     image = new s3Image();
     image->load(device, "../resources/1.png");
