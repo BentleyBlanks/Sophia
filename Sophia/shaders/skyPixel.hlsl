@@ -119,8 +119,8 @@ float4 tonemapping(float4 color)
 
 float4 main(input i) : SV_TARGET
 {
-    //i.texCoord.x = 0.5;
-    //i.texCoord.y = 0.5;
+    //i.texCoord.x = 393 / 1280.0f;
+    //i.texCoord.y = 168 / 720.0f;
 
     // convert texCoord to ndc
     float ndcX = 2 * i.texCoord.x - 1;
@@ -135,8 +135,9 @@ float4 main(input i) : SV_TARGET
     r.origin = float3(0, 0, 0);
     r.origin = mul(float4(r.origin, 1.0f), cameraToWorld);
 	
-    float3 pixelPosition = float3(vx, vy, canvasDistance);
-    pixelPosition = mul(float4(pixelPosition, 1.0f), cameraToWorld);
+	// for percison
+    double3 pixelPosition = double3(vx, vy, canvasDistance);
+    pixelPosition = mul(double4(pixelPosition, 1.0), cameraToWorld);
     r.direction = normalize(pixelPosition - r.origin);
 	
 	// km
@@ -160,6 +161,8 @@ float4 main(input i) : SV_TARGET
     if (!raySphereIntersect(r, atmos, nearTAtmos, farTAtmos) || farTAtmos < 0)
         return float4(0, 0, 0, 1);
 
+    //return float4(0, 0, 1, 1);
+
     if (nearTAtmos > minT)
         minT = nearTAtmos;
 	if (farTAtmos < maxT)
@@ -178,7 +181,6 @@ float4 main(input i) : SV_TARGET
     float g = 0.76f;
     float phaseM = 3.f / (8.f * PI) * ((1.f - g * g) * (1.f + mu * mu)) / ((2.f + g * g) * pow(1.f + g * g - 2.f * g * mu, 1.5f));
 	
-	//[unroll(16)]
     for (int i = 0; i < numSampleViewDir; i++)
     {
         float3 samplePosition = r.origin + (currentT + segmentLength * 0.5f) * r.direction;
@@ -203,7 +205,6 @@ float4 main(input i) : SV_TARGET
         float opticalDepthLightR = 0, opticalDepthLightM = 0;
 		
         int j;
-		//[unroll(8)]
         for (j = 0; j < numSampleLight; j++)
         {
             float3 samplePositionLight = samplePosition + (currentLightT + segmentLengthLight * 0.5f) * sunDirection;
@@ -233,6 +234,7 @@ float4 main(input i) : SV_TARGET
 		return tonemapping(float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * 20, 1));
 	else
         return float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * 20, 1);
+
     //return float4(0, 0, 1, 1);
     //return float4(i.texCoord.x, i.texCoord.y, 0, 1.0f);
 }

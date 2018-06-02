@@ -100,6 +100,7 @@ t3Matrix4x4 projectionMatrix, worldToCamera;
 s3Camera* camera = nullptr;
 
 t3Vector3f target(0, 6360e3 + 1000, -30000), origin(0, 0, -1.5e7);
+//t3Vector3f target(0, 1908300.0f, -10509000.0f), origin(0, 0, -1.5e7);
 
 class s3Sky : public s3CallbackHandle
 {
@@ -108,27 +109,29 @@ public:
     {
         bool show_demo_window = true;
         bool show_another_window = false;
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
         ImGui::Begin("HHHH");
         {
             ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
 
-            t3Vector3f dir = origin - target;
-            float length = dir.length();
-            dir.normalize();
+            t3Vector3f dir = -(target - origin);
+            //float length = dir.length();
+            //dir.normalize();
 
             t3Vector3f o, r, up, d;
             camera->getViewAxis(o, r, up, d);
 
             static float t = 0.0f;
-            t3Vector3f currentPosition = target + t * dir * length;
-            if (ImGui::DragFloat("CameraPosition", &t, 0.001f, 0.0f, 1.0f))
+            t3Vector3f currentPosition = target + t * dir;
+            if (ImGui::DragFloat("Camera Interpolation T", &t, 0.001f, 0.0f, 1.0f))
             {
-                camera->setCameraToWorld(currentPosition, currentPosition + t3Vector3f(0, 0, 10), up);
+                camera->setCameraToWorld(currentPosition, currentPosition + t3Vector3f(0, 0, 100), t3Vector3f(0, 1, 0));
+                skyCB.cameraToWorld = camera->getCameraToWorld();
             }
 
-            ImGui::DragFloat3("CurrentPosition", &currentPosition.x);
+            ImGui::DragFloat3("Current Position", &currentPosition.x);
+            ImGui::DragFloat3("Camera Position", &o.x);
+            //ImGui::DragFloat3("Sun Direction", &skyCB.sunDirection.x);
 
             //if (show_demo_window)
             //{
@@ -155,25 +158,6 @@ public:
 
         // ps
         deviceContext->PSSetShader(pixelShader, nullptr, 0);
-
-        // Update constant buffer
-        skyCB.canvasDistance = 1;
-        skyCB.tanHalfFovY = t3Math::tanDeg(camera->getFovY() / 2.0f);
-        skyCB.tanHalfFovX = skyCB.tanHalfFovY * camera->getAspectRatio();
-        skyCB.sphereOrigin = t3Vector3f(0, 0, 0);
-        skyCB.cameraToWorld = camera->getCameraToWorld();
-
-        skyCB.sunDirection = t3Vector3f(0, 1, 0);
-        skyCB.earthRadius = 6360e3;
-        skyCB.atmosphereRadius = 6420e3;
-        skyCB.thicknessR = 7994;
-        skyCB.thicknessM = 1200;
-        skyCB.betaR = t3Vector3f(3.8e-6f, 13.5e-6f, 33.1e-6f);
-        skyCB.betaM = t3Vector3f(21e-6f);
-        skyCB.numSampleLight = 8;
-        skyCB.numSampleViewDir = 16;
-        skyCB.isToneMapping = 1;
-
         deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &skyCB, 0, 0);
         deviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
 
@@ -294,6 +278,25 @@ void createConstantBuffers()
         s3Log::error("Failed to create constant buffer[frame]\n");
         return;
     }
+
+    // Update constant buffer's default value
+    skyCB.canvasDistance = 1;
+    skyCB.tanHalfFovY = t3Math::tanDeg(camera->getFovY() / 2.0f);
+    skyCB.tanHalfFovX = skyCB.tanHalfFovY * camera->getAspectRatio();
+    skyCB.sphereOrigin = t3Vector3f(0, 0, 0);
+    skyCB.cameraToWorld = camera->getCameraToWorld();
+
+    skyCB.sunDirection = t3Vector3f(0, 1, 0);
+    skyCB.earthRadius = 6360e3;
+    skyCB.atmosphereRadius = 6420e3;
+    skyCB.thicknessR = 7994;
+    skyCB.thicknessM = 1200;
+    skyCB.betaR = t3Vector3f(3.8e-6f, 13.5e-6f, 33.1e-6f);
+    skyCB.betaM = t3Vector3f(21e-6f);
+
+    skyCB.numSampleLight = 8;
+    skyCB.numSampleViewDir = 16;
+    skyCB.isToneMapping = 1;
 }
 
 void createShaders()
@@ -400,7 +403,7 @@ void destroy()
 int main()
 {
     s3App app;
-    if (!app.init(t3Vector2f(720, 720), t3Vector2f(100, 100)))
+    if (!app.init(t3Vector2f(1280, 720), t3Vector2f(100, 100)))
         return 0;
 
     s3Window* window = app.getWindow();
@@ -415,8 +418,8 @@ int main()
 
     //camera = new s3Camera(t3Vector3f(0, 0, -1.5e7), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
     //    width / height, 65, 0.1f, 6e5f);
-    camera = new s3Camera(target, target + t3Vector3f(0, 0, 10), t3Vector3f(0, 1, 0),
-        width / height, 65, 0.001f, 10000.0f);
+    camera = new s3Camera(target, target + t3Vector3f(0, 0, 100), t3Vector3f(0, 1, 0),
+        width / height, 65, 0.001f, 1000000.0f);
 
     //createVertexIndexBuffer();
     createStates();

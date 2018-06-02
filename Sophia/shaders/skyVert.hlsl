@@ -8,8 +8,8 @@ output main(uint id : SV_VertexID)
 {
     output o;
 
-    o.texCoord = float2((id << 1) & 2, id & 2);
-    o.position = float4(o.texCoord * float2(2, -2) + float2(-1, 1), 0, 1);
+    o.texCoord = double2((id << 1) & 2, id & 2);
+    o.position = double4(o.texCoord * double2(2, -2) + double2(-1, 1), 0, 1);
 
     return o;
 }
