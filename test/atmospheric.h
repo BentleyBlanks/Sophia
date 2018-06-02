@@ -32,6 +32,7 @@
 
 struct s3SkyCB
 {
+    // Camera
     // For computing perspective rays
     float canvasDistance;
     float tanHalfFovX, tanHalfFovY;
@@ -40,11 +41,37 @@ struct s3SkyCB
 
     // atmos + earth's origin
     t3Vector3f sphereOrigin;
-    float padding3;
+    float padding2;
     // --------------------------16Byte--------------------------
 
     t3Matrix4x4 cameraToWorld;
     // --------------------------64Byte--------------------------
+
+    // atmospheric
+    t3Vector3f sunDirection; 
+    float earthRadius;
+    // --------------------------16Byte--------------------------
+
+    float atmosphereRadius;
+    // Thickness of the atmosphere if density was uniform (Rayleigh + Mie)
+    float thicknessR, thicknessM;
+    float padding3;
+    // --------------------------16Byte--------------------------
+
+    // Rayleigh + Mie extinction coefficient
+    t3Vector3f betaR;
+    float padding4;
+    // --------------------------16Byte--------------------------
+
+    t3Vector3f betaM; 
+    float numSampleViewDir;
+    // --------------------------16Byte--------------------------
+
+    // samples
+    float numSampleLight;
+    int isToneMapping;
+    float padding6[2];
+    // --------------------------16Byte--------------------------
 };
 
 s3SkyCB skyCB;
@@ -72,6 +99,8 @@ float32 width = 0, height = 0;
 t3Matrix4x4 projectionMatrix, worldToCamera;
 s3Camera* camera = nullptr;
 
+t3Vector3f target(0, 6360e3 + 1000, -30000), origin(0, 0, -1.5e7);
+
 class s3Sky : public s3CallbackHandle
 {
 public:
@@ -85,12 +114,28 @@ public:
         {
             ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
 
+            t3Vector3f dir = origin - target;
+            float length = dir.length();
+            dir.normalize();
 
-            if (show_demo_window)
+            t3Vector3f o, r, up, d;
+            camera->getViewAxis(o, r, up, d);
+
+            static float t = 0.0f;
+            t3Vector3f currentPosition = target + t * dir * length;
+            if (ImGui::DragFloat("CameraPosition", &t, 0.001f, 0.0f, 1.0f))
             {
-                ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-                ImGui::ShowDemoWindow(&show_demo_window);
+                camera->setCameraToWorld(currentPosition, currentPosition + t3Vector3f(0, 0, 10), up);
             }
+
+            ImGui::DragFloat3("CurrentPosition", &currentPosition.x);
+
+            //if (show_demo_window)
+            //{
+            //    ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+            //    ImGui::ShowDemoWindow(&show_demo_window);
+            //}
+
             ImGui::End();
         }
     }
@@ -117,6 +162,17 @@ public:
         skyCB.tanHalfFovX = skyCB.tanHalfFovY * camera->getAspectRatio();
         skyCB.sphereOrigin = t3Vector3f(0, 0, 0);
         skyCB.cameraToWorld = camera->getCameraToWorld();
+
+        skyCB.sunDirection = t3Vector3f(0, 1, 0);
+        skyCB.earthRadius = 6360e3;
+        skyCB.atmosphereRadius = 6420e3;
+        skyCB.thicknessR = 7994;
+        skyCB.thicknessM = 1200;
+        skyCB.betaR = t3Vector3f(3.8e-6f, 13.5e-6f, 33.1e-6f);
+        skyCB.betaM = t3Vector3f(21e-6f);
+        skyCB.numSampleLight = 8;
+        skyCB.numSampleViewDir = 16;
+        skyCB.isToneMapping = 1;
 
         deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &skyCB, 0, 0);
         deviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
@@ -344,7 +400,7 @@ void destroy()
 int main()
 {
     s3App app;
-    if (!app.init(t3Vector2f(1280, 720), t3Vector2f(100, 100)))
+    if (!app.init(t3Vector2f(720, 720), t3Vector2f(100, 100)))
         return 0;
 
     s3Window* window = app.getWindow();
@@ -357,10 +413,10 @@ int main()
     renderTargetView = renderer.getRenderTargetView();
     depthStencilView = renderer.getDepthStencilView();
 
-    camera = new s3Camera(t3Vector3f(0, 0, -15000.0f), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
-        width / height, 65, 0.1f, 6e5f);
-    //camera = new s3Camera(t3Vector3f(0, 6360 + 20, -100), t3Vector3f(0, 6360 + 20, 0), t3Vector3f(0, 1, 0),
-    //    width / height, 65, 0.001f, 10000.0f);
+    //camera = new s3Camera(t3Vector3f(0, 0, -1.5e7), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
+    //    width / height, 65, 0.1f, 6e5f);
+    camera = new s3Camera(target, target + t3Vector3f(0, 0, 10), t3Vector3f(0, 1, 0),
+        width / height, 65, 0.001f, 10000.0f);
 
     //createVertexIndexBuffer();
     createStates();
