@@ -48,14 +48,14 @@ struct s3SkyCB
     // --------------------------64Byte--------------------------
 
     // atmospheric
-    t3Vector3f sunDirection; 
-    float earthRadius;
+    t3Vector3f sunDirection;
+    float sunIntensity;
     // --------------------------16Byte--------------------------
 
+    float earthRadius;
     float atmosphereRadius;
     // Thickness of the atmosphere if density was uniform (Rayleigh + Mie)
     float thicknessR, thicknessM;
-    float padding3;
     // --------------------------16Byte--------------------------
 
     // Rayleigh + Mie extinction coefficient
@@ -74,6 +74,7 @@ struct s3SkyCB
     // --------------------------16Byte--------------------------
 };
 
+// CB
 s3SkyCB skyCB;
 ID3D11Buffer* constantBuffer;
 
@@ -99,8 +100,10 @@ float32 width = 0, height = 0;
 t3Matrix4x4 projectionMatrix, worldToCamera;
 s3Camera* camera = nullptr;
 
-t3Vector3f target(0, 6360e3 + 1000, -30000), origin(0, 0, -1.5e7);
-//t3Vector3f target(0, 1908300.0f, -10509000.0f), origin(0, 0, -1.5e7);
+t3Vector3f target(0, 6360e3 + 1000, -30000), origin(0, 6360e3, -1.5e7);
+t3Vector3f targetLookAt(0, 0, 1), originLookAt(0, -0.330350399f, 0.943858325f);
+
+s3Image* earthImage, *earthHeightMap;
 
 class s3Sky : public s3CallbackHandle
 {
@@ -114,32 +117,54 @@ public:
         {
             ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
 
-            t3Vector3f dir = -(target - origin);
-            //float length = dir.length();
-            //dir.normalize();
+            static bool isToneMapping = true;
+            if (ImGui::Checkbox("isToneMapping", &isToneMapping))
+                skyCB.isToneMapping = (int)isToneMapping;
 
-            t3Vector3f o, r, up, d;
-            camera->getViewAxis(o, r, up, d);
-
+            static t3Vector3f dir = target - origin;
+            static t3Vector3f diffLookAt = targetLookAt - originLookAt;
             static float t = 0.0f;
-            t3Vector3f currentPosition = target + t * dir;
-            if (ImGui::DragFloat("Camera Interpolation T", &t, 0.001f, 0.0f, 1.0f))
+            static t3Vector3f currentPosition, currentLookAt;
+            if (ImGui::DragFloat("Interpolation T", &t, 0.001f, 0.0f, 1.0f))
             {
-                camera->setCameraToWorld(currentPosition, currentPosition + t3Vector3f(0, 0, 100), t3Vector3f(0, 1, 0));
-                skyCB.cameraToWorld = camera->getCameraToWorld();
+                currentLookAt = originLookAt + t * diffLookAt;
+                currentPosition = origin + t * dir;
+                camera->setCameraToWorld(currentPosition, currentLookAt.getNormalized(), t3Vector3f(0, 1, 0));
+            }
+            static float angle = 0.0f;
+            if (ImGui::DragFloat("Sun Angle", &angle, 0.1f, 0.0f, 360.0f))
+                skyCB.sunDirection = t3Vector3f(0, t3Math::cosDeg(angle), -t3Math::sinDeg(angle));
+
+            ImGui::DragFloat("Sun Intensity", &skyCB.sunIntensity, 1.0f, 0.0f, 1000.0f);
+
+            // update by frame
+            skyCB.cameraToWorld = camera->getCameraToWorld();
+
+            ImGui::Separator();
+            ImGui::Text("Not Physically Based if Modified");
+            ImGui::DragFloat("Earth Radius", &skyCB.earthRadius, 1000.0f, 5e6, 1e7);
+            ImGui::DragFloat("Atmos Radius", &skyCB.atmosphereRadius, 1000.0f, 5e6, 1e7);
+
+            ImGui::DragFloat3("Beta Mie", &skyCB.betaM.x, 1e-7f, 1e-7f, 1e-4f, "%.10f");
+            ImGui::DragFloat3("Beta Rayleigh", &skyCB.betaR.x, 1e-8f, 1e-7f, 1e-4f, "%.10f");
+
+            ImGui::Separator();
+
+            static float speedKeyboard = 50.0f;
+            if (ImGui::DragFloat("Camera Keyboard Speed", &speedKeyboard, 100.0f, 30.0f, 2e5))
+                camera->setKeyboardSpeed(speedKeyboard);
+
+            static float speedMouse = 0.01f;
+            if (ImGui::DragFloat("Camera Mouse Speed", &speedMouse, 0.01f, 0.01f, 1.0f))
+                camera->setMouseSpeed(speedMouse);
+
+            if (show_demo_window)
+            {
+                ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+                ImGui::ShowDemoWindow(&show_demo_window);
             }
 
-            ImGui::DragFloat3("Current Position", &currentPosition.x);
-            ImGui::DragFloat3("Camera Position", &o.x);
-            //ImGui::DragFloat3("Sun Direction", &skyCB.sunDirection.x);
-
-            //if (show_demo_window)
-            //{
-            //    ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            //    ImGui::ShowDemoWindow(&show_demo_window);
-            //}
-
-            ImGui::End();
+            ImGui::End();                
         }
     }
 
@@ -157,7 +182,19 @@ public:
         deviceContext->VSSetShader(vertexShader, nullptr, 0);
 
         // ps
+        ID3D11ShaderResourceView* textureSRV1 = earthImage->getShaderResouceView();
+        ID3D11ShaderResourceView* textureSRV2 = earthHeightMap->getShaderResouceView();
+
+        ID3D11SamplerState* samplerState1 = earthImage->getSamplerState();
+        ID3D11SamplerState* samplerState2 = earthHeightMap->getSamplerState();
+
         deviceContext->PSSetShader(pixelShader, nullptr, 0);
+        deviceContext->PSSetSamplers(0, 1, &samplerState1);
+        deviceContext->PSSetShaderResources(0, 1, &textureSRV1);
+
+        deviceContext->PSSetSamplers(1, 1, &samplerState2);
+        deviceContext->PSSetShaderResources(1, 1, &textureSRV2);
+
         deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &skyCB, 0, 0);
         deviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
 
@@ -287,6 +324,7 @@ void createConstantBuffers()
     skyCB.cameraToWorld = camera->getCameraToWorld();
 
     skyCB.sunDirection = t3Vector3f(0, 1, 0);
+    skyCB.sunIntensity = 20.0f;
     skyCB.earthRadius = 6360e3;
     skyCB.atmosphereRadius = 6420e3;
     skyCB.thicknessR = 7994;
@@ -403,7 +441,7 @@ void destroy()
 int main()
 {
     s3App app;
-    if (!app.init(t3Vector2f(1280, 720), t3Vector2f(100, 100)))
+    if (!app.init(t3Vector2f(1600, 900), t3Vector2f(10, 10)))
         return 0;
 
     s3Window* window = app.getWindow();
@@ -418,8 +456,14 @@ int main()
 
     //camera = new s3Camera(t3Vector3f(0, 0, -1.5e7), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
     //    width / height, 65, 0.1f, 6e5f);
-    camera = new s3Camera(target, target + t3Vector3f(0, 0, 100), t3Vector3f(0, 1, 0),
+    camera = new s3Camera(origin, originLookAt, t3Vector3f(0, 1, 0),
         width / height, 65, 0.001f, 1000000.0f);
+
+    earthImage = new s3Image();
+    earthImage->load(device, "../resources/EarthDayTime8k.png");
+
+    earthHeightMap = new s3Image();
+    earthHeightMap->load(device, "../resources/EarthHeightMap8k.png");
 
     //createVertexIndexBuffer();
     createStates();

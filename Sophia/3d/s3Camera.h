@@ -7,14 +7,15 @@
 class s3Camera
 {
 public:
-    s3Camera(t3Vector3f origin, t3Vector3f lookAt, t3Vector3f up, 
+    s3Camera(t3Vector3f origin, t3Vector3f direction, t3Vector3f up, 
              float32 aspectRatio = 1.333f, float32 fovDeg = 45.0f, float32 nearZ = 0.1f, float32 farZ = 100.0f);
     ~s3Camera();
 
     void setProjectionMatrix(float32 aspectRatio, float32 fovDeg, float32 nearZ, float32 farZ);
     t3Matrix4x4 getProjectionMatrix() const;
 
-    void setCameraToWorld(t3Vector3f origin, t3Vector3f lookAt, t3Vector3f up);
+    void setCameraToWorld(const t3Vector3f& origin, const t3Vector3f& direction, const t3Vector3f& up);
+    void setCameraToWorld(const t3Matrix4x4& cameraToWorld);
     t3Matrix4x4 getCameraToWorld() const;
     t3Matrix4x4 getWorldToCamera() const;
     void getViewAxis(t3Vector3f& origin, t3Vector3f& right, t3Vector3f& up, t3Vector3f& direction);
@@ -23,6 +24,10 @@ public:
     float32 getNearZ() const;
     float32 getFarZ() const;
     float32 getFovY() const;
+
+    // mouse / keyboard control
+    void setMouseSpeed(float mouseSpeed);
+    void setKeyboardSpeed(float keyboardSpeed);
 
 private:
     void handleInit();
@@ -36,7 +41,7 @@ private:
     t3Matrix4x4 cameraToWorld, worldToCamera;
     t3Matrix4x4 projectionMatrix;
 
-    t3Vector3f origin, lookAt, up;
+    //t3Vector3f origin, lookAt, up;
 
     class s3CameraHandle;
     s3CameraHandle* cameraHandle;

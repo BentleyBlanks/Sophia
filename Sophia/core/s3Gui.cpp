@@ -592,7 +592,7 @@ bool    s3ImGuiInit(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* devic
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
 
     g_hWnd = (HWND)hwnd;

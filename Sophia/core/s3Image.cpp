@@ -15,6 +15,7 @@ s3Image::~s3Image()
 
 bool s3Image::load(ID3D11Device* device, const std::string & filePath)
 {
+    s3Log::debug("Image:%s Begin loading...\n", filePath.c_str());
     std::vector<unsigned char> image;
     unsigned w, h;
 
@@ -33,6 +34,8 @@ bool s3Image::load(ID3D11Device* device, const std::string & filePath)
     imageData.clear();
     for (int32 i = 0; i < height; i++)
     {
+        s3Log::info("Loding: %.2f%% \r", (float)i / height * 100);
+
         for (int32 j = 0; j < width; j++)
         {
             imageData.push_back(t3Vector3f(image[(i * width + j) * 4 + 0] / 255.0f,
@@ -113,6 +116,7 @@ bool s3Image::load(ID3D11Device* device, const std::string & filePath)
         return false;
     }
 
+    s3Log::success("Image:%s loaded Successfully\n", filePath.c_str());
     loaded = true;
     return true;
 }

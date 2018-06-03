@@ -30,6 +30,7 @@ cbuffer skyCB
 
 	// atmospheric
     float3 sunDirection;
+    float sunIntensity;
     float earthRadius, atmosphereRadius;
 	// Thickness of the atmosphere if density was uniform (Rayleigh + Mie)
     float thicknessR, thicknessM;
@@ -40,6 +41,11 @@ cbuffer skyCB
     float numSampleViewDir, numSampleLight;
     int isToneMapping;
 };
+
+// Texture for earth
+Texture2D earthTexture, earthHeightMap;
+
+sampler earthSampler, earthHeightSampler;
 
 bool solveQuadratic(float A, float B, float C, inout float t0, inout float t1)
 {
@@ -152,9 +158,27 @@ float4 main(input i) : SV_TARGET
     float nearTEarth = -FLOAT_MAX, farTEarth = FLOAT_MAX, minT = 0.0f, maxT = FLOAT_MAX;
 
 	// intersect earth
+    float3 earthTextureColor = float3(1, 1, 1);
     if (raySphereIntersect(r, earth, nearTEarth, farTEarth) && farTEarth > 0)
+    {
 		// atmos range between [0, nearT]
         maxT = max(0.0f, nearTEarth);
+
+		if(nearTEarth > 0)
+        {
+            float3 intersectPoint = r.origin + r.direction * nearTEarth;
+
+			// no normalize needed(prevent float error caused by large position)
+            float3 d = (intersectPoint - earth.origin) / earth.radius;
+            float theta = acos(d.z);
+            float phi = atan(d.y / d.x);
+
+			// convert to spherical coordinate system(range[0, 1])
+            float2 texCoord = float2((theta * 2.0f / PI + 1.0f) / 2.0f, phi / PI);
+
+            earthTextureColor = earthTexture.Sample(earthSampler, texCoord);
+        }
+    }
 
 	// intersect atmos
     float nearTAtmos = -FLOAT_MAX, farTAtmos = FLOAT_MAX;
@@ -231,9 +255,9 @@ float4 main(input i) : SV_TARGET
     }
 
 	if(isToneMapping)
-		return tonemapping(float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * 20, 1));
+        return tonemapping(float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity * earthTextureColor, 1));
 	else
-        return float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * 20, 1);
+        return float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity * earthTextureColor, 1);
 
     //return float4(0, 0, 1, 1);
     //return float4(i.texCoord.x, i.texCoord.y, 0, 1.0f);
