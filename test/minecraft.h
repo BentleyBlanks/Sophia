@@ -329,8 +329,8 @@ void createShaders()
 #if _DEBUG
     flags |= D3DCOMPILE_DEBUG;
 #endif
-    std::wstring vsFilePath(L"../Sophia/shaders/vertex.hlsl");
-    std::wstring psFilePath(L"../Sophia/shaders/pixel.hlsl");
+    std::wstring vsFilePath(L"../Sophia/shaders/simple/vertex.hlsl");
+    std::wstring psFilePath(L"../Sophia/shaders/simple/pixel.hlsl");
 
     // ---------------------------------vertex shader---------------------------------
     HRESULT hr = D3DCompileFromFile(

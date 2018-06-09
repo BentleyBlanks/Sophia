@@ -18,7 +18,12 @@ public:
     void setCameraToWorld(const t3Matrix4x4& cameraToWorld);
     t3Matrix4x4 getCameraToWorld() const;
     t3Matrix4x4 getWorldToCamera() const;
-    void getViewAxis(t3Vector3f& origin, t3Vector3f& right, t3Vector3f& up, t3Vector3f& direction);
+
+    t3Vector3f getOrigin() const;
+    t3Vector3f getUpAxis() const;
+    t3Vector3f getDirectionAxis() const;
+    t3Vector3f getRightAxis() const;
+    void getViewAxis(t3Vector3f& origin, t3Vector3f& right, t3Vector3f& up, t3Vector3f& direction) const;
 
     float32 getAspectRatio() const;
     float32 getNearZ() const;
@@ -29,6 +34,10 @@ public:
     void setMouseSpeed(float mouseSpeed);
     void setKeyboardSpeed(float keyboardSpeed);
 
+    void setMouseEventState(bool state);
+    void setKeyboardEventState(bool state);
+    bool getMouseEventState() const;
+    bool getKeyboardEventState() const;
 private:
     void handleInit();
     void handleDeinit();
@@ -41,8 +50,9 @@ private:
     t3Matrix4x4 cameraToWorld, worldToCamera;
     t3Matrix4x4 projectionMatrix;
 
-    //t3Vector3f origin, lookAt, up;
-
     class s3CameraHandle;
     s3CameraHandle* cameraHandle;
+
+    // Event
+    bool mouseEventState, keyboardEventState;
 };

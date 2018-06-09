@@ -177,6 +177,9 @@ float4 main(input i) : SV_TARGET
             float2 texCoord = float2((theta * 2.0f / PI + 1.0f) / 2.0f, phi / PI);
 
             earthTextureColor = earthTexture.Sample(earthSampler, texCoord);
+
+			// height mapping
+            nearTEarth += 8848 * earthHeightMap.Sample(earthHeightSampler, texCoord);
         }
     }
 
@@ -254,11 +257,13 @@ float4 main(input i) : SV_TARGET
         currentT += segmentLength;
     }
 
-	if(isToneMapping)
-        return tonemapping(float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity * earthTextureColor, 1));
-	else
-        return float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity * earthTextureColor, 1);
+    float4 color = float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity, 1);
 
-    //return float4(0, 0, 1, 1);
+	if(isToneMapping)
+        return tonemapping(color);
+	else
+        return color;
+
+    return float4(0, 0, 1, 1);
     //return float4(i.texCoord.x, i.texCoord.y, 0, 1.0f);
 }

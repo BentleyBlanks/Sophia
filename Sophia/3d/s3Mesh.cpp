@@ -177,13 +177,13 @@ s3Mesh* s3Mesh::createSphere(ID3D11DeviceContext* deviceContext, float32 radius,
             int32 nextI = i + 1;
             int32 nextJ = (j + 1) % stride;
 
+            indices.push_back(i * stride + nextJ);
+            indices.push_back(nextI * stride + j);
             indices.push_back(i * stride + j);
-            indices.push_back(nextI * stride + j);
-            indices.push_back(i * stride + nextJ);
 
-            indices.push_back(i * stride + nextJ);
-            indices.push_back(nextI * stride + j);
             indices.push_back(nextI * stride + nextJ);
+            indices.push_back(nextI * stride + j);
+            indices.push_back(i * stride + nextJ);
         }
     }
 
@@ -201,7 +201,7 @@ s3Mesh* s3Mesh::createSphere(ID3D11DeviceContext* deviceContext, float32 radius,
     return mesh;
 }
 
-void s3Mesh::draw(ID3D11DeviceContext * deviceContext)
+void s3Mesh::draw(ID3D11DeviceContext * deviceContext) const
 {
     uint32 vertexStride = sizeof(s3VertexPNT);
     uint32 offset = 0;
@@ -223,4 +223,26 @@ s3Mesh::s3Mesh(const s3Mesh & ref)
 
 s3Mesh::~s3Mesh()
 {
+}
+
+void s3Mesh::setObjectToWorld(t3Matrix4x4 objectToWorld)
+{
+    this->objectToWorld = objectToWorld;
+    this->worldToObject = objectToWorld.getInverse();
+}
+
+void s3Mesh::setWoldToObject(t3Matrix4x4 worldToObject)
+{
+    this->worldToObject = worldToObject;
+    this->objectToWorld = worldToObject.getInverse();
+}
+
+t3Matrix4x4 s3Mesh::getObjectToWorld() const
+{
+    return objectToWorld;
+}
+
+t3Matrix4x4 s3Mesh::getWoldToObject() const
+{
+    return worldToObject;
 }

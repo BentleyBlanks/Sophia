@@ -170,3 +170,68 @@ void s3ScalarSinCos(float * pSin, float * pCos, float Value)
     *pCos = sign*p;
 }
 
+bool s3SolveQuadratic(float A, float B, float C, float* t0, float* t1)
+{
+    // --!Copied from Mitsuba(util.cpp 447)
+    /* Linear case */
+    if (A == 0)
+    {
+        if (B != 0)
+        {
+            *t0 = *t1 = -C / B;
+            return true;
+        }
+        return false;
+    }
+
+    float discrim = B * B - 4.0f * A * C;
+
+    /* Leave if there is no solution */
+    if (discrim < 0)
+        return false;
+
+    float temp, sqrtDiscrim = sqrt(discrim);
+
+    /* Numerically stable version of (-b (+/-) sqrtDiscrim) / (2 * a)
+    *
+    * Based on the observation that one solution is always
+    * accurate while the other is not. Finds the solution of
+    * greater magnitude which does not suffer from loss of
+    * precision and then uses the identity x1 * x2 = c / a
+    */
+    // 通过B的状态求得更大的temp来避免出现精度丢失问题
+    if (B < 0)
+        temp = -0.5f * (B - sqrtDiscrim);
+    else
+        temp = -0.5f * (B + sqrtDiscrim);
+
+    *t0 = temp / A;
+    *t1 = C / temp;
+
+    /* Return the results so that t0 < t1 */
+    if (*t0 > *t1)
+    {
+        float t = *t0;
+        *t0 = *t1;
+        *t1 = t;
+    }
+
+    return true;
+}
+
+// world space
+bool s3RaySphereIntersect(s3Ray r, s3Sphere s, float* nearT, float* farT)
+{
+    t3Vector3f o = r.origin - s.origin;
+    t3Vector3f d = r.direction;
+
+    // direction为单位向量，长度为1
+    float A = r.direction.length();
+    float B = 2 * o.dot(r.direction);
+    float C = o.dot(o) - s.radius * s.radius;
+
+    if (!s3SolveQuadratic(A, B, C, nearT, farT))
+        return false;
+
+    return true;
+}

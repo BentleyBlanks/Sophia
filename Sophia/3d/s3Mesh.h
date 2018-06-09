@@ -2,6 +2,7 @@
 
 #include <t3Vector3.h>
 #include <t3Vector2.h>
+#include <t3Matrix4x4.h>
 #include <core/s3Settings.h>
 
 class s3VertexPNT
@@ -22,10 +23,17 @@ public:
 class s3Mesh
 {
 public:
-    void draw(ID3D11DeviceContext* deviceContext);
+    void draw(ID3D11DeviceContext* deviceContext) const;
 
     static s3Mesh* createCube(ID3D11DeviceContext* deviceContext, float32 size);
     static s3Mesh* createSphere(ID3D11DeviceContext* deviceContext, float32 radius = 1, int32 tessellation = 16);
+
+    void setObjectToWorld(t3Matrix4x4 objectToWorld);
+    void setWoldToObject(t3Matrix4x4 worldToObject);
+
+    t3Matrix4x4 getObjectToWorld() const;
+    t3Matrix4x4 getWoldToObject() const;
+
 private:
     s3Mesh();
     s3Mesh(const s3Mesh& ref);
@@ -35,4 +43,6 @@ private:
     ID3D11Buffer* indexBuffer;
 
     int32 indexCount;
+
+    t3Matrix4x4 objectToWorld, worldToObject;
 };

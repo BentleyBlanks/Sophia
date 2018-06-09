@@ -37,6 +37,15 @@
     <Filter Include="Sophia\thirdparty\imgui">
       <UniqueIdentifier>{38f23717-e17a-4f8e-87ee-28ce7faa8837}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\shaders\simple">
+      <UniqueIdentifier>{aab2b1d7-a7c5-418c-8f86-aa3c374ca52b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\shaders\sky">
+      <UniqueIdentifier>{2da4ea79-0ac4-4c8d-8205-36c9d5949a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\shaders\skyRayCasting">
+      <UniqueIdentifier>{fd2812e8-7933-4084-9ba3-59a376e93aa5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -110,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_draw.cpp">
       <Filter>Sophia\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\3d\s3Shader.cpp">
+      <Filter>Sophia\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +224,9 @@
     <ClInclude Include="..\Sophia\thirdparty\imgui\stb_truetype.h">
       <Filter>Sophia\thirdparty\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sophia\3d\s3Shader.h">
+      <Filter>Sophia\3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.inl">
@@ -231,17 +246,41 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Sophia\shaders\pixel.hlsl">
-      <Filter>Sophia\shaders</Filter>
+    <FxCompile Include="..\Sophia\shaders\simple\pixel.hlsl">
+      <Filter>Sophia\shaders\simple</Filter>
     </FxCompile>
-    <FxCompile Include="..\Sophia\shaders\vertex.hlsl">
-      <Filter>Sophia\shaders</Filter>
+    <FxCompile Include="..\Sophia\shaders\simple\vertex.hlsl">
+      <Filter>Sophia\shaders\simple</Filter>
     </FxCompile>
-    <FxCompile Include="..\Sophia\shaders\skyPixel.hlsl">
-      <Filter>Sophia\shaders</Filter>
+    <FxCompile Include="..\Sophia\shaders\skyRayCasting\skyPixel.hlsl">
+      <Filter>Sophia\shaders\skyRayCasting</Filter>
     </FxCompile>
-    <FxCompile Include="..\Sophia\shaders\skyVert.hlsl">
-      <Filter>Sophia\shaders</Filter>
+    <FxCompile Include="..\Sophia\shaders\sky\earthVS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\skyRayCasting\skyVert.hlsl">
+      <Filter>Sophia\shaders\skyRayCasting</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\earthPS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\skyFromSpaceVS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\skyFromSpacePS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\skyFromAtmosVS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\skyFromAtmosPS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\lutVS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\sky\lutPS.hlsl">
+      <Filter>Sophia\shaders\sky</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

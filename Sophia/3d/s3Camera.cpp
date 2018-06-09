@@ -4,107 +4,120 @@
 #include <app/s3CallbackManager.h>
 #include <core/s3MathHepler.h>
 
-static float accumulativeAngleX = 0.0f, accumulativeAngleY = 0.0f;
-
 class s3Camera::s3CameraHandle : public s3CallbackHandle
 {
 public:
-    s3CameraHandle(s3Camera* camera) : camera(camera), keyboardSpeed(1e5f), mouseSpeed(1) {}
+    s3CameraHandle(s3Camera* camera) 
+        : camera(camera), keyboardSpeed(0.5f), mouseSpeed(0.5), accumulativeAngleX(0.0f), accumulativeAngleY(0.0f) {}
 
     void onHandle(const s3CallbackUserData* data)
     {
         t3Vector3f origin, right, up, direction;
         camera->getViewAxis(origin, right, up, direction);
 
-        if (data->sender == &s3CallbackManager::callBack.onKeyPressed)
+        if (camera->keyboardEventState)
         {
-            s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
-            if (keyEvent->key == 'w')
-                origin += keyboardSpeed * direction;
-            else if (keyEvent->key == 'a')
-                origin += keyboardSpeed * -right;
-            else if (keyEvent->key == 's')
-                origin += keyboardSpeed * -direction;
-            else if (keyEvent->key == 'd')
-                origin += keyboardSpeed * right;
-            
-            if(keyEvent->keyCode == s3KeyCode::Up)
-                origin += keyboardSpeed * up;
-            else if (keyEvent->keyCode == s3KeyCode::Down)
-                origin += keyboardSpeed * -up;
-            else if (keyEvent->keyCode == s3KeyCode::Left)
-                origin += keyboardSpeed * -right;
-            else if (keyEvent->keyCode == s3KeyCode::Right)
-                origin += keyboardSpeed * right;
-#ifdef TEST
-            keyEvent->print(0);
-#endif
-        }
-        else if (data->sender == &s3CallbackManager::callBack.onKeyReleased)
-        {
-            s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
-#ifdef TEST
-            keyEvent->print(1);
-#endif
-        }
-        else if (data->sender == &s3CallbackManager::callBack.onMouseMoved)
-        {
-            s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+            if (data->sender == &s3CallbackManager::callBack.onKeyPressed)
+            {
+                s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
+                if (keyEvent->key == 'w')
+                    origin += keyboardSpeed * direction;
+                else if (keyEvent->key == 'a')
+                    origin += keyboardSpeed * -right;
+                else if (keyEvent->key == 's')
+                    origin += keyboardSpeed * -direction;
+                else if (keyEvent->key == 'd')
+                    origin += keyboardSpeed * right;
 
-            //t3Vector3f d(0, 0, 1), u(0, 1, 0), r(1, 0, 0);
-            //// dragged(move + pressed)
-            //if (mouseEvent->type == s3MouseEvent::s3ButtonType::LEFT)
-            //{
-            //    if (mouseEvent->offsetX != 0)
-            //    {
-            //        accumulativeAngleX = fmodf(accumulativeAngleX + mouseEvent->offsetX * mouseSpeed, 360.0f);
-            //        t3Matrix4x4 a = makeRotationMatrix(accumulativeAngleX, origin, up);
-
-            //        // rotate 2 axis
-            //        d = (d * a - origin).getNormalized();
-            //        r = (r * a - origin).getNormalized();
-            //        u = d.getCrossed(r).getNormalized();
-            //    }
-            //    
-            //    if (mouseEvent->offsetY != 0)
-            //    {
-            //        accumulativeAngleY = fmodf(accumulativeAngleY + mouseEvent->offsetY * mouseSpeed, 360.0f);
-            //        t3Matrix4x4 a = makeRotationMatrix(accumulativeAngleY, origin, right);
-
-            //        // rotate 2 axis
-            //        d = (d * a - origin).getNormalized();
-            //        u = (u * a - origin).getNormalized();
-            //        r = u.getCrossed(d).getNormalized();
-            //    }
-
-            //    direction = d;
-            //    up = u;
-            //    right = r;
+                if (keyEvent->keyCode == s3KeyCode::Up)
+                    origin += keyboardSpeed * up;
+                else if (keyEvent->keyCode == s3KeyCode::Down)
+                    origin += keyboardSpeed * -up;
+                else if (keyEvent->keyCode == s3KeyCode::Left)
+                    origin += keyboardSpeed * -right;
+                else if (keyEvent->keyCode == s3KeyCode::Right)
+                    origin += keyboardSpeed * right;
 #ifdef TEST
-                mouseEvent->print(2);
+                keyEvent->print(0);
 #endif
-            //}
+            }
+            else if (data->sender == &s3CallbackManager::callBack.onKeyReleased)
+            {
+                s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
+#ifdef TEST
+                keyEvent->print(1);
+#endif
+            }
         }
-        else if (data->sender == &s3CallbackManager::callBack.onMousePressed)
+
+        if (camera->mouseEventState)
         {
-            s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+            if (data->sender == &s3CallbackManager::callBack.onMouseMoved)
+            {
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+
+                t3Vector3f d(0, 0, 1), u(0, 1, 0), r(1, 0, 0);
+                // dragged(move + pressed)
+                if (mouseEvent->type == s3MouseEvent::s3ButtonType::LEFT)
+                {
+                    if (mouseEvent->offsetX != 0)
+                    {
+                        accumulativeAngleX = fmodf(accumulativeAngleX + mouseEvent->offsetX * mouseSpeed, 360.0f);
+                        t3Matrix4x4 a = makeRotationMatrix(accumulativeAngleX, origin, up);
+
+                        // rotate 2 axis
+                        d = (d * a - origin).getNormalized();
+                        r = (r * a - origin).getNormalized();
+                        u = d.getCrossed(r).getNormalized();
+                    }
+
+                    if (mouseEvent->offsetY != 0)
+                    {
+                        accumulativeAngleY = fmodf(accumulativeAngleY + mouseEvent->offsetY * mouseSpeed, 360.0f);
+                        t3Matrix4x4 a = makeRotationMatrix(accumulativeAngleY, origin, right);
+
+                        // rotate 2 axis
+                        d = (d * a - origin).getNormalized();
+                        u = (u * a - origin).getNormalized();
+                        r = u.getCrossed(d).getNormalized();
+                    }
+
+                    direction = d;
+                    up = u;
+                    right = r;
 #ifdef TEST
-            mouseEvent->print(0);
+                    mouseEvent->print(2);
 #endif
-        }
-        else if (data->sender == &s3CallbackManager::callBack.onMouseReleased)
-        {
-            s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+                }
+                else if(mouseEvent->type == s3MouseEvent::s3ButtonType::RIGHT)
+                {
+                    if (mouseEvent->offsetX != 0)
+                        origin += mouseEvent->offsetX * keyboardSpeed * right;
+                    if (mouseEvent->offsetY != 0)
+                        origin += mouseEvent->offsetY * keyboardSpeed * direction;
+                }
+            }
+            else if (data->sender == &s3CallbackManager::callBack.onMousePressed)
+            {
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
 #ifdef TEST
-            mouseEvent->print(1);
+                mouseEvent->print(0);
 #endif
-        }
-        else if (data->sender == &s3CallbackManager::callBack.onMouseScrolled)
-        {
-            s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+            }
+            else if (data->sender == &s3CallbackManager::callBack.onMouseReleased)
+            {
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
 #ifdef TEST
-            mouseEvent->print(3);
+                mouseEvent->print(1);
 #endif
+            }
+            else if (data->sender == &s3CallbackManager::callBack.onMouseScrolled)
+            {
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+#ifdef TEST
+                mouseEvent->print(3);
+#endif
+            }
         }
 
         // update view matrix
@@ -112,7 +125,9 @@ public:
     }
 
     s3Camera* camera;
-    float keyboardSpeed, mouseSpeed;
+    float keyboardSpeed, mouseSpeed; 
+    float accumulativeAngleX, accumulativeAngleY;
+    t3Vector3f o, d, u, r;
 };
 
 s3Camera::s3Camera(t3Vector3f origin, t3Vector3f direction, t3Vector3f up, float32 aspectRatio, float32 fovDeg, float32 nearZ, float32 farZ)
@@ -123,6 +138,9 @@ s3Camera::s3Camera(t3Vector3f origin, t3Vector3f direction, t3Vector3f up, float
     // mouse + keyboard event
     cameraHandle = new s3CameraHandle(this);
     handleInit();
+
+    mouseEventState = true;
+    keyboardEventState = true;
 }
 
 void s3Camera::handleInit()
@@ -220,7 +238,27 @@ t3Matrix4x4 s3Camera::getWorldToCamera() const
     return worldToCamera;
 }
 
-void s3Camera::getViewAxis(t3Vector3f & origin, t3Vector3f & right, t3Vector3f& up, t3Vector3f& direction)
+t3Vector3f s3Camera::getOrigin() const
+{
+    return t3Vector3f(cameraToWorld._mat[0][3], cameraToWorld._mat[1][3], cameraToWorld._mat[2][3]);
+}
+
+t3Vector3f s3Camera::getUpAxis() const
+{
+    return t3Vector3f(cameraToWorld._mat[0][1], cameraToWorld._mat[1][1], cameraToWorld._mat[2][1]);
+}
+
+t3Vector3f s3Camera::getDirectionAxis() const
+{
+    return t3Vector3f(cameraToWorld._mat[0][2], cameraToWorld._mat[1][2], cameraToWorld._mat[2][2]);
+}
+
+t3Vector3f s3Camera::getRightAxis() const
+{
+    return t3Vector3f(cameraToWorld._mat[0][0], cameraToWorld._mat[1][0], cameraToWorld._mat[2][0]);
+}
+
+void s3Camera::getViewAxis(t3Vector3f & origin, t3Vector3f & right, t3Vector3f& up, t3Vector3f& direction) const
 {
     direction.set(cameraToWorld._mat[0][2], cameraToWorld._mat[1][2], cameraToWorld._mat[2][2]);
     origin.set(cameraToWorld._mat[0][3], cameraToWorld._mat[1][3], cameraToWorld._mat[2][3]);
@@ -256,4 +294,24 @@ void s3Camera::setMouseSpeed(float mouseSpeed)
 void s3Camera::setKeyboardSpeed(float keyboardSpeed)
 {
     cameraHandle->keyboardSpeed = keyboardSpeed;
+}
+
+void s3Camera::setMouseEventState(bool state)
+{
+    mouseEventState = state;
+}
+
+void s3Camera::setKeyboardEventState(bool state)
+{
+    keyboardEventState = state;
+}
+
+bool s3Camera::getMouseEventState() const
+{
+    return mouseEventState;
+}
+
+bool s3Camera::getKeyboardEventState() const
+{
+    return keyboardEventState;
 }

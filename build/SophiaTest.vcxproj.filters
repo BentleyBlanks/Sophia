@@ -17,5 +17,8 @@
     <ClInclude Include="..\test\atmospheric.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\earth.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

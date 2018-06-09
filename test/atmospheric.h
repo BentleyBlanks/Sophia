@@ -329,7 +329,7 @@ void createConstantBuffers()
     skyCB.atmosphereRadius = 6420e3;
     skyCB.thicknessR = 7994;
     skyCB.thicknessM = 1200;
-    skyCB.betaR = t3Vector3f(3.8e-6f, 13.5e-6f, 33.1e-6f);
+    skyCB.betaR = t3Vector3f(5.8e-6f, 13.5e-6f, 33.1e-6f);
     skyCB.betaM = t3Vector3f(21e-6f);
 
     skyCB.numSampleLight = 8;
@@ -347,8 +347,8 @@ void createShaders()
 #if _DEBUG
     flags |= D3DCOMPILE_DEBUG;
 #endif
-    std::wstring vsFilePath(L"../Sophia/shaders/skyVert.hlsl");
-    std::wstring psFilePath(L"../Sophia/shaders/skyPixel.hlsl");
+    std::wstring vsFilePath(L"../Sophia/shaders/skyRayCasting/skyVert.hlsl");
+    std::wstring psFilePath(L"../Sophia/shaders/skyRayCasting/skyPixel.hlsl");
 
     // ---------------------------------vertex shader---------------------------------
     HRESULT hr = D3DCompileFromFile(
@@ -385,11 +385,11 @@ void createShaders()
     //    shaderBlob->GetBufferSize(),
     //    &inputLayout);
 
-    if (FAILED(hr))
-    {
-        s3Log::error("Input Layout Create Failed\n");
-        return;
-    }
+    //if (FAILED(hr))
+    //{
+    //    s3Log::error("Input Layout Create Failed\n");
+    //    return;
+    //}
 
     // ---------------------------------pixel shader---------------------------------
     profile = s3GetLatestProfile(s3ShaderType::S3_PIXEL_SHADER);
@@ -458,6 +458,7 @@ int main()
     //    width / height, 65, 0.1f, 6e5f);
     camera = new s3Camera(origin, originLookAt, t3Vector3f(0, 1, 0),
         width / height, 65, 0.001f, 1000000.0f);
+    camera->setMouseEventState(false);
 
     earthImage = new s3Image();
     earthImage->load(device, "../resources/EarthDayTime8k.png");
