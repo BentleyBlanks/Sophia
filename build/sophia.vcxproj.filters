@@ -46,6 +46,9 @@
     <Filter Include="Sophia\shaders\skyRayCasting">
       <UniqueIdentifier>{fd2812e8-7933-4084-9ba3-59a376e93aa5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\light">
+      <UniqueIdentifier>{5baebb74-a132-4401-9140-76690dd9df64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\3d\s3Shader.cpp">
       <Filter>Sophia\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\light\s3PointLight.cpp">
+      <Filter>Sophia\light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="..\Sophia\3d\s3Shader.h">
       <Filter>Sophia\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\light\s3PointLight.h">
+      <Filter>Sophia\light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

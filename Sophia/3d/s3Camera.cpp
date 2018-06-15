@@ -8,7 +8,12 @@ class s3Camera::s3CameraHandle : public s3CallbackHandle
 {
 public:
     s3CameraHandle(s3Camera* camera) 
-        : camera(camera), keyboardSpeed(0.5f), mouseSpeed(0.5), accumulativeAngleX(0.0f), accumulativeAngleY(0.0f) {}
+        : 
+        camera(camera), 
+        keyboardSpeed(0.5f), 
+        mouseSpeed(0.1f), 
+        angleX(90.0f),
+        angleY(0.0f) {}
 
     void onHandle(const s3CallbackUserData* data)
     {
@@ -56,35 +61,26 @@ public:
             {
                 s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
 
-                t3Vector3f d(0, 0, 1), u(0, 1, 0), r(1, 0, 0);
-                // dragged(move + pressed)
                 if (mouseEvent->type == s3MouseEvent::s3ButtonType::LEFT)
                 {
-                    if (mouseEvent->offsetX != 0)
-                    {
-                        accumulativeAngleX = fmodf(accumulativeAngleX + mouseEvent->offsetX * mouseSpeed, 360.0f);
-                        t3Matrix4x4 a = makeRotationMatrix(accumulativeAngleX, origin, up);
+                    float32 offsetX = mouseEvent->offsetX * mouseSpeed;
+                    float32 offsetY = mouseEvent->offsetY * mouseSpeed;
 
-                        // rotate 2 axis
-                        d = (d * a - origin).getNormalized();
-                        r = (r * a - origin).getNormalized();
-                        u = d.getCrossed(r).getNormalized();
-                    }
+                    angleX += offsetX;
+                    angleY += offsetY;
 
-                    if (mouseEvent->offsetY != 0)
-                    {
-                        accumulativeAngleY = fmodf(accumulativeAngleY + mouseEvent->offsetY * mouseSpeed, 360.0f);
-                        t3Matrix4x4 a = makeRotationMatrix(accumulativeAngleY, origin, right);
+                    // make sure that when pitch is out of bounds, screen doesn't get flipped
+                    if (angleY > 89.0f)
+                        angleY = 89.0f;
+                    if (angleY < -89.0f)
+                        angleY = -89.0f;
 
-                        // rotate 2 axis
-                        d = (d * a - origin).getNormalized();
-                        u = (u * a - origin).getNormalized();
-                        r = u.getCrossed(d).getNormalized();
-                    }
-
-                    direction = d;
-                    up = u;
-                    right = r;
+                    t3Vector3f front;
+                    front.x = t3Math::cosDeg(angleX) * t3Math::cosDeg(angleY);
+                    front.y = t3Math::sinDeg(angleY);
+                    front.z = t3Math::sinDeg(angleX) * t3Math::cosDeg(angleY);
+                    direction = front.getNormalized();
+                    up.set(0, 1, 0);
 #ifdef TEST
                     mouseEvent->print(2);
 #endif
@@ -125,9 +121,8 @@ public:
     }
 
     s3Camera* camera;
-    float keyboardSpeed, mouseSpeed; 
-    float accumulativeAngleX, accumulativeAngleY;
-    t3Vector3f o, d, u, r;
+    float32 keyboardSpeed, mouseSpeed; 
+    float32 angleX, angleY;
 };
 
 s3Camera::s3Camera(t3Vector3f origin, t3Vector3f direction, t3Vector3f up, float32 aspectRatio, float32 fovDeg, float32 nearZ, float32 farZ)

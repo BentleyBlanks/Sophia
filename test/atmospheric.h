@@ -458,13 +458,13 @@ int main()
     //    width / height, 65, 0.1f, 6e5f);
     camera = new s3Camera(origin, originLookAt, t3Vector3f(0, 1, 0),
         width / height, 65, 0.001f, 1000000.0f);
-    camera->setMouseEventState(false);
+    //camera->setMouseEventState(false);
 
     earthImage = new s3Image();
-    earthImage->load(device, "../resources/EarthDayTime8k.png");
+    //earthImage->load(device, "../resources/EarthDayTime8k.png");
 
     earthHeightMap = new s3Image();
-    earthHeightMap->load(device, "../resources/EarthHeightMap8k.png");
+    //earthHeightMap->load(device, "../resources/EarthHeightMap8k.png");
 
     //createVertexIndexBuffer();
     createStates();

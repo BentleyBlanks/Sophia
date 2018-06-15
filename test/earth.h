@@ -611,14 +611,14 @@ int main()
 
     camera = new s3Camera(t3Vector3f(0, 0, -25), t3Vector3f(0, 0, 1), t3Vector3f(0, 1, 0),
         width / height, 65, 0.01f, 1000.0f);
-    camera->setMouseEventState(false);
+    //camera->setMouseEventState(false);
 
     createLUT();
     createShaders();
     createStates();
     createConstantBuffers();
 
-    earthMesh = s3Mesh::createSphere(renderer.getDeviceContext(), earthRadius, 512);
+    earthMesh = s3Mesh::createSphere(renderer.getDeviceContext(), earthRadius, 32);
     earthMesh->setObjectToWorld(t3Matrix4x4(
         1, 0, 0, 0,
         0, 1, 0, 0,

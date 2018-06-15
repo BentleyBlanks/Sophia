@@ -50,10 +50,10 @@ float4 main(input i) : SV_TARGET
 
     float4 color = phaseM * i.colorM + i.colorR * phaseR;
 
-	return float4(color.xyz, color.z);
- //   if (i.intersect.x == 0.0f)
- //       return float4(color.xyz, 1.0f);
-	//else 
- //       return float4(color.xyz * earthGround.Sample(textureSampler, i.texCoord1).xyz, 1.0f);
+	//return float4(color.xyz, color.z);
+    if (i.intersect.x == 0.0f)
+        return tonemapping(float4(color.xyz, 1.0f));
+    else
+        return tonemapping(float4(color.xyz * earthGround.Sample(textureSampler, i.texCoord1).xyz, 1.0f));
     //return tonemapping(float4(color.xyz, color.z));
 }

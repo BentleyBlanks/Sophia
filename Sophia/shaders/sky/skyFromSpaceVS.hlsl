@@ -185,7 +185,7 @@ output main(input i)
 
     // column-major matrix(transpose of the matrix on CPU)
         o.position = mul(float4(i.position, 1.0f), mvp);
-        o.texCoord0 = cameraPosition - i.position;
+        o.texCoord0 = normalize(cameraPosition - i.position);
         o.texCoord1 = i.texCoord;
         o.colorR = float4(sumR * sunIntensity * betaR, 1.0f);
         o.colorM = float4(sumM * sunIntensity * betaM, 1.0f);
