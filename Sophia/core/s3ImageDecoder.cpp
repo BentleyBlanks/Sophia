@@ -1,30 +1,11 @@
 #include <core/s3ImageDecoder.h>
 #include <core/log/s3Log.h>
+#include <app/s3Utils.h>
 
 #include <lodepng.h>
-#define TINYEXR_IMPLEMENTATION
 #include <tinyexr.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
-s3ImageType parseImageType(const std::string & filePath)
-{
-    s3ImageType type;
-    char extension[32];
-    _splitpath(filePath.c_str(), NULL, NULL, NULL, extension);
-
-    // parsing image file's postfix
-    if (!_stricmp(extension, ".png"))
-        type = S3_IMAGE_PNG;
-    else if (!_stricmp(extension, ".exr"))
-        type = S3_IMAGE_EXR;
-    else if (!_stricmp(extension, ".hdr"))
-        type = S3_IMAGE_HDR;
-    else
-        type = S3_IMAGE_ERROR;
-
-    return type;
-}
 
 s3ImageDecoder::s3ImageDecoder()
     :texture2d(nullptr), textureSRV(nullptr), samplerState(nullptr),
@@ -43,7 +24,7 @@ bool s3ImageDecoder::load(ID3D11Device* device, const std::string & filePath)
 
     // --------------------------------------Texture From File--------------------------------------
     DXGI_FORMAT format;
-    type = parseImageType(filePath);
+    type = s3GetImageType(filePath);
 
     if (type == S3_IMAGE_ERROR)
     {
@@ -199,7 +180,7 @@ bool s3ImageDecoder::load(ID3D11Device* device, const std::string & filePath)
     return true;
 }
 
-bool s3ImageDecoder::load(ID3D11Device * device, int width, int height, const std::vector<t3Vector4f>& imageData)
+bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, const std::vector<t3Vector4f>& imageData)
 {    
     if (imageData.size() <= 0 || width <=0 || height <=0)
     {

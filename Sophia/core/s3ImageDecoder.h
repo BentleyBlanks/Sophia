@@ -10,7 +10,7 @@ public:
     ~s3ImageDecoder();
 
     bool load(ID3D11Device* device, const std::string& filePath);
-    bool load(ID3D11Device* device, int width, int height, const std::vector<t3Vector4f>& imageData);
+    bool load(ID3D11Device* device, int32 width, int32 height, const std::vector<t3Vector4f>& imageData);
 
     int32 getWidth() const;
     int32 getHeight() const;

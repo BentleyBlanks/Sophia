@@ -36,3 +36,7 @@ std::string s3KeyTypeToString(s3KeyCode type);
 std::string s3BoolToString(bool b);
 
 std::string s3GetLatestProfile(s3ShaderType type);
+
+s3ImageType s3GetImageType(const std::string & filePath);
+
+

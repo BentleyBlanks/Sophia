@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/s3ImageDecoder.h>
+#include <core/s3ImageEncoder.h>
 #include <core/s3MathHepler.h>
 #include <app/s3CallbackManager.h>
 #include <app/s3Renderer.h>

@@ -197,6 +197,7 @@
     <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp" />
+    <ClCompile Include="..\Sophia\thirdparty\tinyexr\tinyexr.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sophia\3d\s3Camera.h" />

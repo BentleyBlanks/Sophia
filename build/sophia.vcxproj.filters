@@ -144,6 +144,9 @@
     <ClCompile Include="..\Sophia\core\s3ImageEncoder.cpp">
       <Filter>Sophia\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\tinyexr\tinyexr.cc">
+      <Filter>Sophia\thirdparty\tinyexr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\sophia\core\s3Settings.h">

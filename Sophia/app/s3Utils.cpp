@@ -532,3 +532,22 @@ std::string s3GetLatestProfile(s3ShaderType type)
         return "";
     }
 }
+
+s3ImageType s3GetImageType(const std::string & filePath)
+{
+    s3ImageType type;
+    char extension[32];
+    _splitpath(filePath.c_str(), NULL, NULL, NULL, extension);
+
+    // parsing image file's postfix
+    if (!_stricmp(extension, ".png"))
+        type = S3_IMAGE_PNG;
+    else if (!_stricmp(extension, ".exr"))
+        type = S3_IMAGE_EXR;
+    else if (!_stricmp(extension, ".hdr"))
+        type = S3_IMAGE_HDR;
+    else
+        type = S3_IMAGE_ERROR;
+
+    return type;
+}

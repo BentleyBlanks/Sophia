@@ -157,5 +157,18 @@ int main()
     s3CallbackManager::callBack.onBeginRender += mc;
 
     app.run();
+
+    // Image Saving Test
+    s3ImageEncoder encoder(256, 256, s3ImageType::S3_IMAGE_EXR);
+    for (int32 x = 0; x < 256; x++)
+    {
+        for (int32 y = 0; y < 256; y++) 
+        {
+            encoder.setColor(x, y, t3Vector4f(x / 255.0f, y / 255.0f, 0.5f, (x + y) / 510.0f));
+        }
+    }
+        
+    encoder.write("../resources/2.exr");
+    
     return 0;
 }
