@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <t3Vector2.h>
+#include <t3Vector4.h>
 
 class s3Window;
 
@@ -12,6 +13,7 @@ public:
 
     bool init(const t3Vector2f& size, const t3Vector2f& pos);
     void run();
+    void setClearColor(t3Vector4f clearColor);
 
     s3Window* getWindow();
 
@@ -20,4 +22,5 @@ private:
     void render();
 
     s3Window* window;
+    t3Vector4f clearColor;
 };

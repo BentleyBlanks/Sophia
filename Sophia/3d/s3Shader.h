@@ -16,9 +16,12 @@ public:
     ID3DBlob* getPixelShaderBlob();
     ID3DBlob* getVertexShaderBlob();
 
+    ID3D11InputLayout* getInputLayout();
+
 private:
     ID3D11VertexShader* vertexShader;
     ID3D11PixelShader* pixelShader;
 
     ID3DBlob* pixelShaderBlob, *vertexShaderBlob;
+    ID3D11InputLayout* inputLayout;
 };

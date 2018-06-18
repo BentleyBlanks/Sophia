@@ -7,7 +7,9 @@ s3Renderer::s3Renderer()
     deviceContext(NULL),
     swapChain(NULL),
     renderTargetView(NULL),
-    depthStencilView(NULL)
+    depthStencilView(NULL),
+    MSAAEnabled(true),
+    MSAACount(4)
 {
 }
 
@@ -54,7 +56,7 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     scd.Flags = 0;
     scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     scd.OutputWindow = hwnd;
-    scd.SampleDesc.Count = 1;
+    scd.SampleDesc.Count = MSAACount;
     scd.SampleDesc.Quality = 0;
     scd.Windowed = true;
 
@@ -97,7 +99,7 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     td.CPUAccessFlags = 0;
     td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     td.MiscFlags = 0;
-    td.SampleDesc.Count = 1;
+    td.SampleDesc.Count = MSAACount;
     td.SampleDesc.Quality = 0;
     td.Usage = D3D11_USAGE_DEFAULT;
 
@@ -259,4 +261,25 @@ ID3D11RenderTargetView * s3Renderer::getRenderTargetView()
 ID3D11DepthStencilView * s3Renderer::getDepthStencilView()
 {
     return depthStencilView;
+}
+
+void s3Renderer::setMSAACount(int count)
+{
+    if (count >= 1)
+        MSAACount = count;
+}
+
+int s3Renderer::getMSAACount()
+{
+    return MSAACount;
+}
+
+void s3Renderer::setMSAAEnabled(bool enabled)
+{
+    MSAAEnabled = enabled;
+}
+
+bool s3Renderer::getMSAAEnabled()
+{
+    return MSAAEnabled;
 }

@@ -109,6 +109,13 @@
 #define ushort	unsigned short int
 #endif
 
+enum s3ImageType
+{
+    S3_IMAGE_ERROR = -1,
+    S3_IMAGE_PNG = 0,
+    S3_IMAGE_EXR = 1,
+    S3_IMAGE_HDR = 2
+};
 
 // ------------------------Macro Function------------------------
 template<typename T>

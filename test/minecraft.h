@@ -61,7 +61,7 @@ ID3D11RasterizerState* rasterizerState = nullptr;
 // Texture
 //ID3D11ShaderResourceView* textureSRV;
 //ID3D11SamplerState* samplerState;
-s3Image* image;
+s3ImageDecoder* image;
 
 s3Mesh *sphere, *cube;
 
@@ -443,7 +443,7 @@ int main()
     sphere = s3Mesh::createSphere(renderer.getDeviceContext(), 2);
     //cube = s3Mesh::createCube(renderer.getDeviceContext(), 2);
 
-    image = new s3Image();
+    image = new s3ImageDecoder();
     image->load(device, "../resources/1.png");
 
     //createVertexIndexBuffer();

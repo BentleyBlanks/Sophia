@@ -49,6 +49,18 @@
     <Filter Include="Sophia\light">
       <UniqueIdentifier>{5baebb74-a132-4401-9140-76690dd9df64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\shaders\pbrLighting">
+      <UniqueIdentifier>{2480de53-16b4-4a90-b470-8d2dde598110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\thirdparty\tinyexr">
+      <UniqueIdentifier>{27186bbc-949e-4347-9968-98e8516587af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\thirdparty\stbImage">
+      <UniqueIdentifier>{fc6db4f9-65df-4fce-9e70-cab08c11d701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\shaders\common">
+      <UniqueIdentifier>{13a8d738-a7fa-45be-ad4c-f3768f8cce1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -108,9 +120,6 @@
     <ClCompile Include="..\Sophia\core\s3Random.cpp">
       <Filter>Sophia\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\core\s3Image.cpp">
-      <Filter>Sophia\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui.cpp">
       <Filter>Sophia\thirdparty\imgui</Filter>
     </ClCompile>
@@ -128,6 +137,12 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\light\s3PointLight.cpp">
       <Filter>Sophia\light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3ImageDecoder.cpp">
+      <Filter>Sophia\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\core\s3ImageEncoder.cpp">
+      <Filter>Sophia\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +221,6 @@
     <ClInclude Include="..\Sophia\core\s3Random.h">
       <Filter>Sophia\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\core\s3Image.h">
-      <Filter>Sophia\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sophia\thirdparty\imgui\imgui.h">
       <Filter>Sophia\thirdparty\imgui</Filter>
     </ClInclude>
@@ -235,6 +247,18 @@
     </ClInclude>
     <ClInclude Include="..\Sophia\light\s3PointLight.h">
       <Filter>Sophia\light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3ImageDecoder.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\core\s3ImageEncoder.h">
+      <Filter>Sophia\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\stbImage\stb_image.h">
+      <Filter>Sophia\thirdparty\stbImage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\tinyexr\tinyexr.h">
+      <Filter>Sophia\thirdparty\tinyexr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -290,6 +314,24 @@
     </FxCompile>
     <FxCompile Include="..\Sophia\shaders\sky\lutPS.hlsl">
       <Filter>Sophia\shaders\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\pbrLighting\pbrLightingPS.hlsl">
+      <Filter>Sophia\shaders\pbrLighting</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\pbrLighting\pbrLightingVS.hlsl">
+      <Filter>Sophia\shaders\pbrLighting</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\pbrLighting\pbrIBLPS.hlsl">
+      <Filter>Sophia\shaders\pbrLighting</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\pbrLighting\pbrIBLVS.hlsl">
+      <Filter>Sophia\shaders\pbrLighting</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\common\drawImageVS.hlsl">
+      <Filter>Sophia\shaders\common</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\common\drawImagePS.hlsl">
+      <Filter>Sophia\shaders\common</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

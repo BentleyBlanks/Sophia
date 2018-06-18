@@ -2,12 +2,14 @@
 #include <app/s3Utils.h>
 #include <core/log/s3Log.h>
 #include <core/s3Settings.h>
+#include <3d/s3Mesh.h>
 
 s3Shader::s3Shader() : 
     vertexShader(nullptr), 
     pixelShader(nullptr), 
     pixelShaderBlob(nullptr), 
-    vertexShaderBlob(nullptr)
+    vertexShaderBlob(nullptr),
+    inputLayout(nullptr)
 {
 }
 
@@ -61,6 +63,20 @@ bool s3Shader::load(ID3D11Device* device, const std::wstring& vsFilePath, const 
     if (FAILED(hr))
     {
         s3Log::error("Vertex Shader Create Failed\n");
+        return false;
+    }
+
+    // Vertex PNT Input layout 
+    hr = device->CreateInputLayout(
+        s3VertexPNT::inputDesc,
+        _countof(s3VertexPNT::inputDesc),
+        vertexShaderBlob->GetBufferPointer(),
+        vertexShaderBlob->GetBufferSize(),
+        &inputLayout);
+
+    if (FAILED(hr))
+    {
+        s3Log::error("Input Layout Create Failed\n");
         return false;
     }
 
@@ -121,4 +137,9 @@ ID3DBlob* s3Shader::getPixelShaderBlob()
 ID3DBlob* s3Shader::getVertexShaderBlob()
 {
     return vertexShaderBlob;
+}
+
+ID3D11InputLayout * s3Shader::getInputLayout()
+{
+    return inputLayout;
 }

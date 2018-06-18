@@ -101,7 +101,7 @@ s3SkyFromSpacePSCB skyFromSpacePSSCBCPU;
 
 ID3D11Buffer* earthCBGPU = nullptr;
 s3EarthCB earhCBCPU;
-s3Image* earthGround;
+s3ImageDecoder* earthGround;
 
 // Attributes
 t3Vector3f lightDirection(0, 0, 1);
@@ -128,7 +128,7 @@ t3Vector3f betaR = t3Vector3f(Kr * 4 * T3MATH_PI / waveLength4.x,
                               Km * 4 * T3MATH_PI / waveLength4.z);
 //t3Vector3f betaR(3.8e-6f, 13.5e-6f, 33.1e-6f), betaM(23.1e-6f);
 
-s3Image* lut = nullptr;
+s3ImageDecoder* lut = nullptr;
 int lutAngleSamples = 180, lutAltitudeSamples = 64, lutLightSamples = 50;
 float Hr = 0.25f, Hm = 0.1f;
 
@@ -236,7 +236,7 @@ void MakeOpticalDepthBuffer(std::vector<t3Vector4f>& data, float fInnerRadius, f
 
 void createLUT()
 {
-    lut = new s3Image();
+    lut = new s3ImageDecoder();
     std::vector<t3Vector4f> data;
 
     //MakeOpticalDepthBuffer(data, earthRadius, atmosRadius, Hr, Hm);
@@ -632,7 +632,7 @@ int main()
         0, 0, 1, 0,
         0, 0, 0, 1));
 
-    earthGround = new s3Image();
+    earthGround = new s3ImageDecoder();
     earthGround->load(device, "../resources/EarthNoCloud2k.png");
 
     s3Sky mc;

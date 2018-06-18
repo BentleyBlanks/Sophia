@@ -103,7 +103,7 @@ s3Camera* camera = nullptr;
 t3Vector3f target(0, 6360e3 + 1000, -30000), origin(0, 6360e3, -1.5e7);
 t3Vector3f targetLookAt(0, 0, 1), originLookAt(0, -0.330350399f, 0.943858325f);
 
-s3Image* earthImage, *earthHeightMap;
+s3ImageDecoder* earthImage, *earthHeightMap;
 
 class s3Sky : public s3CallbackHandle
 {
@@ -460,10 +460,10 @@ int main()
         width / height, 65, 0.001f, 1000000.0f);
     //camera->setMouseEventState(false);
 
-    earthImage = new s3Image();
+    earthImage = new s3ImageDecoder();
     //earthImage->load(device, "../resources/EarthDayTime8k.png");
 
-    earthHeightMap = new s3Image();
+    earthHeightMap = new s3ImageDecoder();
     //earthHeightMap->load(device, "../resources/EarthHeightMap8k.png");
 
     //createVertexIndexBuffer();

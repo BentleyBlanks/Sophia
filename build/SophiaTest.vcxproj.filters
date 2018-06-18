@@ -20,5 +20,11 @@
     <ClInclude Include="..\test\earth.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\pbrLighting.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\commonShader.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

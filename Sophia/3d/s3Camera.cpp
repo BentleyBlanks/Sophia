@@ -10,7 +10,7 @@ public:
     s3CameraHandle(s3Camera* camera) 
         : 
         camera(camera), 
-        keyboardSpeed(0.5f), 
+        keyboardSpeed(0.1f), 
         mouseSpeed(0.1f), 
         angleX(90.0f),
         angleY(0.0f) {}
@@ -69,7 +69,6 @@ public:
                     angleX += offsetX;
                     angleY += offsetY;
 
-                    // make sure that when pitch is out of bounds, screen doesn't get flipped
                     if (angleY > 89.0f)
                         angleY = 89.0f;
                     if (angleY < -89.0f)

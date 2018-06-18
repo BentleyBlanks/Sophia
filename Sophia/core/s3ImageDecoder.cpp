@@ -1,58 +1,111 @@
-#include <core/s3Image.h>
-#include <lodepng.h>
+#include <core/s3ImageDecoder.h>
 #include <core/log/s3Log.h>
 
-s3Image::s3Image()
+#include <lodepng.h>
+#define TINYEXR_IMPLEMENTATION
+#include <tinyexr.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+s3ImageType parseImageType(const std::string & filePath)
+{
+    s3ImageType type;
+    char extension[32];
+    _splitpath(filePath.c_str(), NULL, NULL, NULL, extension);
+
+    // parsing image file's postfix
+    if (!_stricmp(extension, ".png"))
+        type = S3_IMAGE_PNG;
+    else if (!_stricmp(extension, ".exr"))
+        type = S3_IMAGE_EXR;
+    else if (!_stricmp(extension, ".hdr"))
+        type = S3_IMAGE_HDR;
+    else
+        type = S3_IMAGE_ERROR;
+
+    return type;
+}
+
+s3ImageDecoder::s3ImageDecoder()
     :texture2d(nullptr), textureSRV(nullptr), samplerState(nullptr),
-    width(-1), height(-1), loaded(false)
+    width(-1), height(-1), loaded(false), type(S3_IMAGE_ERROR)
 {
 }
 
-s3Image::~s3Image()
+s3ImageDecoder::~s3ImageDecoder()
 {
-    imageData.clear();
+    //imageData.clear();
 }
 
-bool s3Image::load(ID3D11Device* device, const std::string & filePath)
+bool s3ImageDecoder::load(ID3D11Device* device, const std::string & filePath)
 {
     s3Log::debug("Image:%s Begin loading...\n", filePath.c_str());
-    std::vector<unsigned char> image;
-    unsigned w, h;
 
-    unsigned error = lodepng::decode(image, w, h, filePath.c_str());
+    // --------------------------------------Texture From File--------------------------------------
+    DXGI_FORMAT format;
+    type = parseImageType(filePath);
 
-    if (error)
+    if (type == S3_IMAGE_ERROR)
     {
-        s3Log::error("s3ImageDecoder load:%s failed, Error: %s", filePath.c_str(), lodepng_error_text(error));
-        loaded = false;
+        s3Log::error("s3ImageDecoder load failed, image postfix not suppoted\n");
         return false;
     }
 
-    width = (int32) w;
-    height = (int32) h;
+    // For different type of image
+    std::vector<unsigned char> pngData;
+    float* exrData = NULL, *hdrData = NULL;
 
-    imageData.clear();
-    for (int32 i = 0; i < height; i++)
+    if (type == S3_IMAGE_PNG)
     {
-        s3Log::info("Loding: %.2f%% \r", (float)i / height * 100);
+        unsigned w, h;
+        unsigned error = lodepng::decode(pngData, w, h, filePath.c_str());
 
-        for (int32 j = 0; j < width; j++)
+        if (error)
         {
-            imageData.push_back(t3Vector4f(image[(i * width + j) * 4 + 0] / 255.0f,
-                                           image[(i * width + j) * 4 + 1] / 255.0f,
-                                           image[(i * width + j) * 4 + 2] / 255.0f,
-                                           1.0f));
+            s3Log::error("s3ImageDecoder load:%s failed, Error: %s\n", filePath.c_str(), lodepng_error_text(error));
+            loaded = false;
+            return false;
         }
+
+        width = (int32)w;
+        height = (int32)h;
+        format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    }
+    else if (type == S3_IMAGE_EXR)
+    {
+        const char* error;
+        if (LoadEXR(&exrData, &width, &height, filePath.c_str(), &error) != 0)
+        {
+            s3Log::error("s3ImageDecoder load:%s failed, Error: %s\n", error);
+            exrData = NULL;
+            return false;
+        }
+        format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    }
+    else if (type == S3_IMAGE_HDR)
+    {
+        //stbi_set_flip_vertically_on_load(true);
+
+        int numComponents;
+        hdrData = stbi_loadf(filePath.c_str(), &width, &height, &numComponents, 0);
+
+        if (!hdrData)
+        {
+            s3Log::error("s3ImageDecoder load:%s failed\n");
+            return false;
+        }
+
+        format = DXGI_FORMAT_R32G32B32_FLOAT;
     }
 
-    // DX11 Texture2D
+    // --------------------------------------DX11 Texture2D--------------------------------------
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
     textureDesc.ArraySize = 1;
     textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
     textureDesc.CPUAccessFlags = 0;
-    textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    textureDesc.Format = format;
     textureDesc.Width = width;
     textureDesc.Height = height;
     textureDesc.MipLevels = 1;
@@ -64,9 +117,23 @@ bool s3Image::load(ID3D11Device* device, const std::string & filePath)
     // Bind Data to Texture2D
     D3D11_SUBRESOURCE_DATA initData;
     ZeroMemory(&initData, sizeof(D3D11_SUBRESOURCE_DATA));
-    initData.pSysMem = imageData.data();
-    initData.SysMemPitch = sizeof(t3Vector4f) * width;
     initData.SysMemSlicePitch = 0;
+
+    if (type == S3_IMAGE_PNG)
+    {
+        initData.pSysMem = pngData.data();
+        initData.SysMemPitch = sizeof(uint8) * 4 * width;
+    }
+    else if (type == S3_IMAGE_EXR)
+    {
+        initData.pSysMem = exrData;
+        initData.SysMemPitch = sizeof(float32) * 4 * width;
+    }
+    else if (type == S3_IMAGE_HDR)
+    {
+        initData.pSysMem = hdrData;
+        initData.SysMemPitch = sizeof(float32) * 3 * width;
+    }
 
     HRESULT hr = device->CreateTexture2D(&textureDesc, &initData, &texture2d);
     if (FAILED(hr))
@@ -79,7 +146,7 @@ bool s3Image::load(ID3D11Device* device, const std::string & filePath)
     // Create texture's relative shader resource view
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     ZeroMemory(&srvDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-    srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+    srvDesc.Format = format;
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MipLevels = 1;
     srvDesc.Texture2D.MostDetailedMip = 0;
@@ -117,14 +184,24 @@ bool s3Image::load(ID3D11Device* device, const std::string & filePath)
         return false;
     }
 
+
     s3Log::success("Image:%s loaded Successfully\n", filePath.c_str());
     loaded = true;
+
+    // destory temporary data
+    if (type == S3_IMAGE_PNG)
+        pngData.clear();
+    else if (type == S3_IMAGE_EXR)
+        S3_SAFE_DELETE_1DARRAY(exrData);
+    else if (type == S3_IMAGE_HDR)
+        stbi_image_free(hdrData);
+
     return true;
 }
 
-bool s3Image::load(ID3D11Device * device, int width, int height, const std::vector<t3Vector4f>& data)
+bool s3ImageDecoder::load(ID3D11Device * device, int width, int height, const std::vector<t3Vector4f>& imageData)
 {    
-    if (data.size() <= 0 || width <=0 || height <=0)
+    if (imageData.size() <= 0 || width <=0 || height <=0)
     {
         s3Log::warning("Image Data Null\n");
         return false;
@@ -134,7 +211,7 @@ bool s3Image::load(ID3D11Device * device, int width, int height, const std::vect
     this->height = height;
 
     // copy to local
-    imageData.assign(data.begin(), data.end());
+    //imageData.assign(data.begin(), data.end());
 
     // DX11 Texture2D
     D3D11_TEXTURE2D_DESC textureDesc;
@@ -213,37 +290,42 @@ bool s3Image::load(ID3D11Device * device, int width, int height, const std::vect
     return true;
 }
 
-int32 s3Image::getWidth() const
+int32 s3ImageDecoder::getWidth() const
 {
     return width;
 }
 
-int32 s3Image::getHeight() const
+int32 s3ImageDecoder::getHeight() const
 {
     return height;
 }
 
-ID3D11Texture2D * s3Image::getTexture2D()
+ID3D11Texture2D * s3ImageDecoder::getTexture2D()
 {
     return texture2d;
 }
 
-ID3D11ShaderResourceView * s3Image::getShaderResouceView()
+ID3D11ShaderResourceView * s3ImageDecoder::getShaderResouceView()
 {
     return textureSRV;
 }
 
-ID3D11SamplerState * s3Image::getSamplerState()
+ID3D11SamplerState * s3ImageDecoder::getSamplerState()
 {
     return samplerState;
 }
 
-std::vector<t3Vector4f>* s3Image::getImageData()
+s3ImageType s3ImageDecoder::getImageType()
 {
-    return &imageData;
+    return type;
 }
 
-bool s3Image::isLoaded() const
+//std::vector<t3Vector4f>* s3Image::getImageData()
+//{
+//    return &imageData;
+//}
+
+bool s3ImageDecoder::isLoaded() const
 {
     return loaded;
 }

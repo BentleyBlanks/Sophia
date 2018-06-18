@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/s3Image.h>
+#include <core/s3ImageDecoder.h>
 #include <core/s3MathHepler.h>
 #include <app/s3CallbackManager.h>
 #include <app/s3Renderer.h>
@@ -11,3 +11,5 @@
 #include <3d/s3Camera.h>
 #include <3d/s3Mesh.h>
 #include <3d/s3Shader.h>
+
+#include <light/s3PointLight.h>

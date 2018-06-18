@@ -20,6 +20,12 @@ public:
     IDXGISwapChain* getSwapChain();
     ID3D11RenderTargetView* getRenderTargetView();
     ID3D11DepthStencilView* getDepthStencilView();
+
+    void setMSAACount(int count);
+    int getMSAACount();
+    void setMSAAEnabled(bool enabled);
+    bool getMSAAEnabled();
+
 private:
     s3Renderer();
 
@@ -30,4 +36,7 @@ private:
 
     ID3D11RenderTargetView* renderTargetView;
     ID3D11DepthStencilView* depthStencilView;
+
+    bool MSAAEnabled;
+    int MSAACount;
 };
