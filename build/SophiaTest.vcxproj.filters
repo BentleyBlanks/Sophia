@@ -26,5 +26,11 @@
     <ClInclude Include="..\test\commonShader.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\irradianceMap.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\skybox.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

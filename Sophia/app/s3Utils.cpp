@@ -551,3 +551,14 @@ s3ImageType s3GetImageType(const std::string & filePath)
 
     return type;
 }
+
+float s3SphericalTheta(const t3Vector3f &v)
+{
+    return t3Math::acosRad(t3Math::clamp(v.y, -1.f, 1.f));
+}
+
+float s3SphericalPhi(const t3Vector3f &v)
+{
+    float p = t3Math::atan2Rad(v.z, v.x);
+    return (p < 0.f) ? p + 2.f * T3MATH_PI : p;
+}

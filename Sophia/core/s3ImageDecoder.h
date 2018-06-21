@@ -12,6 +12,8 @@ public:
     bool load(ID3D11Device* device, const std::string& filePath);
     bool load(ID3D11Device* device, int32 width, int32 height, const std::vector<t3Vector4f>& imageData);
 
+    t3Vector4f getColor(int32 x, int32 y);
+
     int32 getWidth() const;
     int32 getHeight() const;
 
@@ -19,7 +21,11 @@ public:
     ID3D11ShaderResourceView* getShaderResouceView();
     ID3D11SamplerState* getSamplerState();
     s3ImageType getImageType();
-    //std::vector<t3Vector4f>* getImageData();
+
+    std::vector<t3Vector4f>& getImageData();
+    std::vector<unsigned char>& getPNGData();
+    float32*& getEXRData();
+    float32*& getHDRData();
 
     bool isLoaded() const;
 
@@ -32,5 +38,9 @@ private:
 
     int32 width, height;
     bool loaded;
-    //std::vector<t3Vector4f> imageData;
+
+    // For different type of image
+    std::vector<t3Vector4f> imageData;
+    std::vector<unsigned char> pngData;
+    float32 *exrData, *hdrData;
 };

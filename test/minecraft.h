@@ -72,7 +72,7 @@ s3Camera* camera = nullptr;
 class s3Sky : public s3CallbackHandle
 {
 public:
-    void onHandle(const s3CallbackUserData* userData)
+    void onHandle(const s3CallbackUserData* imageData)
     {
         ID3D11ShaderResourceView* textureSRV = image->getShaderResouceView();
         ID3D11SamplerState* samplerState = image->getSamplerState();

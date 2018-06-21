@@ -43,7 +43,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 s3MouseEvent mouseEvent((s3ButtonType)i, x, y, 0, 0, 0, control, shift);
 
                 s3CallbackUserData data;
-                data.userData = &mouseEvent;
+                data.imageData = &mouseEvent;
 
                 s3CallbackManager::callBack.onMousePressed.trigger(&data);
             }
@@ -73,7 +73,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 s3MouseEvent mouseEvent((s3ButtonType)i, x, y, 0, 0, 0, control, shift);
 
                 s3CallbackUserData data;
-                data.userData = &mouseEvent;
+                data.imageData = &mouseEvent;
 
                 s3CallbackManager::callBack.onMouseReleased.trigger(&data);
             }
@@ -120,7 +120,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 mouseEvent.type = (s3ButtonType) i;
 
             s3CallbackUserData data;
-            data.userData = &mouseEvent;
+            data.imageData = &mouseEvent;
 
             s3CallbackManager::callBack.onMouseMoved.trigger(&data);
         }
@@ -143,7 +143,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         s3MouseEvent mouseEvent(s3ButtonType::NONE, x, y, 0, 0, zDelta, control, shift);
         s3CallbackUserData data;
-        data.userData = &mouseEvent;
+        data.imageData = &mouseEvent;
 
         s3CallbackManager::callBack.onMouseScrolled.trigger(&data);
         return 0;
@@ -170,7 +170,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         s3KeyCode key = (s3KeyCode)wParam;
         s3KeyEvent keyEvent(key, c, control, shift, alt);
         s3CallbackUserData data;
-        data.userData = &keyEvent;
+        data.imageData = &keyEvent;
         
         s3CallbackManager::callBack.onKeyPressed.trigger(&data);
         return 0;
@@ -200,7 +200,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
         s3KeyEvent keyEvent(key, c, control, shift, alt);
         s3CallbackUserData data;
-        data.userData = &keyEvent;
+        data.imageData = &keyEvent;
         s3CallbackManager::callBack.onKeyReleased.trigger(&data);
         return 0;
     }
@@ -282,9 +282,9 @@ void s3App::render()
 void s3App::run()
 {
     // init engine with hwnd
-    s3CallbackUserData userData;
-    userData.userData = window->getHandle();
-    s3CallbackManager::callBack.onEngineInit.trigger(&userData);
+    s3CallbackUserData imageData;
+    imageData.imageData = window->getHandle();
+    s3CallbackManager::callBack.onEngineInit.trigger(&imageData);
 
     MSG msg;
     while(true)

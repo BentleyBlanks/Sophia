@@ -19,10 +19,25 @@ ID3D11RasterizerState* rasterizerState = nullptr;
 ID3D11RenderTargetView* renderTargetView = nullptr;
 ID3D11DepthStencilView* depthStencilView = nullptr;
 
+float32 width = 0, height = 0;
+s3Camera* camera = nullptr;
+
 int imageIndex = 0;
-s3ImageDecoder pngImage, exrImage, hdrImage;
+s3ImageDecoder image;
 
 s3Shader skyShader;
+
+struct cb
+{
+    float canvasDistance;
+    float tanHalfFovX, tanHalfFovY;
+    float padding;
+    // -----------------------------------------------
+
+    t3Matrix4x4 cameraToWorld;
+};
+cb cbCPU;
+ID3D11Buffer* cbGPU;
 
 class s3Demo : public s3CallbackHandle
 {
@@ -32,9 +47,6 @@ public:
         ImGui::Begin("Who's Your Daddy?");
         {
             ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-
-            const char* imageNames[] = { "PNG", "EXR", "HDR" };
-            ImGui::Combo("Image Class", &imageIndex, imageNames, IM_ARRAYSIZE(imageNames));
 
             ImGui::End();
         }
@@ -52,27 +64,16 @@ public:
         deviceContext->VSSetShader(skyShader.getVertexShader(), nullptr, 0);
 
         // ps
-        ID3D11ShaderResourceView* srv;
-        ID3D11SamplerState* state;
-        switch (imageIndex)
-        {
-        case 0:
-            srv = pngImage.getShaderResouceView();
-            state = pngImage.getSamplerState();
-            break;
-        case 1:
-            srv = exrImage.getShaderResouceView();
-            state = exrImage.getSamplerState();
-            break;
-        case 2:
-            srv = hdrImage.getShaderResouceView();
-            state = hdrImage.getSamplerState();
-            break;
-        }
+        ID3D11ShaderResourceView* srv = image.getShaderResouceView();
+        ID3D11SamplerState* state = image.getSamplerState();
 
         deviceContext->PSSetShader(skyShader.getPixelShader(), nullptr, 0);
         deviceContext->PSSetSamplers(0, 1, &state);
         deviceContext->PSSetShaderResources(0, 1, &srv);
+
+        cbCPU.cameraToWorld = camera->getCameraToWorld();
+        deviceContext->UpdateSubresource(cbGPU, 0, nullptr, &cbCPU, 0, 0);
+        deviceContext->PSSetConstantBuffers(0, 1, &cbGPU);
 
         deviceContext->RSSetState(rasterizerState);
 
@@ -130,7 +131,32 @@ void createStates()
 
 void createShaders()
 {
-    skyShader.load(device, L"../Sophia/shaders/common/drawImageVS.hlsl", L"../Sophia/shaders/common/drawImagePS.hlsl");
+    skyShader.load(device, L"../Sophia/shaders/common/skyVS.hlsl", L"../Sophia/shaders/common/skyPS.hlsl");
+}
+
+void createConstantBuffer()
+{
+    D3D11_BUFFER_DESC constantBufferDesc;
+    ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
+    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    // cameraDirection + cameraOrigin
+    constantBufferDesc.ByteWidth = sizeof(cb);
+    constantBufferDesc.CPUAccessFlags = 0;
+    constantBufferDesc.MiscFlags = 0;
+    constantBufferDesc.StructureByteStride = 0;
+    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+    HRESULT hr = device->CreateBuffer(&constantBufferDesc, nullptr, &cbGPU);
+    if (FAILED(hr))
+    {
+        s3Log::error("Failed to create constant buffer[frame]\n");
+        return;
+    }
+
+    // Update constant buffer's default value
+    cbCPU.canvasDistance = 1;
+    cbCPU.tanHalfFovY = t3Math::tanDeg(camera->getFovY() / 2.0f);
+    cbCPU.tanHalfFovX = cbCPU.tanHalfFovY * camera->getAspectRatio();
 }
 
 int main()
@@ -140,35 +166,27 @@ int main()
         return 0;
     app.setClearColor(t3Vector4f(0.2f));
 
+    width = app.getWindow()->getWindowSize().x;
+    height = app.getWindow()->getWindowSize().y;
+
     s3Renderer& renderer = s3Renderer::get();
     device = renderer.getDevice();
     deviceContext = renderer.getDeviceContext();
     renderTargetView = renderer.getRenderTargetView();
     depthStencilView = renderer.getDepthStencilView();
 
+    camera = new s3Camera(t3Vector3f(0, 0, -1), t3Vector3f(0, 0, 1), t3Vector3f(0, 1, 0),
+        width / height, 65, 0.1f, 1000.0f);
+
     createShaders();
     createStates();
+    createConstantBuffer();
 
-    pngImage.load(device, "../resources/03.png");
-    exrImage.load(device, "../resources/skylightBlue.exr");
-    hdrImage.load(device, "../resources/newport_loft.hdr");
+    image.load(device, "../resources/irradianceDiffuseMap1.exr");
 
     s3Demo mc;
     s3CallbackManager::callBack.onBeginRender += mc;
 
     app.run();
-
-    // Image Saving Test
-    s3ImageEncoder encoder(256, 256, s3ImageType::S3_IMAGE_EXR);
-    for (int32 x = 0; x < 256; x++)
-    {
-        for (int32 y = 0; y < 256; y++) 
-        {
-            encoder.setColor(x, y, t3Vector4f(x / 255.0f, y / 255.0f, 0.5f, (x + y) / 510.0f));
-        }
-    }
-        
-    encoder.write("../resources/2.exr");
-    
     return 0;
 }

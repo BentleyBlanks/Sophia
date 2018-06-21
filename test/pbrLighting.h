@@ -177,7 +177,7 @@ public:
         }
     }
 
-    void onHandle(const s3CallbackUserData* userData)
+    void onHandle(const s3CallbackUserData* imageData)
     {
         for (int32 i = 0; i < sphereRows; i++)
         {

@@ -24,7 +24,7 @@ public:
         {
             if (data->sender == &s3CallbackManager::callBack.onKeyPressed)
             {
-                s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
+                s3KeyEvent* keyEvent = (s3KeyEvent*)data->imageData;
                 if (keyEvent->key == 'w')
                     origin += keyboardSpeed * direction;
                 else if (keyEvent->key == 'a')
@@ -48,7 +48,7 @@ public:
             }
             else if (data->sender == &s3CallbackManager::callBack.onKeyReleased)
             {
-                s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
+                s3KeyEvent* keyEvent = (s3KeyEvent*)data->imageData;
 #ifdef TEST
                 keyEvent->print(1);
 #endif
@@ -59,7 +59,7 @@ public:
         {
             if (data->sender == &s3CallbackManager::callBack.onMouseMoved)
             {
-                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->imageData;
 
                 if (mouseEvent->type == s3MouseEvent::s3ButtonType::LEFT)
                 {
@@ -94,21 +94,21 @@ public:
             }
             else if (data->sender == &s3CallbackManager::callBack.onMousePressed)
             {
-                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->imageData;
 #ifdef TEST
                 mouseEvent->print(0);
 #endif
             }
             else if (data->sender == &s3CallbackManager::callBack.onMouseReleased)
             {
-                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->imageData;
 #ifdef TEST
                 mouseEvent->print(1);
 #endif
             }
             else if (data->sender == &s3CallbackManager::callBack.onMouseScrolled)
             {
-                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->userData;
+                s3MouseEvent* mouseEvent = (s3MouseEvent*)data->imageData;
 #ifdef TEST
                 mouseEvent->print(3);
 #endif

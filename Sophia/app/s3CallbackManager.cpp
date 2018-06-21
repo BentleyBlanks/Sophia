@@ -15,13 +15,13 @@ public:
     {
         if (data->sender == &s3CallbackManager::callBack.onKeyReleased)
         {
-            s3KeyEvent* keyEvent = (s3KeyEvent*)data->userData;
+            s3KeyEvent* keyEvent = (s3KeyEvent*)data->imageData;
             if (keyEvent->keyCode == s3KeyCode::EscapeKey)
                 exit(0);
         }
         else if (data->sender == &s3CallbackManager::callBack.onEngineInit)
         {
-            s3ImGuiInit(data->userData, s3Renderer::get().getDevice(), s3Renderer::get().getDeviceContext());
+            s3ImGuiInit(data->imageData, s3Renderer::get().getDevice(), s3Renderer::get().getDeviceContext());
         }
         else if (data->sender == &s3CallbackManager::callBack.onEngineDeinit)
         {

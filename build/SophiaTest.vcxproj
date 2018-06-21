@@ -152,8 +152,10 @@
     <ClInclude Include="..\test\atmospheric.h" />
     <ClInclude Include="..\test\commonShader.h" />
     <ClInclude Include="..\test\earth.h" />
+    <ClInclude Include="..\test\irradianceMap.h" />
     <ClInclude Include="..\test\minecraft.h" />
     <ClInclude Include="..\test\pbrLighting.h" />
+    <ClInclude Include="..\test\skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="sophia.vcxproj">

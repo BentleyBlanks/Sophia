@@ -147,9 +147,9 @@ public:
     T3_FORCE_INLINE static t3Vector3<Type> one() { return t3Vector3<float>(1, 1, 1); }
 
 	// 测试使用的Console Log输出
-    T3_FORCE_INLINE void print(std::string name) const;
+    T3_FORCE_INLINE void prints(std::string name) const;
 
-    T3_FORCE_INLINE void print() const;
+    T3_FORCE_INLINE void prints() const;
 };
 
 

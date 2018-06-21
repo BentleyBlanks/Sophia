@@ -9,7 +9,7 @@
 
 s3ImageDecoder::s3ImageDecoder()
     :texture2d(nullptr), textureSRV(nullptr), samplerState(nullptr),
-    width(-1), height(-1), loaded(false), type(S3_IMAGE_ERROR)
+    width(-1), height(-1), loaded(false), type(S3_IMAGE_ERROR), exrData(nullptr), hdrData(nullptr)
 {
 }
 
@@ -33,9 +33,6 @@ bool s3ImageDecoder::load(ID3D11Device* device, const std::string & filePath)
     }
 
     // For different type of image
-    std::vector<unsigned char> pngData;
-    float* exrData = NULL, *hdrData = NULL;
-
     if (type == S3_IMAGE_PNG)
     {
         unsigned w, h;
@@ -165,24 +162,23 @@ bool s3ImageDecoder::load(ID3D11Device* device, const std::string & filePath)
         return false;
     }
 
-
     s3Log::success("Image:%s loaded Successfully\n", filePath.c_str());
     loaded = true;
 
-    // destory temporary data
-    if (type == S3_IMAGE_PNG)
-        pngData.clear();
-    else if (type == S3_IMAGE_EXR)
-        S3_SAFE_DELETE_1DARRAY(exrData);
-    else if (type == S3_IMAGE_HDR)
-        stbi_image_free(hdrData);
+    //// destory temporary data
+    //if (type == S3_IMAGE_PNG)
+    //    pngData.clear();
+    //else if (type == S3_IMAGE_EXR)
+    //    S3_SAFE_DELETE_1DARRAY(exrData);
+    //else if (type == S3_IMAGE_HDR)
+    //    stbi_image_free(hdrData);
 
     return true;
 }
 
-bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, const std::vector<t3Vector4f>& imageData)
+bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, const std::vector<t3Vector4f>& data)
 {    
-    if (imageData.size() <= 0 || width <=0 || height <=0)
+    if (data.size() <= 0 || width <=0 || height <=0)
     {
         s3Log::warning("Image Data Null\n");
         return false;
@@ -192,7 +188,7 @@ bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, cons
     this->height = height;
 
     // copy to local
-    //imageData.assign(data.begin(), data.end());
+    imageData.assign(data.begin(), data.end());
 
     // DX11 Texture2D
     D3D11_TEXTURE2D_DESC textureDesc;
@@ -244,7 +240,7 @@ bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, cons
     // Sampler State for texture sampling
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
-    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
     samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -269,6 +265,42 @@ bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, cons
     s3Log::success("Texture2D created Successfully\n");
     loaded = true;
     return true;
+}
+
+t3Vector4f s3ImageDecoder::getColor(int32 x, int32 y)
+{
+    if (!loaded)
+    {
+        s3Log::error("s3ImageDecoder not loaded yet\n");
+        return t3Vector4f();
+    }
+
+    if (type == S3_IMAGE_PNG)
+    {
+        int32 index = 4 * (x + y * width);
+        return t3Vector4f(pngData[index + 0] / 255.0f, 
+                          pngData[index + 1] / 255.0f, 
+                          pngData[index + 2] / 255.0f, 
+                          pngData[index + 3] / 255.0f);
+    }
+    else if (type == S3_IMAGE_EXR)
+    {
+        int32 index = 4 * (x + y * width);
+        return t3Vector4f(exrData[index + 0], 
+                          exrData[index + 1], 
+                          exrData[index + 2], 
+                          exrData[index + 3]);
+    }
+    else if (type == S3_IMAGE_HDR)
+    {
+        int32 index = 3 * (x + y * width);
+        return t3Vector4f(hdrData[index + 0], 
+                          hdrData[index + 1], 
+                          hdrData[index + 2],
+                          1.0f);
+    }
+    else
+        return t3Vector4f();
 }
 
 int32 s3ImageDecoder::getWidth() const
@@ -301,10 +333,25 @@ s3ImageType s3ImageDecoder::getImageType()
     return type;
 }
 
-//std::vector<t3Vector4f>* s3Image::getImageData()
-//{
-//    return &imageData;
-//}
+std::vector<t3Vector4f>& s3ImageDecoder::getImageData()
+{
+    return imageData;
+}
+
+std::vector<unsigned char>& s3ImageDecoder::getPNGData()
+{
+    return pngData;
+}
+
+float32 *& s3ImageDecoder::getEXRData()
+{
+    return exrData;
+}
+
+float32 *& s3ImageDecoder::getHDRData()
+{
+    return hdrData;
+}
 
 bool s3ImageDecoder::isLoaded() const
 {

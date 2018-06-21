@@ -336,5 +336,11 @@
     <FxCompile Include="..\Sophia\shaders\common\drawImagePS.hlsl">
       <Filter>Sophia\shaders\common</Filter>
     </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\common\skyVS.hlsl">
+      <Filter>Sophia\shaders\common</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\common\skyPS.hlsl">
+      <Filter>Sophia\shaders\common</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

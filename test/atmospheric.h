@@ -168,7 +168,7 @@ public:
         }
     }
 
-    void onHandle(const s3CallbackUserData* userData)
+    void onHandle(const s3CallbackUserData* imageData)
     {
         // IA
         deviceContext->IASetVertexBuffers(0, 0, NULL, NULL, NULL);

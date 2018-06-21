@@ -82,7 +82,7 @@ s3ImageEncoder::s3ImageEncoder(int32 width, int32 height, s3ImageType type)
         exrData = new float[width * height * 3];
         break;
     case S3_IMAGE_HDR:
-        hdrData = new float[width * height * 4];
+        //hdrData = new float[width * height * 4];
         break;
     }
 }
@@ -111,11 +111,11 @@ void s3ImageEncoder::setColor(int32 x, int32 y, const t3Vector4f & L)
         //exrData[(x + y * width) * 4 + 3] = L.w;
         break;
     case S3_IMAGE_HDR:
-        hdrData[(x + y * width) * 3 + 0] = L.x;
-        hdrData[(x + y * width) * 3 + 1] = L.y;
-        hdrData[(x + y * width) * 3 + 2] = L.z;
+        //hdrData[(x + y * width) * 3 + 0] = L.x;
+        //hdrData[(x + y * width) * 3 + 1] = L.y;
+        //hdrData[(x + y * width) * 3 + 2] = L.z;
         //hdrData[(x + y * width) * 4 + 3] = L.w;
-        break;
+        //break;
     default:
         s3Log::error("s3ImageEncoder image: %s saved failed, wrong image type\n", type);
         break;
@@ -153,5 +153,29 @@ bool s3ImageEncoder::write(const std::string& filePath)
     default:
         s3Log::error("s3ImageEncoder image: %s saved failed, wrong image type\n", filePath.c_str());
         return false;
+    }
+}
+
+void s3ImageEncoder::print()
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (type == S3_IMAGE_PNG)
+            {
+                s3Log::print("r: %d, ", pngData[(i * width + j) * 4 + 0]);
+                s3Log::print("g: %d, ", pngData[(i * width + j) * 4 + 1]);
+                s3Log::print("b: %d, ", pngData[(i * width + j) * 4 + 2]);
+                s3Log::print("a: %d\n", pngData[(i * width + j) * 4 + 3]);
+            }
+            else if (type == S3_IMAGE_EXR)
+            {
+                s3Log::print("r: %.2f, ", exrData[(i * width + j) * 3 + 0]);
+                s3Log::print("g: %.2f, ", exrData[(i * width + j) * 3 + 1]);
+                s3Log::print("b: %.2f\n", exrData[(i * width + j) * 3 + 2]);
+                //s3Log::print("a: %d\n", exrData[(i * width + j) * 4 + 3]);
+            }
+        }
     }
 }

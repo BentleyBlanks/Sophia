@@ -470,7 +470,7 @@ T3_FORCE_INLINE Type t3Vector3<Type>::dot(const t3Vector3<Type>& vector) const
 
 // For test to print in console
 template<typename Type>
-T3_FORCE_INLINE void t3Vector3<Type>::print(std::string name) const
+T3_FORCE_INLINE void t3Vector3<Type>::prints(std::string name) const
 {
 #ifdef _DEBUG
     // test name null
@@ -482,7 +482,7 @@ T3_FORCE_INLINE void t3Vector3<Type>::print(std::string name) const
 }
 
 template<typename Type>
-T3_FORCE_INLINE void t3Vector3<Type>::print() const
+T3_FORCE_INLINE void t3Vector3<Type>::prints() const
 {
 #ifdef _DEBUG
     std::cout << "t3Vector3 ";

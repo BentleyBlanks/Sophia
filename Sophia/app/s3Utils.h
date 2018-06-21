@@ -2,6 +2,7 @@
 
 #include <core/s3Settings.h>
 #include <core/s3Event.h>
+#include <t3Vector3.h>
 
 enum s3ShaderType
 {
@@ -39,4 +40,6 @@ std::string s3GetLatestProfile(s3ShaderType type);
 
 s3ImageType s3GetImageType(const std::string & filePath);
 
+float s3SphericalTheta(const t3Vector3f &w);
 
+float s3SphericalPhi(const t3Vector3f &w);

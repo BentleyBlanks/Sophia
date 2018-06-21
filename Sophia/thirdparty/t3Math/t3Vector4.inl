@@ -419,7 +419,7 @@ T3_FORCE_INLINE float t3Vector4<Type>::dot(const t3Vector4<Type>& vec) const
 
 
 template <class Type>
-T3_FORCE_INLINE void t3Vector4<Type>::print() const
+T3_FORCE_INLINE void t3Vector4<Type>::prints() const
 {
 #ifdef _DEBUG
     std::cout << "t3Vector4 ";
@@ -428,7 +428,7 @@ T3_FORCE_INLINE void t3Vector4<Type>::print() const
 }
 
 template <class Type>
-T3_FORCE_INLINE void t3Vector4<Type>::print(std::string name) const
+T3_FORCE_INLINE void t3Vector4<Type>::prints(std::string name) const
 {
 #ifdef _DEBUG
     // test name null

@@ -12,6 +12,7 @@ public:
 
     bool write(const std::string& filePath);
 
+    void print();
 private:
     // imageData
     float32 *exrData, *hdrData;

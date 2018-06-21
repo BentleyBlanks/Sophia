@@ -3,4 +3,6 @@
 //#include "atmospheric.h"
 //#include "earth.h"
 //#include "pbrLighting.h"
-#include "commonShader.h"
+//#include "commonShader.h"
+//#include "irradianceMap.h"
+#include "skybox.h"

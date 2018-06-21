@@ -5,13 +5,13 @@
 struct s3CallbackUserData
 {
     void* sender = nullptr;
-    void* userData = nullptr;
+    void* imageData = nullptr;
 };
 
 class s3CallbackHandle
 {
 public:
-    virtual void onHandle(const s3CallbackUserData* userData) = 0;
+    virtual void onHandle(const s3CallbackUserData* imageData) = 0;
 };
 
 class s3Callback
