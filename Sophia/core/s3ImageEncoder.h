@@ -12,6 +12,9 @@ public:
 
     bool write(const std::string& filePath);
 
+    int32 getWidth() const;
+    int32 getHeight() const;
+
     void print();
 private:
     // imageData

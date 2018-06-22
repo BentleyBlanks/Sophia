@@ -55,11 +55,11 @@ bool s3SaveExr(const float* rgb, int width, int height, const char* fileName)
     const char* err = NULL; // or nullptr in C++11 or later.
     int ret = SaveEXRImageToFile(&image, &header, fileName, &err);
     if (ret != TINYEXR_SUCCESS) {
-        fprintf(stderr, "Save EXR err: %s\n", err);
+        s3Log::print("s3ImageEncoder image: %s saved failed, error: %s\n", err);
         FreeEXRErrorMessage(err); // free's buffer for an error message 
         return false;
     }
-    s3Log::print("Saved exr file. [ %s ] \n", fileName);
+    //s3Log::print("Saved exr file. [ %s ] \n", fileName);
 
     //free(rgb);
 
@@ -154,6 +154,16 @@ bool s3ImageEncoder::write(const std::string& filePath)
         s3Log::error("s3ImageEncoder image: %s saved failed, wrong image type\n", filePath.c_str());
         return false;
     }
+}
+
+int32 s3ImageEncoder::getWidth() const
+{
+    return width;
+}
+
+int32 s3ImageEncoder::getHeight() const
+{
+    return height;
 }
 
 void s3ImageEncoder::print()

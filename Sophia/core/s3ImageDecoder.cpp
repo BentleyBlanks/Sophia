@@ -269,7 +269,7 @@ bool s3ImageDecoder::load(ID3D11Device * device, int32 width, int32 height, cons
 
 t3Vector4f s3ImageDecoder::getColor(int32 x, int32 y)
 {
-    if (!loaded)
+    if (!loaded || x < 0 || y < 0)
     {
         s3Log::error("s3ImageDecoder not loaded yet\n");
         return t3Vector4f();

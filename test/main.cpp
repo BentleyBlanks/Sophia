@@ -4,5 +4,5 @@
 //#include "earth.h"
 //#include "pbrLighting.h"
 //#include "commonShader.h"
-//#include "irradianceMap.h"
-#include "skybox.h"
+#include "precomputedMap.h"
+//#include "skybox.h"
