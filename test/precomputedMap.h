@@ -6,9 +6,9 @@
 #include <core/s3Random.h>
 #include <core/log/s3Log.h>
 
-//#define DIFFUSE
+#define DIFFUSE
 //#define SPUCULAR
-#define SPUCULAR_BRDF
+//#define SPUCULAR_BRDF
 
 float32 distributionGGX(t3Vector3f N, t3Vector3f H, float roughness)
 {

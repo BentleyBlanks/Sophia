@@ -257,13 +257,13 @@ float4 main(input i) : SV_TARGET
         currentT += segmentLength;
     }
 
-    float4 color = float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity, 1);
+    float4 color = float4(float3(sumR * betaR * phaseR + sumM * betaM * phaseM) * sunIntensity * earthTextureColor, 1);
 
 	if(isToneMapping)
         return tonemapping(color);
 	else
         return color;
 
-    return float4(0, 0, 1, 1);
+    //return float4(0, 0, 1, 1);
     //return float4(i.texCoord.x, i.texCoord.y, 0, 1.0f);
 }

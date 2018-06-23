@@ -78,6 +78,8 @@ struct s3SkyCB
 s3SkyCB skyCB;
 ID3D11Buffer* constantBuffer;
 
+s3Renderer* renderer;
+
 // IA
 ID3D11Device* device = nullptr;
 ID3D11DeviceContext* deviceContext = nullptr;
@@ -88,12 +90,12 @@ ID3D11VertexShader* vertexShader = nullptr;
 ID3D11PixelShader* pixelShader = nullptr;
 
 // State
-ID3D11DepthStencilState* depthStencilState = nullptr;
-ID3D11RasterizerState* rasterizerState = nullptr;
+//ID3D11DepthStencilState* depthStencilState = nullptr;
+//ID3D11RasterizerState* rasterizerState = nullptr;
 
 // OM
-ID3D11RenderTargetView* renderTargetView = nullptr;
-ID3D11DepthStencilView* depthStencilView = nullptr;
+//ID3D11RenderTargetView* renderTargetView = nullptr;
+//ID3D11DepthStencilView* depthStencilView = nullptr;
 
 // Camera
 float32 width = 0, height = 0;
@@ -176,7 +178,7 @@ public:
         deviceContext->IASetInputLayout(NULL);
         deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-        deviceContext->RSSetState(rasterizerState);
+        deviceContext->RSSetState(renderer->getRasterizerState());
 
         // vs
         deviceContext->VSSetShader(vertexShader, nullptr, 0);
@@ -199,8 +201,8 @@ public:
         deviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
 
         // OM
-        deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-        deviceContext->OMSetDepthStencilState(depthStencilState, 1);
+        deviceContext->OMSetRenderTargets(1, &renderer->getRenderTargetView(), renderer->getDepthStencilView());
+        deviceContext->OMSetDepthStencilState(renderer->getDepthStencilState(), 1);
 
         deviceContext->Draw(3, 0);
 
@@ -256,46 +258,46 @@ public:
 //        return;
 //    }
 //}
-
-void createStates()
-{
-    // Setup depth/stencil state.
-    D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
-    ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilStateDesc.DepthEnable = TRUE;
-    depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
-    depthStencilStateDesc.StencilEnable = FALSE;
-
-    HRESULT hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
-    if (FAILED(hr))
-    {
-        s3Log::error("Failed to create DepthStencil State\n");
-        return;
-    }
-
-    // Setup rasterizer state.
-    D3D11_RASTERIZER_DESC rasterizerDesc;
-    ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
-    rasterizerDesc.AntialiasedLineEnable = FALSE;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.DepthBias = 0;
-    rasterizerDesc.DepthBiasClamp = 0.0f;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    rasterizerDesc.FrontCounterClockwise = FALSE;
-    rasterizerDesc.MultisampleEnable = FALSE;
-    rasterizerDesc.ScissorEnable = FALSE;
-    rasterizerDesc.SlopeScaledDepthBias = 0.0f;
-
-    // Create the rasterizer state object.
-    hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-    if (FAILED(hr))
-    {
-        s3Log::error("Failed to create Rasterrizer State\n");
-        return;
-    }
-}
+//
+//void createStates()
+//{
+//    // Setup depth/stencil state.
+//    D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
+//    ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+//    depthStencilStateDesc.DepthEnable = TRUE;
+//    depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+//    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+//    depthStencilStateDesc.StencilEnable = FALSE;
+//
+//    HRESULT hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
+//    if (FAILED(hr))
+//    {
+//        s3Log::error("Failed to create DepthStencil State\n");
+//        return;
+//    }
+//
+//    // Setup rasterizer state.
+//    D3D11_RASTERIZER_DESC rasterizerDesc;
+//    ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+//    rasterizerDesc.AntialiasedLineEnable = FALSE;
+//    rasterizerDesc.CullMode = D3D11_CULL_BACK;
+//    rasterizerDesc.DepthBias = 0;
+//    rasterizerDesc.DepthBiasClamp = 0.0f;
+//    rasterizerDesc.DepthClipEnable = TRUE;
+//    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+//    rasterizerDesc.FrontCounterClockwise = FALSE;
+//    rasterizerDesc.MultisampleEnable = FALSE;
+//    rasterizerDesc.ScissorEnable = FALSE;
+//    rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+//
+//    // Create the rasterizer state object.
+//    hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+//    if (FAILED(hr))
+//    {
+//        s3Log::error("Failed to create Rasterrizer State\n");
+//        return;
+//    }
+//}
 
 void createConstantBuffers()
 {
@@ -448,11 +450,11 @@ int main()
     width = window->getWindowSize().x;
     height = window->getWindowSize().y;
 
-    s3Renderer& renderer = s3Renderer::get();
-    device = renderer.getDevice();
-    deviceContext = renderer.getDeviceContext();
-    renderTargetView = renderer.getRenderTargetView();
-    depthStencilView = renderer.getDepthStencilView();
+    renderer = &s3Renderer::get();
+    device = renderer->getDevice();
+    deviceContext = renderer->getDeviceContext();
+    //renderTargetView = renderer->getRenderTargetView();
+    //depthStencilView = renderer->getDepthStencilView();
 
     //camera = new s3Camera(t3Vector3f(0, 0, -1.5e7), t3Vector3f(0, 0, 0), t3Vector3f(0, 1, 0),
     //    width / height, 65, 0.1f, 6e5f);
@@ -461,13 +463,13 @@ int main()
     //camera->setMouseEventState(false);
 
     earthImage = new s3ImageDecoder();
-    //earthImage->load(device, "../resources/EarthDayTime8k.png");
+    earthImage->load(device, "../resources/EarthDayTime8k.png");
 
     earthHeightMap = new s3ImageDecoder();
     //earthHeightMap->load(device, "../resources/EarthHeightMap8k.png");
 
     //createVertexIndexBuffer();
-    createStates();
+    //createStates();
     createConstantBuffers();
     createShaders();
 
