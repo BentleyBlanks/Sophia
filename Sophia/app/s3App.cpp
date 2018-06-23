@@ -138,8 +138,8 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         bool shift = (keyStates & MK_SHIFT) != 0;
         bool control = (keyStates & MK_CONTROL) != 0;
 
-        int x = ((int)(short)LOWORD(lParam));
-        int y = ((int)(short)HIWORD(lParam));
+        int32 x = ((int)(short)LOWORD(lParam));
+        int32 y = ((int)(short)HIWORD(lParam));
 
         s3MouseEvent mouseEvent(s3ButtonType::NONE, x, y, 0, 0, zDelta, control, shift);
         s3CallbackUserData data;
@@ -207,7 +207,9 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_SIZE:
     {
-        s3Renderer::get().resize((int)LOWORD(lParam), (int)HIWORD(lParam));
+        float32 w = (float32) LOWORD(lParam), h = (float32) HIWORD(lParam);
+        if(w != 0.0f && h != 0.0f)
+            s3Renderer::get().resize((int32)w, (int32)h);
         return 0;
     }
 
@@ -250,8 +252,8 @@ bool s3App::init(const t3Vector2f& size, const t3Vector2f& pos)
     // Window correlation
     RECT clientArea;
     GetClientRect(window->getHandle(), &clientArea);
-    int width = clientArea.right - clientArea.left;
-    int height = clientArea.bottom - clientArea.top;
+    int32 width = clientArea.right - clientArea.left;
+    int32 height = clientArea.bottom - clientArea.top;
 
     if(!s3Renderer::get().init(window->getHandle(), width, height))	return false;
 

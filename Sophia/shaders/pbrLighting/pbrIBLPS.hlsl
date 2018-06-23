@@ -22,9 +22,13 @@ struct input
 };
 
 Texture2D albedoMap, normalMap, metallicMap, roughnessMap, aoMap;
+Texture2D irradianceMap, prefilterMap, brdfMap;
+
 sampler textureSampler;
 
-static const float PI = 3.14159265359;
+static const float PI = 3.1415926535897932384626433832795, 
+				   INV_PI = 0.31830988618379067153776752674503,
+				   INV_TWO_PI = 0.15915494309189533576888376337251;
 
 float3 getNormal(input i)
 {
@@ -82,10 +86,28 @@ float3 fresnelSchlick(float cosTheta, float3 F0)
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
+float3 fresnelSchlickRoughness(float cosTheta, float3 F0, float roughness)
+{
+    return F0 + (max(float3(1.0f - roughness, 1.0f - roughness, 1.0f - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
+}
+
+// cartisan to sperical
+float sphericalTheta(float3 v)
+{
+    return acos(clamp(v.y, -1.f, 1.f));
+}
+
+float sphericalPhi(float3 v)
+{
+    float p = atan2(v.z, v.x);
+    return (p < 0.f) ? p + 2.f * PI : p;
+}
+
 float4 main(input i) : SV_TARGET
 {
     float3 normal = i.normal;
     float3 V = normalize(cameraPosition - i.fragPos);
+    float3 R = reflect(-V, normal);
 
     float3 albedo = albedoCB;
     float metallic = metallicCB;
@@ -135,10 +157,31 @@ float4 main(input i) : SV_TARGET
         Lo += radiance * cosL * (kd * albedo / PI + N * G * F / max(4.0f * cosV * cosL, 0.001));
     }
 
-	 // ambient lighting
-    float3 ambient = float3(0.03f, 0.03f, 0.03f) * albedo * ao;
+	 // ambient lighting using IBL 
+    float3 F = fresnelSchlickRoughness(max(dot(normal, V), 0.0), F0, roughness);
 
-    float3 color = ambient + Lo;
+    float3 ks = F;
+    float3 kd = float3(1.0f, 1.0f, 1.0f) - ks;
+    kd *= 1.0f - metallic;
+
+	// diffuse from irradiance map
+    float2 sphericalN = float2(sphericalPhi(normal) * INV_TWO_PI, sphericalTheta(normal) * INV_PI);
+    float3 irradiance = irradianceMap.Sample(textureSampler, sphericalN).rgb;
+    float3 diffuse = irradiance * albedo;
+	
+	// combine brdf and prefilterd map to split-sum approximation
+    const float MAX_LOD = 4.0;
+    float2 sphericalR = float2(sphericalPhi(R) * INV_TWO_PI, sphericalTheta(R) * INV_PI);
+    float3 prefiltered = prefilterMap.SampleLevel(textureSampler, sphericalR, roughness * MAX_LOD).rgb;
+
+    float2 brdf = brdfMap.Sample(textureSampler, float2(max(dot(normal, V), 0.0), roughness)).rg;
+
+	// Split-Sum approximation
+    float3 specular = prefiltered * (F * brdf.x + brdf.y);
+	
+    float3 IBLAmbient = (kd * diffuse + specular) * ao;
+
+    float3 color = IBLAmbient + Lo;
 
     // HDR tonemapping
     color = color / (color + float3(1.0f, 1.0f, 1.0f));

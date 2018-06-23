@@ -150,8 +150,17 @@ int main()
     createStates();
 
     pngImage.load(device, "../resources/03.png");
-    exrImage.load(device, "../resources/skylightBlue.exr");
     hdrImage.load(device, "../resources/newport_loft.hdr");
+    //exrImage.load(device, "../resources/skylightBlue.exr");
+    std::vector<std::string> specularNames;
+    for (int32 i = 0; i < 8; i++)
+    {
+        std::string name = "../resources/lut/specular/";
+        name += s3ToString(i);
+        name += ".exr";
+        specularNames.push_back(name);
+    }
+    exrImage.load(device, specularNames);
 
     s3Demo mc;
     s3CallbackManager::callBack.onBeginRender += mc;

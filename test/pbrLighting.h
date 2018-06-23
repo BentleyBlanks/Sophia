@@ -33,21 +33,19 @@ const int32 sphereRows = 7, sphereColumns = 7;
 s3Mesh* spheres[sphereRows * sphereColumns];
 
 s3Camera* camera = nullptr;
+
+s3Renderer* renderer = nullptr;
+
 // IA
 ID3D11Device* device = nullptr;
 ID3D11DeviceContext* deviceContext = nullptr;
 
-// State
-ID3D11DepthStencilState* depthStencilState = nullptr;
-ID3D11RasterizerState* rasterizerState = nullptr;
-
-// OM
-ID3D11RenderTargetView* renderTargetView = nullptr;
-ID3D11DepthStencilView* depthStencilView = nullptr;
-
 // Shaders
-s3Shader* pbrShader = nullptr, *pbrIBLShader = nullptr;
+int32 shaderIndex = 0;
+s3Shader* pbrShader = nullptr, *pbrIBLShader = nullptr, *skyShader = nullptr;
 s3ImageDecoder albedoMap, normalMap, metallicMap, roughnessMap, aoMap;
+s3ImageDecoder irradianceMap, prefilterMap, brdfMap;
+s3ImageDecoder skybox;
 
 struct s3PbrVSCB
 {
@@ -55,6 +53,18 @@ struct s3PbrVSCB
 };
 s3PbrVSCB pbrVSCBCPU;
 ID3D11Buffer* pbrVSCBGPU;
+
+struct s3SkyboxCB
+{
+    float canvasDistance;
+    float tanHalfFovX, tanHalfFovY;
+    float padding;
+    // -----------------------------------------------
+
+    t3Matrix4x4 cameraToWorld;
+};
+s3SkyboxCB skyboxCBCPU;
+ID3D11Buffer* skyboxCBGPU;
 
 struct s3PbrPSCB
 {
@@ -93,50 +103,11 @@ void createShaders()
     pbrShader = new s3Shader();
     pbrShader->load(device, L"../Sophia/shaders/pbrLighting/pbrLightingVS.hlsl", L"../Sophia/shaders/pbrLighting/pbrLightingPS.hlsl");
 
-
     pbrIBLShader = new s3Shader();
     pbrIBLShader->load(device, L"../Sophia/shaders/pbrLighting/pbrIBLVS.hlsl", L"../Sophia/shaders/pbrLighting/pbrIBLPS.hlsl");
-}
 
-void createStates()
-{
-    bool MSAAEnabled = s3Renderer::get().getMSAAEnabled();
-    // Setup depth/stencil state.
-    D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
-    ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilStateDesc.DepthEnable = MSAAEnabled;
-    depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
-    depthStencilStateDesc.StencilEnable = FALSE;
-
-    HRESULT hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
-    if (FAILED(hr))
-    {
-        s3Log::error("Failed to create DepthStencil State\n");
-        return;
-    }
-
-    // Setup rasterizer state.
-    D3D11_RASTERIZER_DESC rasterizerDesc;
-    ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
-    rasterizerDesc.AntialiasedLineEnable = MSAAEnabled;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.DepthBias = 0;
-    rasterizerDesc.DepthBiasClamp = 0.0f;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    rasterizerDesc.FrontCounterClockwise = FALSE;
-    rasterizerDesc.MultisampleEnable = MSAAEnabled;
-    rasterizerDesc.ScissorEnable = FALSE;
-    rasterizerDesc.SlopeScaledDepthBias = 0.0f;
-
-    // Create the rasterizer state object.
-    hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-    if (FAILED(hr))
-    {
-        s3Log::error("Failed to create Rasterrizer State\n");
-        return;
-    }
+    skyShader = new s3Shader();
+    skyShader->load(device, L"../Sophia/shaders/common/skyVS.hlsl", L"../Sophia/shaders/common/skyPS.hlsl");
 }
 
 void createConstantBuffers()
@@ -145,7 +116,7 @@ void createConstantBuffers()
 
     createConstantBuffer(device, s3PbrPSCB, pbrPSCBGPU);
     {
-        pbrPSCBCPU.albedo = t3Vector3f(0.5f, 0.0f, 0.0f);
+        pbrPSCBCPU.albedo = t3Vector3f(1.0f, 1.0f, 1.0f);
         pbrPSCBCPU.ao = 1.0f;
 
         for (int32 i = 0; i < 4; i++)
@@ -153,6 +124,13 @@ void createConstantBuffers()
             pbrPSCBCPU.lightPositions[i] = toVec4(pointLights[i].getPosition());
             pbrPSCBCPU.lightColors[i] = toVec4(pointLights[i].getColor());
         }
+    }
+
+    createConstantBuffer(device, s3SkyboxCB, skyboxCBGPU);
+    {
+        skyboxCBCPU.canvasDistance = 1;
+        skyboxCBCPU.tanHalfFovY = t3Math::tanDeg(camera->getFovY() / 2.0f);
+        skyboxCBCPU.tanHalfFovX = skyboxCBCPU.tanHalfFovY * camera->getAspectRatio();
     }
 }
 
@@ -173,60 +151,117 @@ public:
             if (ImGui::Checkbox("Use Texture", &useTexture))
                 pbrPSCBCPU.useTexture = (int32) useTexture;
 
+            const char* imageNames[] = { "IBL", "Lights" };
+            ImGui::Combo("Shader Selection", &shaderIndex, imageNames, IM_ARRAYSIZE(imageNames));
+
             ImGui::End();
         }
     }
 
     void onHandle(const s3CallbackUserData* imageData)
     {
-        for (int32 i = 0; i < sphereRows; i++)
+        // skybox
+        {                    
+            // IA
+            deviceContext->IASetVertexBuffers(0, 0, NULL, NULL, NULL);
+            deviceContext->IASetIndexBuffer(NULL, (DXGI_FORMAT)0, 0);
+            deviceContext->IASetInputLayout(NULL);
+            deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+            // vs
+            deviceContext->VSSetShader(skyShader->getVertexShader(), nullptr, 0);
+
+            // ps
+            ID3D11ShaderResourceView* srv = skybox.getShaderResouceView();
+            ID3D11SamplerState* state = skybox.getSamplerState();
+            deviceContext->PSSetShader(skyShader->getPixelShader(), nullptr, 0);
+            deviceContext->PSSetSamplers(0, 1, &state);
+            deviceContext->PSSetShaderResources(0, 1, &srv);
+
+            skyboxCBCPU.cameraToWorld = camera->getCameraToWorld();
+            deviceContext->UpdateSubresource(skyboxCBGPU, 0, nullptr, &skyboxCBCPU, 0, 0);
+            deviceContext->PSSetConstantBuffers(0, 1, &skyboxCBGPU);
+
+            deviceContext->RSSetState(s3Renderer::get().getRasterizerState());
+
+            // OM
+            deviceContext->OMSetRenderTargets(1, &renderer->getRenderTargetView(), renderer->getDepthStencilView());
+            deviceContext->OMSetDepthStencilState(s3Renderer::get().getDepthStencilState(), 1);
+
+            deviceContext->Draw(3, 0);
+        }
+
+        // pbr 
         {
-            for (int32 j = 0; j < sphereColumns; j++)
+            s3Shader* shader = nullptr;
+            switch (shaderIndex)
             {
-                // IA
-                deviceContext->IASetInputLayout(pbrShader->getInputLayout());
+            case 0:
+                shader = pbrIBLShader;
+                break;
+            case 1:
+                shader = pbrShader;
+                break;
+            }
 
-                // VS
-                deviceContext->VSSetShader(pbrShader->getVertexShader(), nullptr, 0);
+            for (int32 i = 0; i < sphereRows; i++)
+            {
+                for (int32 j = 0; j < sphereColumns; j++)
+                {
+                    // IA
+                    deviceContext->IASetInputLayout(shader->getInputLayout());
 
-                pbrVSCBCPU.projection = camera->getProjectionMatrix();
-                pbrVSCBCPU.view = camera->getWorldToCamera();
-                pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
-                deviceContext->UpdateSubresource(pbrVSCBGPU, 0, nullptr, &pbrVSCBCPU, 0, 0);
-                deviceContext->VSSetConstantBuffers(0, 1, &pbrVSCBGPU);
+                    // VS
+                    deviceContext->VSSetShader(shader->getVertexShader(), nullptr, 0);
 
-                // PS
-                deviceContext->PSSetShader(pbrShader->getPixelShader(), nullptr, 0);
+                    pbrVSCBCPU.projection = camera->getProjectionMatrix();
+                    pbrVSCBCPU.view = camera->getWorldToCamera();
+                    pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
+                    deviceContext->UpdateSubresource(pbrVSCBGPU, 0, nullptr, &pbrVSCBCPU, 0, 0);
+                    deviceContext->VSSetConstantBuffers(0, 1, &pbrVSCBGPU);
 
-                // PS Constant Buffer
-                pbrPSCBCPU.cameraPosition = camera->getOrigin();
-                pbrPSCBCPU.roughness = t3Math::clamp((float32)j / sphereColumns, 0.05f, 1.0f);
-                pbrPSCBCPU.metallic = (float32)i / sphereRows;
-                deviceContext->UpdateSubresource(pbrPSCBGPU, 0, nullptr, &pbrPSCBCPU, 0, 0);
-                deviceContext->PSSetConstantBuffers(0, 1, &pbrPSCBGPU);
+                    // PS
+                    deviceContext->PSSetShader(shader->getPixelShader(), nullptr, 0);
 
-                // PS Bind Textures
-                ID3D11SamplerState* sampler = albedoMap.getSamplerState();
-                deviceContext->PSSetSamplers(0, 1, &sampler);
+                    // PS Constant Buffer
+                    pbrPSCBCPU.cameraPosition = camera->getOrigin();
+                    pbrPSCBCPU.roughness = t3Math::clamp((float32)j / sphereColumns, 0.05f, 1.0f);
+                    pbrPSCBCPU.metallic = (float32)i / sphereRows;
+                    deviceContext->UpdateSubresource(pbrPSCBGPU, 0, nullptr, &pbrPSCBCPU, 0, 0);
+                    deviceContext->PSSetConstantBuffers(0, 1, &pbrPSCBGPU);
 
-                ID3D11ShaderResourceView* srv1 = albedoMap.getShaderResouceView();
-                ID3D11ShaderResourceView* srv2 = normalMap.getShaderResouceView();
-                ID3D11ShaderResourceView* srv3 = metallicMap.getShaderResouceView();
-                ID3D11ShaderResourceView* srv4 = roughnessMap.getShaderResouceView();
-                ID3D11ShaderResourceView* srv5 = aoMap.getShaderResouceView();
-                deviceContext->PSSetShaderResources(0, 1, &srv1);
-                deviceContext->PSSetShaderResources(1, 1, &srv2);
-                deviceContext->PSSetShaderResources(2, 1, &srv3);
-                deviceContext->PSSetShaderResources(3, 1, &srv4);
-                deviceContext->PSSetShaderResources(4, 1, &srv5);
+                    // PS Bind Textures
+                    ID3D11SamplerState* sampler = albedoMap.getSamplerState();
+                    deviceContext->PSSetSamplers(0, 1, &sampler);
 
-                deviceContext->RSSetState(rasterizerState);
+                    // textures
+                    ID3D11ShaderResourceView* srv1 = albedoMap.getShaderResouceView();
+                    ID3D11ShaderResourceView* srv2 = normalMap.getShaderResouceView();
+                    ID3D11ShaderResourceView* srv3 = metallicMap.getShaderResouceView();
+                    ID3D11ShaderResourceView* srv4 = roughnessMap.getShaderResouceView();
+                    ID3D11ShaderResourceView* srv5 = aoMap.getShaderResouceView();
+                    deviceContext->PSSetShaderResources(0, 1, &srv1);
+                    deviceContext->PSSetShaderResources(1, 1, &srv2);
+                    deviceContext->PSSetShaderResources(2, 1, &srv3);
+                    deviceContext->PSSetShaderResources(3, 1, &srv4);
+                    deviceContext->PSSetShaderResources(4, 1, &srv5);
 
-                // OM
-                deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-                deviceContext->OMSetDepthStencilState(depthStencilState, 1);
+                    // lut
+                    ID3D11ShaderResourceView* srv6 = irradianceMap.getShaderResouceView();
+                    ID3D11ShaderResourceView* srv7 = prefilterMap.getShaderResouceView();
+                    ID3D11ShaderResourceView* srv8 = brdfMap.getShaderResouceView();
+                    deviceContext->PSSetShaderResources(5, 1, &srv6);
+                    deviceContext->PSSetShaderResources(6, 1, &srv7);
+                    deviceContext->PSSetShaderResources(7, 1, &srv8);
 
-                spheres[i * sphereColumns + j]->draw(deviceContext);
+                    deviceContext->RSSetState(s3Renderer::get().getRasterizerState());
+
+                    // OM
+                    deviceContext->OMSetRenderTargets(1, &renderer->getRenderTargetView(), renderer->getDepthStencilView());
+                    deviceContext->OMSetDepthStencilState(s3Renderer::get().getDepthStencilState(), 1);
+
+                    spheres[i * sphereColumns + j]->draw(deviceContext);
+                }
             }
         }
 
@@ -247,17 +282,14 @@ int main()
     width = window->getWindowSize().x;
     height = window->getWindowSize().y;
 
-    s3Renderer& renderer = s3Renderer::get();
-    device = renderer.getDevice();
-    deviceContext = renderer.getDeviceContext();
-    renderTargetView = renderer.getRenderTargetView();
-    depthStencilView = renderer.getDepthStencilView();
+    renderer = &s3Renderer::get();
+    device = renderer->getDevice();
+    deviceContext = renderer->getDeviceContext();
 
     camera = new s3Camera(t3Vector3f(0, 0, -25), t3Vector3f(0, 0, 1), t3Vector3f(0, 1, 0),
         width / height, 45, 0.01f, 1000.0f);
 
     createShaders();
-    createStates();
     createConstantBuffers();
 
     // init spheres
@@ -266,7 +298,7 @@ int main()
     {
         for (int32 j = 0; j < sphereColumns; j++)
         {
-            spheres[i * sphereColumns + j] = s3Mesh::createSphere(renderer.getDeviceContext(), 1.0f, 64);
+            spheres[i * sphereColumns + j] = s3Mesh::createSphere(renderer->getDeviceContext(), 1.0f, 64);
             spheres[i * sphereColumns + j]->setObjectToWorld(t3Matrix4x4(
                 1, 0, 0, (i - (sphereRows / 2.0f)) * spacing,
                 0, 1, 0, (j - (sphereColumns / 2.0f)) * spacing,
@@ -275,11 +307,28 @@ int main()
         }
     }
 
+    // skybox
+    skybox.load(device, "../resources/newport_loft.hdr");
+
+    // pbr textures
     albedoMap.load(device, "../resources/textures/pbr/rusted_iron/albedo.png");
     normalMap.load(device, "../resources/textures/pbr/rusted_iron/normal.png");
     metallicMap.load(device, "../resources/textures/pbr/rusted_iron/metallic.png");
     roughnessMap.load(device, "../resources/textures/pbr/rusted_iron/roughness.png");
     aoMap.load(device, "../resources/textures/pbr/rusted_iron/ao.png");
+
+    // precomputed lut
+    irradianceMap.load(device, "../resources/lut/irradianceDiffuseMap.exr");
+    brdfMap.load(device, "../resources/lut/brdfMap.exr");
+    std::vector<std::string> specularNames;
+    for (int32 i = 0; i < 8; i++)
+    {
+        std::string name = "../resources/lut/specular/";
+        name += s3ToString(i);
+        name += ".exr";
+        specularNames.push_back(name);
+    }
+    prefilterMap.load(device, specularNames);
 
     s3Pbr mc;
     s3CallbackManager::callBack.onBeginRender += mc;

@@ -55,6 +55,12 @@ float4 main(input i) : SV_TARGET
     r.direction = normalize(pixelPosition - r.origin);
 
     float phi = s3SphericalPhi(r.direction), theta = s3SphericalTheta(r.direction);
+	
+    float4 color = tex.Sample(textureSampler, float2(phi / (2 * PI), theta / PI));
+    // HDR tonemapping
+    color = color / (color + float4(1.0f, 1.0f, 1.0f, 1.0f));
+    // gamma correct
+    color = pow(color, float4(1.0 / 2.2f, 1.0 / 2.2f, 1.0 / 2.2f, 1.0 / 2.2f));
 
-    return tex.Sample(textureSampler, float2(phi / (2 * PI), theta / PI));
+    return color;
 }

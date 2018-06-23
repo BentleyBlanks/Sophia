@@ -11,9 +11,12 @@ public:
 
     bool load(ID3D11Device* device, const std::string& filePath);
     bool load(ID3D11Device* device, int32 width, int32 height, const std::vector<t3Vector4f>& imageData);
+    // first file = most detailed mipmap, mipFilesName's size is mip's level
+    bool load(ID3D11Device* device, const std::vector<std::string> mipFilesName);
 
     t3Vector4f getColor(int32 x, int32 y);
 
+    // return most detailed mipmap's size if existed
     int32 getWidth() const;
     int32 getHeight() const;
 
@@ -43,4 +46,6 @@ private:
     std::vector<t3Vector4f> imageData;
     std::vector<unsigned char> pngData;
     float32 *exrData, *hdrData;
+
+    int32 mipLevels;
 };

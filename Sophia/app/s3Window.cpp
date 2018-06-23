@@ -24,18 +24,19 @@ s3Window::s3Window(const char * caption, WNDPROC proc, const t3Vector2f& size, c
 
     RegisterClassEx(&wc);
 
-    hWnd = CreateWindowEx(NULL,
-                            wc.lpszClassName,
-                            caption,
-                            style,
-                            (int32) position.x,
-                            (int32) position.y,
-                            (int32) size.x,
-                            (int32) size.y,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL);
+    hWnd = CreateWindowEx(
+        NULL,
+        wc.lpszClassName,
+        caption,
+        style,
+        (int32) position.x,
+        (int32) position.y,
+        (int32) size.x,
+        (int32) size.y,
+        NULL,
+        NULL,
+        NULL,
+        NULL);
 
     ShowWindow(hWnd, SW_NORMAL);
     UpdateWindow(hWnd);

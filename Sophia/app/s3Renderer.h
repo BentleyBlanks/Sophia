@@ -15,11 +15,13 @@ public:
     void present(int32 syncInterval = 0, int32 presentFlag = 0);
 
     // DirectX
-    ID3D11Device* getDevice();
-    ID3D11DeviceContext* getDeviceContext();
-    IDXGISwapChain* getSwapChain();
-    ID3D11RenderTargetView* getRenderTargetView();
-    ID3D11DepthStencilView* getDepthStencilView();
+    ID3D11Device*& getDevice();
+    ID3D11DeviceContext*& getDeviceContext();
+    IDXGISwapChain*& getSwapChain();
+    ID3D11RenderTargetView*& getRenderTargetView();
+    ID3D11DepthStencilView*& getDepthStencilView();
+    ID3D11DepthStencilState*& getDepthStencilState();
+    ID3D11RasterizerState*& getRasterizerState();
 
     void setMSAACount(int count);
     int getMSAACount();
@@ -36,7 +38,12 @@ private:
 
     ID3D11RenderTargetView* renderTargetView;
     ID3D11DepthStencilView* depthStencilView;
+    ID3D11Texture2D* depthStencilBuffer;
+
+    ID3D11DepthStencilState* depthStencilState;
+    ID3D11RasterizerState* rasterizerState;
 
     bool MSAAEnabled;
-    int MSAACount;
+    int32 MSAACount;
+    uint32 MSAAQuality;
 };
