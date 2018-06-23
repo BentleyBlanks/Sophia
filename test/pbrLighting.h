@@ -182,11 +182,11 @@ public:
             deviceContext->UpdateSubresource(skyboxCBGPU, 0, nullptr, &skyboxCBCPU, 0, 0);
             deviceContext->PSSetConstantBuffers(0, 1, &skyboxCBGPU);
 
-            deviceContext->RSSetState(s3Renderer::get().getRasterizerState());
+            deviceContext->RSSetState(renderer->getRasterizerState());
 
             // OM
             deviceContext->OMSetRenderTargets(1, &renderer->getRenderTargetView(), renderer->getDepthStencilView());
-            deviceContext->OMSetDepthStencilState(s3Renderer::get().getDepthStencilState(), 1);
+            deviceContext->OMSetDepthStencilState(renderer->getDepthStencilState(), 1);
 
             deviceContext->Draw(3, 0);
         }
@@ -225,8 +225,8 @@ public:
 
                     // PS Constant Buffer
                     pbrPSCBCPU.cameraPosition = camera->getOrigin();
-                    pbrPSCBCPU.roughness = t3Math::clamp((float32)j / sphereColumns, 0.05f, 1.0f);
-                    pbrPSCBCPU.metallic = (float32)i / sphereRows;
+                    pbrPSCBCPU.roughness = t3Math::clamp((float32)(sphereColumns - j) / sphereColumns, 0.05f, 1.0f);
+                    pbrPSCBCPU.metallic = (float32)(sphereRows - i) / sphereRows;
                     deviceContext->UpdateSubresource(pbrPSCBGPU, 0, nullptr, &pbrPSCBCPU, 0, 0);
                     deviceContext->PSSetConstantBuffers(0, 1, &pbrPSCBGPU);
 
@@ -254,11 +254,11 @@ public:
                     deviceContext->PSSetShaderResources(6, 1, &srv7);
                     deviceContext->PSSetShaderResources(7, 1, &srv8);
 
-                    deviceContext->RSSetState(s3Renderer::get().getRasterizerState());
+                    deviceContext->RSSetState(renderer->getRasterizerState());
 
                     // OM
                     deviceContext->OMSetRenderTargets(1, &renderer->getRenderTargetView(), renderer->getDepthStencilView());
-                    deviceContext->OMSetDepthStencilState(s3Renderer::get().getDepthStencilState(), 1);
+                    deviceContext->OMSetDepthStencilState(renderer->getDepthStencilState(), 1);
 
                     spheres[i * sphereColumns + j]->draw(deviceContext);
                 }

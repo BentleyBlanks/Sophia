@@ -158,7 +158,7 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
     depthStencilStateDesc.DepthEnable = MSAAEnabled;
     depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
     depthStencilStateDesc.StencilEnable = FALSE;
 
     hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
@@ -227,91 +227,6 @@ void s3Renderer::shutdown()
 
 void s3Renderer::resize(int width, int height)
 {
-    //if (!deviceContext || !swapChain)	return;
-
-    //// d3d11 handle windows resize:
-    //// https://msdn.microsoft.com/en-us/library/windows/desktop/bb205075%28v=vs.85%29.aspx#Handling_Window_Resizing
-
-    //deviceContext->OMSetRenderTargets(0, 0, 0);
-
-    //// Release all outstanding references to the swap chain's buffers
-    //if (renderTargetView)	renderTargetView->Release();
-
-    //// Preserve the existing buffer count and format
-    //// Automatically choose the width and height to match the client rect for HWND
-    //HRESULT hr = swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
-
-    //// Perform error handling here!
-    //if (FAILED(hr))
-    //{
-    //    std::cout << "Resize Buffer Failed" << std::endl;
-    //    return;
-    //}
-
-    //// Get buffer and create a render-target-view
-    //ID3D11Texture2D* pBuffer = nullptr;
-    //hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBuffer);
-
-    //// Perform error handling here!
-    //if (FAILED(hr))
-    //{
-    //    std::cout << "Resize Get Buffer Failed" << std::endl;
-    //    return;
-    //}
-
-    //hr = device->CreateRenderTargetView(pBuffer, nullptr, &renderTargetView);
-    //if (FAILED(hr))
-    //{
-    //    std::cout << "Resize CreateRenderTargetView Failed" << std::endl;
-    //    return;
-    //}
-
-    //pBuffer->Release();
-
-    //// should i recreate the depth/stencil buffer too ?
-    //// https://gamedev.stackexchange.com/questions/86164/idxgiswapchainresizebuffers-should-i-recreate-the-depth-stencil-buffer-too
-    //// depth/stencil resize is just optional
-    //if (depthStencilView)	depthStencilView->Release();
-
-    //D3D11_TEXTURE2D_DESC dsd;
-    //ZeroMemory(&dsd, sizeof(D3D11_TEXTURE2D_DESC));
-    //dsd.Width = (uint32)width;
-    //dsd.Height = (uint32)height;
-    //dsd.MipLevels = 1;
-    //dsd.ArraySize = 1;
-    //dsd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    //if (MSAAEnabled)
-    //{
-    //    dsd.SampleDesc.Count = MSAACount;
-    //    dsd.SampleDesc.Quality = MSAAQuality - 1;
-    //}
-    //else
-    //{
-    //    dsd.SampleDesc.Count = 1;
-    //    dsd.SampleDesc.Quality = 0;
-    //}
-    //dsd.Usage = D3D11_USAGE_DEFAULT;
-    //dsd.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    //dsd.CPUAccessFlags = 0;
-    //dsd.MiscFlags = 0;
-
-    //ID3D11Texture2D* pDepthStencilBuffer = nullptr;
-    //if (FAILED(device->CreateTexture2D(&dsd, 0, &pDepthStencilBuffer)))	return;
-    //if (FAILED(device->CreateDepthStencilView(pDepthStencilBuffer, 0, &depthStencilView)))	return;
-    //pDepthStencilBuffer->Release();
-
-    //deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-
-    //D3D11_VIEWPORT vp;
-    //vp.Width = (float32)width;
-    //vp.Height = (float32)height;
-    //vp.MinDepth = 0.0f;
-    //vp.MaxDepth = 1.0f;
-    //vp.TopLeftX = 0.0f;
-    //vp.TopLeftY = 0.0f;
-    //deviceContext->RSSetViewports(1, &vp);
-
-
     // ref: https://msdn.microsoft.com/en-us/library/windows/desktop/bb205075%28v=vs.85%29.aspx#Handling_Window_Resizing
     if(!device || !deviceContext || !swapChain) return;
 
