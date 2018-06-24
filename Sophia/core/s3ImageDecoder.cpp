@@ -99,7 +99,7 @@ bool s3ImageDecoder::load(ID3D11Device* device, const std::string & filePath)
     }
     else if (type == S3_IMAGE_EXR)
     {
-        const char* error;
+        const char* error = "";
         if (LoadEXR(&exrData, &width, &height, filePath.c_str(), &error) != 0)
         {
             s3Log::error("s3ImageDecoder load:%s failed, Error: %s\n", error);
@@ -332,7 +332,7 @@ bool s3ImageDecoder::load(ID3D11Device * device, const std::vector<std::string> 
         }
         else if (type == S3_IMAGE_EXR)
         {
-            const char* error;
+            const char* error = "";
             if (LoadEXR(&tempExrData, &tempWidth, &tempHeight, filePath.c_str(), &error) != 0)
             {
                 s3Log::error("s3ImageDecoder load:%s failed, Error: %s\n", error);
@@ -446,11 +446,11 @@ t3Vector4f s3ImageDecoder::getColor(int32 x, int32 y)
     }
     else if (type == S3_IMAGE_HDR)
     {
-        int32 index = 3 * (x + y * width);
+        int32 index = 4 * (x + y * width);
         return t3Vector4f(hdrData[index + 0],
             hdrData[index + 1],
             hdrData[index + 2],
-            1.0f);
+            hdrData[index + 3]);
     }
     else
         return t3Vector4f();
@@ -466,17 +466,17 @@ int32 s3ImageDecoder::getHeight() const
     return height;
 }
 
-ID3D11Texture2D * s3ImageDecoder::getTexture2D()
+ID3D11Texture2D *& s3ImageDecoder::getTexture2D()
 {
     return texture2d;
 }
 
-ID3D11ShaderResourceView * s3ImageDecoder::getShaderResouceView()
+ID3D11ShaderResourceView *& s3ImageDecoder::getShaderResouceView()
 {
     return textureSRV;
 }
 
-ID3D11SamplerState * s3ImageDecoder::getSamplerState()
+ID3D11SamplerState *& s3ImageDecoder::getSamplerState()
 {
     return samplerState;
 }

@@ -158,7 +158,7 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
     depthStencilStateDesc.DepthEnable = MSAAEnabled;
     depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
     depthStencilStateDesc.StencilEnable = FALSE;
 
     hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);

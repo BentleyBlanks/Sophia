@@ -6,8 +6,8 @@
 #include <core/s3Random.h>
 #include <core/log/s3Log.h>
 
-#define DIFFUSE
-//#define SPUCULAR
+//#define DIFFUSE
+#define SPECULAR
 //#define SPUCULAR_BRDF
 
 float32 distributionGGX(t3Vector3f N, t3Vector3f H, float roughness)
@@ -127,22 +127,25 @@ int main()
 
     int32 width = 0, height = 0;
     s3ImageDecoder decoder;
-    decoder.load(renderer.getDevice(), "../resources/newport_loft.hdr");
+    decoder.load(renderer.getDevice(), "../resources/grace-new_latlong.exr");
     //decoder.load(renderer.getDevice(), "../resources/skylightBlue.exr");
     width = decoder.getWidth();
     height = decoder.getHeight();
 
 
 #ifdef DIFFUSE
-    s3ImageEncoder encoder(width, height, s3ImageType::S3_IMAGE_EXR);
-    // tangent coordinate
-    t3Vector3f normal, up, right, sampledLocal, sampledWorld;
-    t3Vector4f irradiance;
     float32 samples = 100;
+    s3ImageEncoder encoder(width, height, s3ImageType::S3_IMAGE_EXR);
     // whole sphere
     //for (float32 phi = 0.0f; phi < T3MATH_2PI; phi += T3MATH_2PI / width)
+#pragma omp parallel for schedule(dynamic)
+
     for (int32 i = 0; i < width; i++)
     {
+        // tangent coordinate
+        t3Vector3f normal, up, right, sampledLocal, sampledWorld;
+        t3Vector4f irradiance;
+
         //s3Log::info("Process: %8.2f \r", phi / T3MATH_2PI * 100);
         s3Log::info("Process: %8.2f \r", i / (float32)width * 100);
 
@@ -190,16 +193,17 @@ int main()
                 }
             }
             irradiance = T3MATH_PI * irradiance / (samples * samples);
-            int32 x = phi * (width - 1) / T3MATH_2PI, y = theta * (height - 1) / T3MATH_PI;
-            encoder.setColor(x, y, irradiance);
+            //int32 x = phi * (width - 1) / T3MATH_2PI, y = theta * (height - 1) / T3MATH_PI;
+            //encoder.setColor(x, y, irradiance);
+            encoder.setColor(i, j, irradiance);
         }
     }
 
     //encoder.print();
-    encoder.write("../resources/irradianceDiffuseMap1.exr");
+    encoder.write("../resources/irradiance1.exr");
     //encoder.write("../resources/irradianceDiffuseMap.exr");
 #elif defined SPECULAR
-    int32 sampleCount = 10000;
+    int32 sampleCount = 30000;
     int32 maxMipLevels = 8;
 
 #pragma omp parallel for schedule(dynamic)
@@ -230,10 +234,6 @@ int main()
                     t3Vector2f random = hammersley(s, sampleCount);
                     t3Vector3f H = importanceSampleGGX(random, N, roughness);
 
-                    //float t = H.z;
-                    //H.z = H.y;
-                    //H.y = t;
-
                     t3Vector3f L = (2.0 * V.dot(H) * H - V).getNormalized();
 
                     float32 cosL = t3Math::Max(N.dot(L), 0.0f);
@@ -263,7 +263,7 @@ int main()
             }
         }
 
-        std::string fileName = "../resources/specularMap/";
+        std::string fileName = "../resources/lut/specular2/";
         fileName += s3ToString(mip);
         fileName += ".exr";
         encoder.write(fileName);

@@ -13,13 +13,13 @@
     ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));\
     constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;\
     constantBufferDesc.ByteWidth = sizeof(cbClassName);\
-    constantBufferDesc.CPUAccessFlags = 0;\
+    constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;\
     constantBufferDesc.MiscFlags = 0;\
     constantBufferDesc.StructureByteStride = 0;\
-    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;\
+    constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;\
     HRESULT hr = d->CreateBuffer(&constantBufferDesc, nullptr, &cb);\
     if (FAILED(hr)){\
-        s3Log::error("Failed to create constant buffer\n");\
+        s3Log::error("Failed to create constant buffer, hr: %d\n", hr);\
         return;\
     }\
 }
@@ -160,6 +160,8 @@ public:
 
     void onHandle(const s3CallbackUserData* imageData)
     {
+        D3D11_MAPPED_SUBRESOURCE ms;
+
         // skybox
         {                    
             // IA
@@ -172,14 +174,22 @@ public:
             deviceContext->VSSetShader(skyShader->getVertexShader(), nullptr, 0);
 
             // ps
-            ID3D11ShaderResourceView* srv = skybox.getShaderResouceView();
-            ID3D11SamplerState* state = skybox.getSamplerState();
             deviceContext->PSSetShader(skyShader->getPixelShader(), nullptr, 0);
-            deviceContext->PSSetSamplers(0, 1, &state);
-            deviceContext->PSSetShaderResources(0, 1, &srv);
+            deviceContext->PSSetSamplers(0, 1, &skybox.getSamplerState());
+            deviceContext->PSSetShaderResources(0, 1, &skybox.getShaderResouceView());
 
-            skyboxCBCPU.cameraToWorld = camera->getCameraToWorld();
-            deviceContext->UpdateSubresource(skyboxCBGPU, 0, nullptr, &skyboxCBCPU, 0, 0);
+            //skyboxCBCPU.cameraToWorld = camera->getCameraToWorld();
+            //deviceContext->UpdateSubresource(skyboxCBGPU, 0, nullptr, &skyboxCBCPU, 0, 0);
+
+            ZeroMemory(&ms, sizeof(D3D11_MAPPED_SUBRESOURCE));
+            if (SUCCEEDED(deviceContext->Map(skyboxCBGPU, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
+            {
+                skyboxCBCPU.cameraToWorld = camera->getCameraToWorld();
+
+                memcpy(ms.pData, &skyboxCBCPU, sizeof(skyboxCBCPU));
+                deviceContext->Unmap(skyboxCBGPU, 0);
+            }
+
             deviceContext->PSSetConstantBuffers(0, 1, &skyboxCBGPU);
 
             deviceContext->RSSetState(renderer->getRasterizerState());
@@ -214,45 +224,59 @@ public:
                     // VS
                     deviceContext->VSSetShader(shader->getVertexShader(), nullptr, 0);
 
-                    pbrVSCBCPU.projection = camera->getProjectionMatrix();
-                    pbrVSCBCPU.view = camera->getWorldToCamera();
-                    pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
-                    deviceContext->UpdateSubresource(pbrVSCBGPU, 0, nullptr, &pbrVSCBCPU, 0, 0);
+                    //pbrVSCBCPU.projection = camera->getProjectionMatrix();
+                    //pbrVSCBCPU.view = camera->getWorldToCamera();
+                    //pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
+                    //deviceContext->UpdateSubresource(pbrVSCBGPU, 0, nullptr, &pbrVSCBCPU, 0, 0);
+
+                    memset(&ms, 0, sizeof(D3D11_MAPPED_SUBRESOURCE));
+                    if (SUCCEEDED(deviceContext->Map(pbrVSCBGPU, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
+                    {
+                        pbrVSCBCPU.projection = camera->getProjectionMatrix();
+                        pbrVSCBCPU.view = camera->getWorldToCamera();
+                        pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
+                         
+                        memcpy(ms.pData, &pbrVSCBCPU, sizeof(s3PbrVSCB));
+                        deviceContext->Unmap(pbrVSCBGPU, 0);
+                    }
                     deviceContext->VSSetConstantBuffers(0, 1, &pbrVSCBGPU);
 
                     // PS
                     deviceContext->PSSetShader(shader->getPixelShader(), nullptr, 0);
 
                     // PS Constant Buffer
-                    pbrPSCBCPU.cameraPosition = camera->getOrigin();
-                    pbrPSCBCPU.roughness = t3Math::clamp((float32)(sphereColumns - j) / sphereColumns, 0.05f, 1.0f);
-                    pbrPSCBCPU.metallic = (float32)(sphereRows - i) / sphereRows;
-                    deviceContext->UpdateSubresource(pbrPSCBGPU, 0, nullptr, &pbrPSCBCPU, 0, 0);
+                    //pbrPSCBCPU.cameraPosition = camera->getOrigin();
+                    //pbrPSCBCPU.roughness = t3Math::clamp((float32)(sphereColumns - j) / sphereColumns, 0.05f, 1.0f);
+                    //pbrPSCBCPU.metallic = (float32)(sphereRows - i) / sphereRows;
+                    //deviceContext->UpdateSubresource(pbrPSCBGPU, 0, nullptr, &pbrPSCBCPU, 0, 0);
+
+                    memset(&ms, 0, sizeof(D3D11_MAPPED_SUBRESOURCE));
+                    if (SUCCEEDED(deviceContext->Map(pbrPSCBGPU, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
+                    {
+                        pbrPSCBCPU.cameraPosition = camera->getOrigin();
+                        pbrPSCBCPU.roughness = t3Math::clamp((float32)(sphereColumns - j) / sphereColumns, 0.05f, 1.0f);
+                        pbrPSCBCPU.metallic = (float32)(sphereRows - i) / sphereRows;
+
+                        memcpy(ms.pData, &pbrPSCBCPU, sizeof(s3PbrPSCB));
+                        deviceContext->Unmap(pbrPSCBGPU, 0);
+                    }
+
                     deviceContext->PSSetConstantBuffers(0, 1, &pbrPSCBGPU);
 
                     // PS Bind Textures
-                    ID3D11SamplerState* sampler = albedoMap.getSamplerState();
-                    deviceContext->PSSetSamplers(0, 1, &sampler);
+                    deviceContext->PSSetSamplers(0, 1, &albedoMap.getSamplerState());
 
                     // textures
-                    ID3D11ShaderResourceView* srv1 = albedoMap.getShaderResouceView();
-                    ID3D11ShaderResourceView* srv2 = normalMap.getShaderResouceView();
-                    ID3D11ShaderResourceView* srv3 = metallicMap.getShaderResouceView();
-                    ID3D11ShaderResourceView* srv4 = roughnessMap.getShaderResouceView();
-                    ID3D11ShaderResourceView* srv5 = aoMap.getShaderResouceView();
-                    deviceContext->PSSetShaderResources(0, 1, &srv1);
-                    deviceContext->PSSetShaderResources(1, 1, &srv2);
-                    deviceContext->PSSetShaderResources(2, 1, &srv3);
-                    deviceContext->PSSetShaderResources(3, 1, &srv4);
-                    deviceContext->PSSetShaderResources(4, 1, &srv5);
+                    deviceContext->PSSetShaderResources(0, 1, &albedoMap.getShaderResouceView());
+                    deviceContext->PSSetShaderResources(1, 1, &normalMap.getShaderResouceView());
+                    deviceContext->PSSetShaderResources(2, 1, &metallicMap.getShaderResouceView());
+                    deviceContext->PSSetShaderResources(3, 1, &roughnessMap.getShaderResouceView());
+                    deviceContext->PSSetShaderResources(4, 1, &aoMap.getShaderResouceView());
 
                     // lut
-                    ID3D11ShaderResourceView* srv6 = irradianceMap.getShaderResouceView();
-                    ID3D11ShaderResourceView* srv7 = prefilterMap.getShaderResouceView();
-                    ID3D11ShaderResourceView* srv8 = brdfMap.getShaderResouceView();
-                    deviceContext->PSSetShaderResources(5, 1, &srv6);
-                    deviceContext->PSSetShaderResources(6, 1, &srv7);
-                    deviceContext->PSSetShaderResources(7, 1, &srv8);
+                    deviceContext->PSSetShaderResources(5, 1, &irradianceMap.getShaderResouceView());
+                    deviceContext->PSSetShaderResources(6, 1, &prefilterMap.getShaderResouceView());
+                    deviceContext->PSSetShaderResources(7, 1, &brdfMap.getShaderResouceView());
 
                     deviceContext->RSSetState(renderer->getRasterizerState());
 

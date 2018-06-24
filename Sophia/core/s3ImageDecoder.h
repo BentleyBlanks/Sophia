@@ -20,9 +20,9 @@ public:
     int32 getWidth() const;
     int32 getHeight() const;
 
-    ID3D11Texture2D* getTexture2D();
-    ID3D11ShaderResourceView* getShaderResouceView();
-    ID3D11SamplerState* getSamplerState();
+    ID3D11Texture2D*& getTexture2D();
+    ID3D11ShaderResourceView*& getShaderResouceView();
+    ID3D11SamplerState*& getSamplerState();
     s3ImageType getImageType();
 
     std::vector<t3Vector4f>& getImageData();
