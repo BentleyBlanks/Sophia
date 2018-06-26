@@ -5,7 +5,9 @@ Sophia is a real-time DirectX 11 renderer. It is not quite a rich graphics engin
 
 ### Atmosperic
 
-Real-time atmosperic simulation based on [Accurate Atmospheric Scattering](https://developer.nvidia.com/gpugems/GPUGems2/gpugems2_chapter16.html) and [Simulating the Colors of the Sky](http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/simulating-sky)
+Real-time atmosperic simulation based on [Accurate Atmospheric Scattering](https://developer.nvidia.com/gpugems/GPUGems2/gpugems2_chapter16.html) and [Simulating the Colors of the Sky](http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/simulating-sky). 
+
+> See more explain in my blog [Atmosperical simulation](http://bentleyblanks.github.io/2018/06/26/2018-06-26-Atmosperical%20simulation/)
 
 > Outside the earth
 
@@ -19,13 +21,15 @@ Real-time atmosperic simulation based on [Accurate Atmospheric Scattering](https
 
 Precomputed LUT according to [Real Shading in Unreal Engine 4](https://cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf)
 
+> See more explain in my blog [PBR based on IBl](http://bentleyblanks.github.io/2018/06/24/2018-06-24-PBR%20based%20on%20IBl/)
+
 > Specular map used as mipmap up to 8 levels
 
 <img src="https://farm2.staticflickr.com/1791/42069990655_b09f7336fc_b.jpg" width="1024" height="512" alt="specularMap">
 
 > Split the sum of the BRDF LUT and diffuse irradiance map
 
-<img src="https://farm1.staticflickr.com/900/29099145538_8ec61a2b6d_b.jpg" width="1024" height="341" alt="precomputed">
+<img src="https://farm2.staticflickr.com/1801/42922399172_9a5ed87ddb_b.jpg" width="1024" height="342" alt="precomputed">
 
 > Spheres with IBL
 
@@ -35,7 +39,7 @@ Precomputed LUT according to [Real Shading in Unreal Engine 4](https://cdn2.unre
 Only supported **Visuio Studio 2015**(Please tell me if it compatible with others). Contains **all thirdparty** no need other dependencies. 
 
 ## Thirdparty
-1. [ImGui](https://github.com/ocornut/imgui)
+1. [imGui](https://github.com/ocornut/imgui)
 2. [lodepng](https://github.com/lvandeve/lodepng)
 3. [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
 4. [tinyexr](https://github.com/syoyo/tinyexr)
