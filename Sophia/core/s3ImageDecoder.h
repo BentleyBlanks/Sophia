@@ -9,10 +9,8 @@ public:
     s3ImageDecoder();
     ~s3ImageDecoder();
 
-    bool load(ID3D11Device* device, const std::string& filePath);
-    bool load(ID3D11Device* device, int32 width, int32 height, const std::vector<t3Vector4f>& imageData);
-    // first file = most detailed mipmap, mipFilesName's size is mip's level
-    bool load(ID3D11Device* device, const std::vector<std::string> mipFilesName);
+    bool load(int32 width, int32 height, const std::vector<t3Vector4f>& imageData);
+    bool load(const std::string& filePath);
 
     t3Vector4f getColor(int32 x, int32 y);
 
@@ -20,9 +18,6 @@ public:
     int32 getWidth() const;
     int32 getHeight() const;
 
-    ID3D11Texture2D*& getTexture2D();
-    ID3D11ShaderResourceView*& getShaderResouceView();
-    ID3D11SamplerState*& getSamplerState();
     s3ImageType getImageType();
 
     std::vector<t3Vector4f>& getImageData();
@@ -33,11 +28,9 @@ public:
     bool isLoaded() const;
 
 private:
-    s3ImageType type;
+    void clear();
 
-    ID3D11Texture2D* texture2d;
-    ID3D11ShaderResourceView* textureSRV;
-    ID3D11SamplerState* samplerState;
+    s3ImageType type;
 
     int32 width, height;
     bool loaded;

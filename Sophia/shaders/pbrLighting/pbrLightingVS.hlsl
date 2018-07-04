@@ -3,6 +3,7 @@ cbuffer cb
     matrix projection;
     matrix view;
     matrix model;
+    matrix normalM;
 }
 
 struct input

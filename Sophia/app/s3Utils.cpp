@@ -1,6 +1,8 @@
 ﻿#include <app/s3Utils.h>
 #include <app/s3Renderer.h>
 #include <core/log/s3Log.h>
+#include <core/s3ImageDecoder.h>
+#include <directx/s3Texture.h>
 
 #include <iostream>  
 #include <sstream>
@@ -548,6 +550,64 @@ s3ImageType s3GetImageType(const std::string & filePath)
         type = S3_IMAGE_ERROR;
 
     return type;
+}
+
+s3Texture* s3LoadAsMipmap(std::vector<std::string> fileNames)
+{
+    s3Texture* texture = new s3Texture();
+
+    int32 width = 0, height = 0;
+    std::vector<float32*> data1;
+    std::vector<std::vector<unsigned char>> data2;
+    s3ImageType type;
+
+    std::vector<s3ImageDecoder> decoder(fileNames.size());
+    for (int32 i = 0; i <fileNames.size(); i++)
+    {
+        decoder[i].load(fileNames[i]);
+
+        if (i == 0)
+        {
+            width = decoder[i].getWidth();
+            height = decoder[i].getHeight();
+        }
+
+        type = decoder[i].getImageType();
+        switch (type)
+        {
+        case S3_IMAGE_PNG:
+            data2.push_back(decoder[i].getPNGData());
+            break;
+        case S3_IMAGE_EXR:
+            data1.push_back(decoder[i].getEXRData());
+            break;
+        case S3_IMAGE_HDR:
+            data1.push_back(decoder[i].getHDRData());
+            break;
+        case S3_IMAGE_ERROR:
+        default:
+            s3Log::warning("Error Image Type\n");
+            S3_SAFE_DELETE(texture);
+            return nullptr;
+        }
+    }
+
+    switch (type)
+    {
+    case S3_IMAGE_PNG:
+        texture->load(width, height, data2);
+        break;
+    case S3_IMAGE_EXR:
+    case S3_IMAGE_HDR:
+        texture->load(width, height, data1);
+        break;
+    case S3_IMAGE_ERROR:
+    default:
+        S3_SAFE_DELETE(texture);
+        return nullptr;
+    }
+    
+    return texture;
 }
 
 float s3SphericalTheta(const t3Vector3f &v)

@@ -14,6 +14,7 @@ struct input
 
 struct output
 {
+    float4 fragPos : POSITION;
     float3 normal : NORMAL;
     float2 texCoord : TEXCOORD;
     float4 position : SV_POSITION;
@@ -27,6 +28,7 @@ output main(input i)
     o.position = mul(mul(mul(float4(i.position, 1.0f), model), view), projection);
     o.normal = mul(float4(i.normal, 1.0f), normalM).xyz;
     o.texCoord = i.texCoord;
+    o.fragPos = o.position;
 
     return o;
 }

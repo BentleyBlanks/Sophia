@@ -46,9 +46,6 @@
     <Filter Include="Sophia\shaders\skyRayCasting">
       <UniqueIdentifier>{fd2812e8-7933-4084-9ba3-59a376e93aa5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sophia\light">
-      <UniqueIdentifier>{5baebb74-a132-4401-9140-76690dd9df64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sophia\shaders\pbrLighting">
       <UniqueIdentifier>{2480de53-16b4-4a90-b470-8d2dde598110}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,12 @@
     </Filter>
     <Filter Include="Sophia\thirdparty\tinyobjloader">
       <UniqueIdentifier>{79cb0112-61f6-4106-a2b2-8b630545279e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\directx">
+      <UniqueIdentifier>{b0b8498f-9522-47b5-be40-619bc74713f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\directx\light">
+      <UniqueIdentifier>{5baebb74-a132-4401-9140-76690dd9df64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,12 +141,6 @@
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_draw.cpp">
       <Filter>Sophia\thirdparty\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\3d\s3Shader.cpp">
-      <Filter>Sophia\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sophia\light\s3PointLight.cpp">
-      <Filter>Sophia\light</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sophia\core\s3ImageDecoder.cpp">
       <Filter>Sophia\core</Filter>
     </ClCompile>
@@ -155,6 +152,18 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\thirdparty\tinyobjloader\tiny_obj_loader.cc">
       <Filter>Sophia\thirdparty\tinyobjloader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\3d\s3Model.cpp">
+      <Filter>Sophia\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\directx\s3Texture.cpp">
+      <Filter>Sophia\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\directx\light\s3PointLight.cpp">
+      <Filter>Sophia\directx\light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\directx\s3Shader.cpp">
+      <Filter>Sophia\directx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,12 +263,6 @@
     <ClInclude Include="..\Sophia\thirdparty\imgui\stb_truetype.h">
       <Filter>Sophia\thirdparty\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\3d\s3Shader.h">
-      <Filter>Sophia\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\light\s3PointLight.h">
-      <Filter>Sophia\light</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sophia\core\s3ImageDecoder.h">
       <Filter>Sophia\core</Filter>
     </ClInclude>
@@ -274,6 +277,18 @@
     </ClInclude>
     <ClInclude Include="..\Sophia\thirdparty\tinyobjloader\tiny_obj_loader.h">
       <Filter>Sophia\thirdparty\tinyobjloader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\3d\s3Model.h">
+      <Filter>Sophia\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\directx\s3Texture.h">
+      <Filter>Sophia\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\directx\light\s3PointLight.h">
+      <Filter>Sophia\directx\light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\directx\s3Shader.h">
+      <Filter>Sophia\directx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -89,7 +89,7 @@ public:
         deviceContext->OMSetRenderTargets(1, &s3Renderer::get().getRenderTargetView(), s3Renderer::get().getDepthStencilView());
         deviceContext->OMSetDepthStencilState(s3Renderer::get().getDepthStencilState(), 1);
 
-        model.draw(deviceContext);
+        model.draw();
 
         // gui
         guiRender();
@@ -113,8 +113,8 @@ int main()
         window->getWindowSize().x / window->getWindowSize().y, 45, 0.01f, 10000.0f);
     camera->setKeyboardSpeed(10.0f);
 
-    meshShader.load(device, L"../Sophia/shaders/common/modelVS.hlsl", L"../Sophia/shaders/common/modelPS.hlsl");
-    model.load(deviceContext, "../resources/models/sponza1/sponza.obj");
+    meshShader.load(L"../Sophia/shaders/common/modelVS.hlsl", L"../Sophia/shaders/common/modelPS.hlsl");
+    model.load("../resources/models/sponza1/sponza.obj");
 
     createCB();
 

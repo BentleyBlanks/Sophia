@@ -8,7 +8,7 @@ public:
     s3Shader();
     ~s3Shader();
 
-    bool load(ID3D11Device* device, const std::wstring& vsfilePath, const std::wstring& psfilePath);
+    bool load(const std::wstring& vsfilePath, const std::wstring& psfilePath);
 
     ID3D11VertexShader* getVertexShader();
     ID3D11PixelShader* getPixelShader();

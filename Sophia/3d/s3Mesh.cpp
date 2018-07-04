@@ -1,4 +1,5 @@
 ﻿#include <3d/s3Mesh.h>
+#include <app/s3Renderer.h>
 #include <core/s3MathHepler.h>
 #include <core/log/s3Log.h>
 #include <t3Math.h>
@@ -57,8 +58,11 @@ s3VertexPNT::s3VertexPNT(t3Vector3f position, t3Vector3f normal, t3Vector2f text
 }
 
 // -----------------------------------------------s3Mesh-----------------------------------------------
-s3Mesh* s3Mesh::createCube(ID3D11DeviceContext* deviceContext, float32 size)
-{    // A cube has six faces, each one pointing in a different direction.
+s3Mesh* s3Mesh::createCube(float32 size)
+{
+    ID3D11DeviceContext* deviceContext = s3Renderer::get().getDeviceContext();
+    
+    // A cube has six faces, each one pointing in a different direction.
     const int faceCount = 6;
 
     static const t3Vector3f faceNormals[faceCount] =
@@ -126,8 +130,10 @@ s3Mesh* s3Mesh::createCube(ID3D11DeviceContext* deviceContext, float32 size)
     return mesh;
 }
 
-s3Mesh* s3Mesh::createSphere(ID3D11DeviceContext* deviceContext, float32 radius, int32 tessellation)
+s3Mesh* s3Mesh::createSphere(float32 radius, int32 tessellation)
 {
+    ID3D11DeviceContext* deviceContext = s3Renderer::get().getDeviceContext();
+
     std::vector<s3VertexPNT> vertices;
     std::vector<uint32> indices;
 
@@ -201,8 +207,9 @@ s3Mesh* s3Mesh::createSphere(ID3D11DeviceContext* deviceContext, float32 radius,
     return mesh;
 }
 
-bool s3Mesh::load(ID3D11DeviceContext* deviceContext, const char* filePath)
+bool s3Mesh::load(const char* filePath)
 {
+    ID3D11DeviceContext* deviceContext = s3Renderer::get().getDeviceContext();
     // Mesh
     std::vector<s3VertexPNT> vertices;
     std::vector<uint32> indices;
@@ -260,8 +267,9 @@ bool s3Mesh::load(ID3D11DeviceContext* deviceContext, const char* filePath)
     return true;
 }
 
-void s3Mesh::draw(ID3D11DeviceContext * deviceContext) const
+void s3Mesh::draw() const
 {
+    ID3D11DeviceContext* deviceContext = s3Renderer::get().getDeviceContext();
     uint32 vertexStride = sizeof(s3VertexPNT);
     uint32 offset = 0;
 

@@ -1,5 +1,6 @@
-﻿#include <3d/s3Shader.h>
+﻿#include <directx/s3Shader.h>
 #include <app/s3Utils.h>
+#include <app/s3Renderer.h>
 #include <core/log/s3Log.h>
 #include <core/s3Settings.h>
 #include <3d/s3Mesh.h>
@@ -22,8 +23,9 @@ s3Shader::~s3Shader()
     S3_SAFE_RELEASE(pixelShader);
 }
 
-bool s3Shader::load(ID3D11Device* device, const std::wstring& vsFilePath, const std::wstring & psFilePath)
+bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFilePath)
 {
+    ID3D11Device* device = s3Renderer::get().getDevice();
     ID3DBlob* errorBlob = nullptr;
 
     std::string profile = s3GetLatestProfile(s3ShaderType::S3_VERTEX_SHADER);

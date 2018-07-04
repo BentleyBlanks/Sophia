@@ -172,7 +172,7 @@
   <ItemGroup>
     <ClCompile Include="..\Sophia\3d\s3Camera.cpp" />
     <ClCompile Include="..\Sophia\3d\s3Mesh.cpp" />
-    <ClCompile Include="..\Sophia\3d\s3Shader.cpp" />
+    <ClCompile Include="..\Sophia\3d\s3Model.cpp" />
     <ClCompile Include="..\Sophia\app\s3App.cpp" />
     <ClCompile Include="..\Sophia\app\s3CallbackManager.cpp" />
     <ClCompile Include="..\Sophia\app\s3Renderer.cpp" />
@@ -189,7 +189,9 @@
     <ClCompile Include="..\Sophia\core\s3Event.cpp" />
     <ClCompile Include="..\Sophia\core\s3MathHepler.cpp" />
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
-    <ClCompile Include="..\Sophia\light\s3PointLight.cpp" />
+    <ClCompile Include="..\Sophia\directx\light\s3PointLight.cpp" />
+    <ClCompile Include="..\Sophia\directx\s3Shader.cpp" />
+    <ClCompile Include="..\Sophia\directx\s3Texture.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_draw.cpp" />
@@ -203,7 +205,7 @@
   <ItemGroup>
     <ClInclude Include="..\Sophia\3d\s3Camera.h" />
     <ClInclude Include="..\Sophia\3d\s3Mesh.h" />
-    <ClInclude Include="..\Sophia\3d\s3Shader.h" />
+    <ClInclude Include="..\Sophia\3d\s3Model.h" />
     <ClInclude Include="..\Sophia\app\s3App.h" />
     <ClInclude Include="..\Sophia\app\s3CallbackManager.h" />
     <ClInclude Include="..\Sophia\app\s3Renderer.h" />
@@ -220,7 +222,9 @@
     <ClInclude Include="..\Sophia\core\s3Event.h" />
     <ClInclude Include="..\Sophia\core\s3MathHepler.h" />
     <ClInclude Include="..\sophia\core\s3Settings.h" />
-    <ClInclude Include="..\Sophia\light\s3PointLight.h" />
+    <ClInclude Include="..\Sophia\directx\light\s3PointLight.h" />
+    <ClInclude Include="..\Sophia\directx\s3Shader.h" />
+    <ClInclude Include="..\Sophia\directx\s3Texture.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
     <ClInclude Include="..\Sophia\thirdparty\imgui\imconfig.h" />
     <ClInclude Include="..\Sophia\thirdparty\imgui\imgui.h" />

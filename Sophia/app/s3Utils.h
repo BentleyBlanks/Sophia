@@ -4,6 +4,8 @@
 #include <core/s3Event.h>
 #include <t3Vector3.h>
 
+class s3Texture;
+
 enum s3ShaderType
 {
     S3_VERTEX_SHADER,
@@ -37,6 +39,8 @@ std::string s3KeyTypeToString(s3KeyCode type);
 std::string s3GetLatestProfile(s3ShaderType type);
 
 s3ImageType s3GetImageType(const std::string & filePath);
+
+s3Texture* s3LoadAsMipmap(std::vector<std::string> fileNames);
 
 float s3SphericalTheta(const t3Vector3f &w);
 

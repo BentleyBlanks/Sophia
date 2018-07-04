@@ -43,13 +43,13 @@ ID3D11DeviceContext* deviceContext = nullptr;
 // Shaders
 int32 shaderIndex = 0;
 s3Shader* pbrShader = nullptr, *pbrIBLShader = nullptr, *skyShader = nullptr;
-s3ImageDecoder albedoMap, normalMap, metallicMap, roughnessMap, aoMap;
-s3ImageDecoder irradianceMap, prefilterMap, brdfMap;
-s3ImageDecoder skybox;
+s3Texture albedoMap, normalMap, metallicMap, roughnessMap, aoMap;
+s3Texture irradianceMap, prefilterMap, brdfMap;
+s3Texture skybox;
 
 struct s3PbrVSCB
 {
-    t3Matrix4x4 projection, view, model;
+    t3Matrix4x4 projection, view, model, normalM;
 };
 s3PbrVSCB pbrVSCBCPU;
 ID3D11Buffer* pbrVSCBGPU;
@@ -101,13 +101,13 @@ s3PointLight pointLights[4] = {
 void createShaders()
 {
     pbrShader = new s3Shader();
-    pbrShader->load(device, L"../Sophia/shaders/pbrLighting/pbrLightingVS.hlsl", L"../Sophia/shaders/pbrLighting/pbrLightingPS.hlsl");
+    pbrShader->load(L"../Sophia/shaders/pbrLighting/pbrLightingVS.hlsl", L"../Sophia/shaders/pbrLighting/pbrLightingPS.hlsl");
 
     pbrIBLShader = new s3Shader();
-    pbrIBLShader->load(device, L"../Sophia/shaders/pbrLighting/pbrIBLVS.hlsl", L"../Sophia/shaders/pbrLighting/pbrIBLPS.hlsl");
+    pbrIBLShader->load(L"../Sophia/shaders/pbrLighting/pbrIBLVS.hlsl", L"../Sophia/shaders/pbrLighting/pbrIBLPS.hlsl");
 
     skyShader = new s3Shader();
-    skyShader->load(device, L"../Sophia/shaders/common/skyVS.hlsl", L"../Sophia/shaders/common/skyPS.hlsl");
+    skyShader->load(L"../Sophia/shaders/common/skyVS.hlsl", L"../Sophia/shaders/common/skyPS.hlsl");
 }
 
 void createConstantBuffers()
@@ -235,7 +235,8 @@ public:
                         pbrVSCBCPU.projection = camera->getProjectionMatrix();
                         pbrVSCBCPU.view = camera->getWorldToCamera();
                         pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
-                         
+                        pbrVSCBCPU.normalM = t3Matrix4x4::getTransposedOf((pbrVSCBCPU.view * pbrVSCBCPU.model).getInverse());
+
                         memcpy(ms.pData, &pbrVSCBCPU, sizeof(s3PbrVSCB));
                         deviceContext->Unmap(pbrVSCBGPU, 0);
                     }
@@ -284,7 +285,7 @@ public:
                     deviceContext->OMSetRenderTargets(1, &renderer->getRenderTargetView(), renderer->getDepthStencilView());
                     deviceContext->OMSetDepthStencilState(renderer->getDepthStencilState(), 1);
 
-                    spheres[i * sphereColumns + j]->draw(deviceContext);
+                    spheres[i * sphereColumns + j]->draw();
                 }
             }
         }
@@ -322,7 +323,7 @@ int main()
     {
         for (int32 j = 0; j < sphereColumns; j++)
         {
-            spheres[i * sphereColumns + j] = s3Mesh::createSphere(renderer->getDeviceContext(), 1.0f, 64);
+            spheres[i * sphereColumns + j] = s3Mesh::createSphere(1.0f, 64);
             spheres[i * sphereColumns + j]->setObjectToWorld(t3Matrix4x4(
                 1, 0, 0, (i - (sphereRows / 2.0f)) * spacing,
                 0, 1, 0, (j - (sphereColumns / 2.0f)) * spacing,
@@ -331,19 +332,34 @@ int main()
         }
     }
 
+    s3ImageDecoder decoder;
     // skybox
-    skybox.load(device, "../resources/newport_loft.hdr");
+    decoder.load("../resources/newport_loft.hdr");
+    skybox.load(decoder.getWidth(), decoder.getHeight(), decoder.getHDRData());
 
     // pbr textures
-    albedoMap.load(device, "../resources/textures/pbr/rusted_iron/albedo.png");
-    normalMap.load(device, "../resources/textures/pbr/rusted_iron/normal.png");
-    metallicMap.load(device, "../resources/textures/pbr/rusted_iron/metallic.png");
-    roughnessMap.load(device, "../resources/textures/pbr/rusted_iron/roughness.png");
-    aoMap.load(device, "../resources/textures/pbr/rusted_iron/ao.png");
+    decoder.load("../resources/textures/pbr/rusted_iron/albedo.png");
+    albedoMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getPNGData());
+
+    decoder.load("../resources/textures/pbr/rusted_iron/normal.png");
+    normalMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getPNGData());
+
+    decoder.load("../resources/textures/pbr/rusted_iron/metallic.png");
+    metallicMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getPNGData());
+
+    decoder.load("../resources/textures/pbr/rusted_iron/roughness.png");
+    roughnessMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getPNGData());
+
+    decoder.load("../resources/textures/pbr/rusted_iron/ao.png");
+    aoMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getPNGData());
 
     // precomputed lut
-    irradianceMap.load(device, "../resources/lut/irradianceDiffuseMap.exr");
-    brdfMap.load(device, "../resources/lut/brdfMap.exr");
+    decoder.load("../resources/lut/irradianceDiffuseMap.exr");
+    irradianceMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getEXRData());
+
+    decoder.load("../resources/lut/brdfMap.exr");
+    brdfMap.load(decoder.getWidth(), decoder.getHeight(), decoder.getEXRData());
+
     std::vector<std::string> specularNames;
     for (int32 i = 0; i < 8; i++)
     {
@@ -352,7 +368,7 @@ int main()
         name += ".exr";
         specularNames.push_back(name);
     }
-    prefilterMap.load(device, specularNames);
+    prefilterMap = *s3LoadAsMipmap(specularNames);
 
     s3Pbr mc;
     s3CallbackManager::callBack.onBeginRender += mc;

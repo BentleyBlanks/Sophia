@@ -11,6 +11,7 @@
 
 #include <3d/s3Camera.h>
 #include <3d/s3Mesh.h>
-#include <3d/s3Shader.h>
 
-#include <light/s3PointLight.h>
+#include <directx/s3Texture.h>
+#include <directx/s3Shader.h>
+#include <directx/light/s3PointLight.h>
