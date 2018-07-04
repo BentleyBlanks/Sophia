@@ -61,6 +61,12 @@
     <Filter Include="Sophia\shaders\common">
       <UniqueIdentifier>{13a8d738-a7fa-45be-ad4c-f3768f8cce1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\shaders\ssao">
+      <UniqueIdentifier>{d8693e13-325b-4b85-a427-8a785ead44e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\thirdparty\tinyobjloader">
+      <UniqueIdentifier>{79cb0112-61f6-4106-a2b2-8b630545279e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="..\Sophia\thirdparty\tinyexr\tinyexr.cc">
       <Filter>Sophia\thirdparty\tinyexr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\thirdparty\tinyobjloader\tiny_obj_loader.cc">
+      <Filter>Sophia\thirdparty\tinyobjloader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +272,9 @@
     <ClInclude Include="..\Sophia\thirdparty\tinyexr\tinyexr.h">
       <Filter>Sophia\thirdparty\tinyexr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sophia\thirdparty\tinyobjloader\tiny_obj_loader.h">
+      <Filter>Sophia\thirdparty\tinyobjloader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.inl">
@@ -340,6 +352,36 @@
       <Filter>Sophia\shaders\common</Filter>
     </FxCompile>
     <FxCompile Include="..\Sophia\shaders\common\skyPS.hlsl">
+      <Filter>Sophia\shaders\common</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\ssaoPS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\ssaoVS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\ssaoBlurPS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\ssaoBlurVS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\aoLightingVS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\aoLightingPS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\geometryPS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\ssao\geometryVS.hlsl">
+      <Filter>Sophia\shaders\ssao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\common\modelPS.hlsl">
+      <Filter>Sophia\shaders\common</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sophia\shaders\common\modelVS.hlsl">
       <Filter>Sophia\shaders\common</Filter>
     </FxCompile>
   </ItemGroup>

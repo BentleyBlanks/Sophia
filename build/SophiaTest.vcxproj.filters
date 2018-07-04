@@ -32,5 +32,11 @@
     <ClInclude Include="..\test\precomputedMap.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\ssao.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\mesh.h">
+      <Filter>SophiaTest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

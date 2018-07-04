@@ -93,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -106,7 +106,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
@@ -122,7 +122,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -139,7 +139,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -156,10 +156,12 @@
     <ClInclude Include="..\test\atmospheric.h" />
     <ClInclude Include="..\test\commonShader.h" />
     <ClInclude Include="..\test\earth.h" />
+    <ClInclude Include="..\test\mesh.h" />
     <ClInclude Include="..\test\precomputedMap.h" />
     <ClInclude Include="..\test\minecraft.h" />
     <ClInclude Include="..\test\pbrLighting.h" />
     <ClInclude Include="..\test\skybox.h" />
+    <ClInclude Include="..\test\ssao.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="sophia.vcxproj">

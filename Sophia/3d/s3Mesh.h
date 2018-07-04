@@ -23,10 +23,13 @@ public:
 class s3Mesh
 {
 public:
-    void draw(ID3D11DeviceContext* deviceContext) const;
+    s3Mesh();
+    s3Mesh(const s3Mesh& ref);
+    ~s3Mesh();
 
-    static s3Mesh* createCube(ID3D11DeviceContext* deviceContext, float32 size);
-    static s3Mesh* createSphere(ID3D11DeviceContext* deviceContext, float32 radius = 1, int32 tessellation = 16);
+    bool load(ID3D11DeviceContext* deviceContext, const char* fileName);
+
+    void draw(ID3D11DeviceContext* deviceContext) const;
 
     void setObjectToWorld(t3Matrix4x4 objectToWorld);
     void setWoldToObject(t3Matrix4x4 worldToObject);
@@ -34,11 +37,10 @@ public:
     t3Matrix4x4 getObjectToWorld() const;
     t3Matrix4x4 getWoldToObject() const;
 
-private:
-    s3Mesh();
-    s3Mesh(const s3Mesh& ref);
-    ~s3Mesh();
+    static s3Mesh* createCube(ID3D11DeviceContext* deviceContext, float32 size);
+    static s3Mesh* createSphere(ID3D11DeviceContext* deviceContext, float32 radius = 1, int32 tessellation = 16);
 
+private:
     ID3D11Buffer* vertexBuffer;
     ID3D11Buffer* indexBuffer;
 

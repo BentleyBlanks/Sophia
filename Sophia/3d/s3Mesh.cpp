@@ -1,9 +1,9 @@
 ﻿#include <3d/s3Mesh.h>
 #include <core/s3MathHepler.h>
+#include <core/log/s3Log.h>
 #include <t3Math.h>
 
-// test
-#include <core/s3Random.h>
+#include <tiny_obj_loader.h>
 
 // Helper for creating a D3D vertex or index buffer.
 template<typename T>
@@ -199,6 +199,65 @@ s3Mesh* s3Mesh::createSphere(ID3D11DeviceContext* deviceContext, float32 radius,
     mesh->indexCount = (int32) indices.size();
 
     return mesh;
+}
+
+bool s3Mesh::load(ID3D11DeviceContext* deviceContext, const char* filePath)
+{
+    // Mesh
+    std::vector<s3VertexPNT> vertices;
+    std::vector<uint32> indices;
+
+    s3Log::debug("Parsering model file: %s...\n", filePath);
+
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+
+    std::string err;
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filePath);
+
+    if (!err.empty()) 
+        s3Log::warning("Warning: %s\n", err.c_str());
+
+    if (!ret)
+    {
+        s3Log::error("Model loading failed\n");
+        return false;
+    }
+
+    for (const auto& shape : shapes) 
+    {
+        for (const auto& index : shape.mesh.indices) 
+        {
+            s3VertexPNT vertex;
+
+            vertex.position = t3Vector3f(attrib.vertices[3 * index.vertex_index + 0],
+                                         attrib.vertices[3 * index.vertex_index + 1],
+                                         attrib.vertices[3 * index.vertex_index + 2]);
+
+            vertex.normal = t3Vector3f(attrib.normals[3 * index.normal_index + 0],
+                                       attrib.normals[3 * index.normal_index + 1],
+                                       attrib.normals[3 * index.normal_index + 2]);
+
+            vertex.textureCoordinate = t3Vector2f(attrib.texcoords[2 * index.texcoord_index + 0],
+                                                  attrib.texcoords[2 * index.texcoord_index + 1]);
+
+            vertices.push_back(vertex);
+            indices.push_back((int32)indices.size());
+        }
+    }
+
+    s3Log::success("Model loaded successfully\n", filePath);
+
+    indexCount = (int32)indices.size();
+
+    ID3D11Device* device;
+    deviceContext->GetDevice(&device);
+
+    s3CreateBuffer(device, vertices, D3D11_BIND_VERTEX_BUFFER, &vertexBuffer);
+    s3CreateBuffer(device, indices, D3D11_BIND_INDEX_BUFFER, &indexBuffer);
+
+    return true;
 }
 
 void s3Mesh::draw(ID3D11DeviceContext * deviceContext) const
