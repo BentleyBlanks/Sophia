@@ -38,7 +38,7 @@ ID3D11DeviceContext* deviceContext = nullptr;
 s3Camera* camera = nullptr;
 s3ImageDecoder image;
 s3Shader meshShader;
-s3Mesh model;
+s3Model model;
 
 void createCB()
 {

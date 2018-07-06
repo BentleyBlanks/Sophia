@@ -15,7 +15,7 @@ void s3CreateBuffer(ID3D11Device* device, T const& data, D3D11_BIND_FLAG bindFla
     D3D11_BUFFER_DESC bufferDesc;
     ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 
-    bufferDesc.ByteWidth = (uint32) data.size() * sizeof(T::value_type);
+    bufferDesc.ByteWidth = (uint32)data.size() * sizeof(T::value_type);
     bufferDesc.BindFlags = bindFlags;
     bufferDesc.CPUAccessFlags = 0;
     bufferDesc.MiscFlags = 0;
@@ -31,12 +31,6 @@ void s3CreateBuffer(ID3D11Device* device, T const& data, D3D11_BIND_FLAG bindFla
     {
         throw std::exception("Failed to create buffer.");
     }
-}
-
-t3Vector3f generateRandomVector()
-{
-    //return t3Vector3f(s3Random::randomFloat(), s3Random::randomFloat(), s3Random::randomFloat());
-    return t3Vector3f(1, 1, 1);
 }
 
 // -----------------------------------------------s3VertexPNT-----------------------------------------------
@@ -110,10 +104,10 @@ s3Mesh* s3Mesh::createCube(float32 size)
         indices.push_back(vbase + 3);
 
         // Four vertices per face.
-        vertices.push_back(s3VertexPNT((normal - side1 - side2) * size, normal, textureCoordinates[0], generateRandomVector()));
-        vertices.push_back(s3VertexPNT((normal - side1 + side2) * size, normal, textureCoordinates[1], generateRandomVector()));
-        vertices.push_back(s3VertexPNT((normal + side1 + side2) * size, normal, textureCoordinates[2], generateRandomVector()));
-        vertices.push_back(s3VertexPNT((normal + side1 - side2) * size, normal, textureCoordinates[3], generateRandomVector()));
+        vertices.push_back(s3VertexPNT((normal - side1 - side2) * size, normal, textureCoordinates[0], t3Vector3f()));
+        vertices.push_back(s3VertexPNT((normal - side1 + side2) * size, normal, textureCoordinates[1], t3Vector3f()));
+        vertices.push_back(s3VertexPNT((normal + side1 + side2) * size, normal, textureCoordinates[2], t3Vector3f()));
+        vertices.push_back(s3VertexPNT((normal + side1 - side2) * size, normal, textureCoordinates[3], t3Vector3f()));
     }
 
     // Create the primitive object.
@@ -169,7 +163,7 @@ s3Mesh* s3Mesh::createSphere(float32 radius, int32 tessellation)
             t3Vector3f normal(dx, dy, dz);
             t3Vector2f textureCoordinate(u, v);
 
-            vertices.push_back(s3VertexPNT(normal * radius, normal, textureCoordinate, generateRandomVector()));
+            vertices.push_back(s3VertexPNT(normal * radius, normal, textureCoordinate, t3Vector3f()));
         }
     }
 
@@ -207,64 +201,9 @@ s3Mesh* s3Mesh::createSphere(float32 radius, int32 tessellation)
     return mesh;
 }
 
-bool s3Mesh::load(const char* filePath)
+std::string s3Mesh::getName()
 {
-    ID3D11DeviceContext* deviceContext = s3Renderer::get().getDeviceContext();
-    // Mesh
-    std::vector<s3VertexPNT> vertices;
-    std::vector<uint32> indices;
-
-    s3Log::debug("Parsering model file: %s...\n", filePath);
-
-    tinyobj::attrib_t attrib;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
-
-    std::string err;
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filePath);
-
-    if (!err.empty()) 
-        s3Log::warning("Warning: %s\n", err.c_str());
-
-    if (!ret)
-    {
-        s3Log::error("Model loading failed\n");
-        return false;
-    }
-
-    for (const auto& shape : shapes) 
-    {
-        for (const auto& index : shape.mesh.indices) 
-        {
-            s3VertexPNT vertex;
-
-            vertex.position = t3Vector3f(attrib.vertices[3 * index.vertex_index + 0],
-                                         attrib.vertices[3 * index.vertex_index + 1],
-                                         attrib.vertices[3 * index.vertex_index + 2]);
-
-            vertex.normal = t3Vector3f(attrib.normals[3 * index.normal_index + 0],
-                                       attrib.normals[3 * index.normal_index + 1],
-                                       attrib.normals[3 * index.normal_index + 2]);
-
-            vertex.textureCoordinate = t3Vector2f(attrib.texcoords[2 * index.texcoord_index + 0],
-                                                  attrib.texcoords[2 * index.texcoord_index + 1]);
-
-            vertices.push_back(vertex);
-            indices.push_back((int32)indices.size());
-        }
-    }
-
-    s3Log::success("Model loaded successfully\n", filePath);
-
-    indexCount = (int32)indices.size();
-
-    ID3D11Device* device;
-    deviceContext->GetDevice(&device);
-
-    s3CreateBuffer(device, vertices, D3D11_BIND_VERTEX_BUFFER, &vertexBuffer);
-    s3CreateBuffer(device, indices, D3D11_BIND_INDEX_BUFFER, &indexBuffer);
-
-    return true;
+    return name;
 }
 
 void s3Mesh::draw() const
@@ -280,11 +219,7 @@ void s3Mesh::draw() const
     deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
-s3Mesh::s3Mesh() :indexCount(0)
-{
-}
-
-s3Mesh::s3Mesh(const s3Mesh & ref)
+s3Mesh::s3Mesh() : indexCount(0), name("Mesh")
 {
 }
 

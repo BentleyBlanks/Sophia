@@ -24,11 +24,7 @@ class s3Mesh
 {
 public:
     s3Mesh();
-    s3Mesh(const s3Mesh& ref);
     ~s3Mesh();
-
-    // load the model to entire mesh
-    bool load(const char* fileName);
 
     void draw() const;
 
@@ -41,11 +37,15 @@ public:
     static s3Mesh* createCube(float32 size);
     static s3Mesh* createSphere(float32 radius = 1, int32 tessellation = 16);
 
+    std::string getName();
+
+    friend class s3Model;
 private:
     ID3D11Buffer* vertexBuffer;
     ID3D11Buffer* indexBuffer;
 
     int32 indexCount;
+    std::string name;
 
     t3Matrix4x4 objectToWorld, worldToObject;
 };

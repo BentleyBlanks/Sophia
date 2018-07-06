@@ -10,6 +10,7 @@
 #include <app/s3Utils.h>
 
 #include <3d/s3Camera.h>
+#include <3d/s3Model.h>
 #include <3d/s3Mesh.h>
 
 #include <directx/s3Texture.h>
