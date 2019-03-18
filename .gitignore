@@ -11,10 +11,9 @@ README~
 *.log
 *.lastbuildstate
 *.suo
-*.VC
-*.VC.db
-*.VC.opendb
+*.VC.*
 *.csv
+*.ipch
 
 #*.sln
 #*.vcxproj
