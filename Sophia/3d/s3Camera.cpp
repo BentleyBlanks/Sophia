@@ -66,8 +66,8 @@ public:
                     float32 offsetX = mouseEvent->offsetX * mouseSpeed;
                     float32 offsetY = mouseEvent->offsetY * mouseSpeed;
 
-                    angleX += offsetX;
-                    angleY += offsetY;
+                    angleX -= offsetX;
+                    angleY -= offsetY;
 
                     if (angleY > 89.0f)
                         angleY = 89.0f;
@@ -139,22 +139,22 @@ s3Camera::s3Camera(t3Vector3f origin, t3Vector3f direction, t3Vector3f up, float
 
 void s3Camera::handleInit()
 {
-    s3CallbackManager::callBack.onKeyPressed += *cameraHandle;
-    s3CallbackManager::callBack.onKeyReleased += *cameraHandle;
-    s3CallbackManager::callBack.onMousePressed += *cameraHandle;
+    s3CallbackManager::callBack.onKeyPressed    += *cameraHandle;
+    s3CallbackManager::callBack.onKeyReleased   += *cameraHandle;
+    s3CallbackManager::callBack.onMousePressed  += *cameraHandle;
     s3CallbackManager::callBack.onMouseReleased += *cameraHandle;
     s3CallbackManager::callBack.onMouseScrolled += *cameraHandle;
-    s3CallbackManager::callBack.onMouseMoved += *cameraHandle;
+    s3CallbackManager::callBack.onMouseMoved    += *cameraHandle;
 }
 
 void s3Camera::handleDeinit()
 {
-    s3CallbackManager::callBack.onKeyPressed -= *cameraHandle;
-    s3CallbackManager::callBack.onKeyReleased -= *cameraHandle;
-    s3CallbackManager::callBack.onMousePressed -= *cameraHandle;
+    s3CallbackManager::callBack.onKeyPressed    -= *cameraHandle;
+    s3CallbackManager::callBack.onKeyReleased   -= *cameraHandle;
+    s3CallbackManager::callBack.onMousePressed  -= *cameraHandle;
     s3CallbackManager::callBack.onMouseReleased -= *cameraHandle;
     s3CallbackManager::callBack.onMouseScrolled -= *cameraHandle;
-    s3CallbackManager::callBack.onMouseMoved -= *cameraHandle;
+    s3CallbackManager::callBack.onMouseMoved    -= *cameraHandle;
 
     S3_SAFE_DELETE(cameraHandle);
 }

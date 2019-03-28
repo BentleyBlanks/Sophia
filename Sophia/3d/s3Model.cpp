@@ -16,12 +16,12 @@ void s3CreateBuffer(ID3D11Device* device, T const& data, D3D11_BIND_FLAG bindFla
     D3D11_BUFFER_DESC bufferDesc;
     ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 
-    bufferDesc.ByteWidth = (uint32)data.size() * sizeof(T::value_type);
-    bufferDesc.BindFlags = bindFlags;
-    bufferDesc.CPUAccessFlags = 0;
-    bufferDesc.MiscFlags = 0;
+    bufferDesc.ByteWidth           = (uint32)data.size() * sizeof(T::value_type);
+    bufferDesc.BindFlags           = bindFlags;
+    bufferDesc.CPUAccessFlags      = 0;
+    bufferDesc.MiscFlags           = 0;
     bufferDesc.StructureByteStride = 0;
-    bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    bufferDesc.Usage               = D3D11_USAGE_DEFAULT;
 
     D3D11_SUBRESOURCE_DATA resourceData;
     ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));

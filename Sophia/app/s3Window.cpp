@@ -9,18 +9,18 @@ s3Window::s3Window(const char * caption, WNDPROC proc, const t3Vector2f& size, c
 
     WNDCLASSEX wc;
     memset(&wc, 0, sizeof(wc));
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = proc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = 0;
-    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.cbSize        = sizeof(WNDCLASSEX);
+    wc.style         = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc   = proc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = 0;
+    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
-    wc.lpszMenuName = NULL;
+    wc.lpszMenuName  = NULL;
     wc.lpszClassName = caption;
-    wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hIconSm       = LoadIcon(NULL, IDI_APPLICATION);
 
     RegisterClassEx(&wc);
 
@@ -90,9 +90,9 @@ HWND s3Window::getHandle()
 void s3Window::adjustWindow()
 {
     RECT rect;
-    rect.left = (LONG) position.x;
-    rect.top = (LONG) position.y;
-    rect.right = (LONG) (position.x +size.x);
+    rect.left   = (LONG) position.x;
+    rect.top    = (LONG) position.y;
+    rect.right  = (LONG) (position.x +size.x);
     rect.bottom = (LONG) (position.y + size.y);
     AdjustWindowRect(&rect, style, false);
 }

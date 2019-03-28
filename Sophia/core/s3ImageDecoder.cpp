@@ -45,7 +45,7 @@ bool s3ImageDecoder::load(const std::string & filePath)
             return false;
         }
 
-        width = (int32)w;
+        width  = (int32)w;
         height = (int32)h;
     }
     else if (type == S3_IMAGE_EXR)

@@ -12,13 +12,13 @@
 
 float32 distributionGGX(t3Vector3f N, t3Vector3f H, float roughness)
 {
-    float32 a = roughness*roughness;
-    float32 a2 = a*a;
-    float32 NdotH = t3Math::Max(N.dot(H), 0.0f);
+    float32 a      = roughness*roughness;
+    float32 a2     = a*a;
+    float32 NdotH  = t3Math::Max(N.dot(H), 0.0f);
     float32 NdotH2 = NdotH*NdotH;
 
-    float32 nom = a2;
-    float32 denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    float32 nom    = a2;
+    float32 denom  = (NdotH2 * (a2 - 1.0) + 1.0);
     denom = PI * denom * denom;
 
     return nom / denom;
@@ -26,10 +26,10 @@ float32 distributionGGX(t3Vector3f N, t3Vector3f H, float roughness)
 
 float32 geometrySchlickGGX(float32 NoV, float32 roughness)
 {
-    float32 a = roughness;
-    float32 k = (a * a) / 2.0f;
+    float32 a     = roughness;
+    float32 k     = (a * a) / 2.0f;
 
-    float32 nom = NoV;
+    float32 nom   = NoV;
     float32 denom = NoV * (1.0f - k) + k;
 
     return nom / denom;
@@ -37,8 +37,8 @@ float32 geometrySchlickGGX(float32 NoV, float32 roughness)
 
 float32 geometrySmith(t3Vector3f N, t3Vector3f V, t3Vector3f L, float roughness)
 {
-    float32 NoV = t3Math::Max(N.dot(V), 0.0f);
-    float32 NoL = t3Math::Max(N.dot(L), 0.0f);
+    float32 NoV  = t3Math::Max(N.dot(V), 0.0f);
+    float32 NoL  = t3Math::Max(N.dot(L), 0.0f);
     float32 ggx2 = geometrySchlickGGX(NoV, roughness);
     float32 ggx1 = geometrySchlickGGX(NoL, roughness);
 
@@ -95,8 +95,8 @@ t3Vector4f integrateBRDF(float32 NoV, float32 roughness, int32 samples)
     for (int32 i = 0; i < samples; ++i)
     {
         t3Vector2f random = hammersley(i, samples);
-        t3Vector3f H = importanceSampleGGX(random, N, roughness);
-        t3Vector3f L = (2.0 * V.dot(H) * H - V).getNormalized();
+        t3Vector3f H      = importanceSampleGGX(random, N, roughness);
+        t3Vector3f L      = (2.0 * V.dot(H) * H - V).getNormalized();
 
         float32 NoL = t3Math::Max(L.y, 0.0f);
         float32 NoH = t3Math::Max(H.y, 0.0f);
@@ -104,9 +104,9 @@ t3Vector4f integrateBRDF(float32 NoV, float32 roughness, int32 samples)
 
         if (NoL > 0.0f)
         {
-            float32 G = geometrySmith(N, V, L, roughness);
+            float32 G           = geometrySmith(N, V, L, roughness);
             float32 GVisibility = (G * VoH) / (NoV * NoH);
-            float32 Fc = t3Math::pow(1.0f - VoH, 5.0f);
+            float32 Fc          = t3Math::pow(1.0f - VoH, 5.0f);
 
             A += (1.0f - Fc) * GVisibility;
             B += Fc * GVisibility;

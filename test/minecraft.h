@@ -245,10 +245,10 @@ void createStates()
     // Setup depth/stencil state.
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilStateDesc.DepthEnable = TRUE;
+    depthStencilStateDesc.DepthEnable    = TRUE;
     depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
-    depthStencilStateDesc.StencilEnable = FALSE;
+    depthStencilStateDesc.DepthFunc      = D3D11_COMPARISON_LESS;
+    depthStencilStateDesc.StencilEnable  = FALSE;
 
     HRESULT hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
     if(FAILED(hr))
@@ -261,15 +261,15 @@ void createStates()
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
     rasterizerDesc.AntialiasedLineEnable = FALSE;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.DepthBias = 0;
-    rasterizerDesc.DepthBiasClamp = 0.0f;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+    rasterizerDesc.CullMode              = D3D11_CULL_BACK;
+    rasterizerDesc.DepthBias             = 0;
+    rasterizerDesc.DepthBiasClamp        = 0.0f;
+    rasterizerDesc.DepthClipEnable       = TRUE;
+    rasterizerDesc.FillMode              = D3D11_FILL_SOLID;
     rasterizerDesc.FrontCounterClockwise = FALSE;
-    rasterizerDesc.MultisampleEnable = FALSE;
-    rasterizerDesc.ScissorEnable = FALSE;
-    rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+    rasterizerDesc.MultisampleEnable     = FALSE;
+    rasterizerDesc.ScissorEnable         = FALSE;
+    rasterizerDesc.SlopeScaledDepthBias  = 0.0f;
 
     // Create the rasterizer state object.
     hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
@@ -285,12 +285,12 @@ void createConstantBuffers()
     // one cb contains one matrix
     D3D11_BUFFER_DESC constantBufferDesc;
     ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
-    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    constantBufferDesc.ByteWidth = sizeof(t3Matrix4x4);
-    constantBufferDesc.CPUAccessFlags = 0;
-    constantBufferDesc.MiscFlags = 0;
+    constantBufferDesc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+    constantBufferDesc.ByteWidth           = sizeof(t3Matrix4x4);
+    constantBufferDesc.CPUAccessFlags      = 0;
+    constantBufferDesc.MiscFlags           = 0;
     constantBufferDesc.StructureByteStride = 0;
-    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    constantBufferDesc.Usage               = D3D11_USAGE_DEFAULT;
 
     HRESULT hr = device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[APPLIATION]);
     if(FAILED(hr))
@@ -428,12 +428,12 @@ int main()
         return 0;
 
     s3Window* window = app.getWindow();
-    width = window->getWindowSize().x;
+    width  = window->getWindowSize().x;
     height = window->getWindowSize().y;
 
     s3Renderer& renderer = s3Renderer::get();
-    device = renderer.getDevice();
-    deviceContext = renderer.getDeviceContext();
+    device           = renderer.getDevice();
+    deviceContext    = renderer.getDeviceContext();
     renderTargetView = renderer.getRenderTargetView();
     depthStencilView = renderer.getDepthStencilView();
 

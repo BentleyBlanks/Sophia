@@ -463,7 +463,7 @@ int main()
     //camera->setMouseEventState(false);
 
     earthImage = new s3ImageDecoder();
-    earthImage->load(device, "../resources/EarthDayTime8k.png");
+    earthImage->load("../resources/EarthDayTime8k.png");
 
     earthHeightMap = new s3ImageDecoder();
     //earthHeightMap->load(device, "../resources/EarthHeightMap8k.png");

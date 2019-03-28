@@ -520,10 +520,10 @@
 	"buffers":
 	[
 		{
-			"file": "/E/Program/Renderer/Sophia/Sophia/shaders/pbrLighting/pbrIBLPS.hlsl",
+			"file": "/E/Program/Renderer/Sophia/Sophia/shaders/ssao/aoLightingPS.hlsl",
 			"settings":
 			{
-				"buffer_size": 5536,
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		}
@@ -590,7 +590,12 @@
 	[
 		"/E/Program/Renderer/Sophia",
 		"/E/Program/Renderer/Sophia/Sophia",
-		"/E/Program/Renderer/Sophia/Sophia/shaders"
+		"/E/Program/Renderer/Sophia/Sophia/shaders",
+		"/E/Program/Renderer/Sophia/Sophia/shaders/pbrLighting",
+		"/E/Program/Renderer/Sophia/Sophia/shaders/simple",
+		"/E/Program/Renderer/Sophia/Sophia/shaders/sky",
+		"/E/Program/Renderer/Sophia/Sophia/shaders/skyRayCasting",
+		"/E/Program/Renderer/Sophia/Sophia/shaders/ssao"
 	],
 	"file_history":
 	[
@@ -761,31 +766,27 @@
 			[
 				{
 					"buffer": 0,
-					"file": "/E/Program/Renderer/Sophia/Sophia/shaders/pbrLighting/pbrIBLPS.hlsl",
+					"file": "/E/Program/Renderer/Sophia/Sophia/shaders/ssao/aoLightingPS.hlsl",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 5536,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1759,
-								1759
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"is_init_dirty_state": false,
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/C++/C++.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 741.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,

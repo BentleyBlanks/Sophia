@@ -11,12 +11,12 @@
 {\
     D3D11_BUFFER_DESC constantBufferDesc;\
     ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));\
-    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;\
-    constantBufferDesc.ByteWidth = sizeof(cbClassName);\
-    constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;\
-    constantBufferDesc.MiscFlags = 0;\
+    constantBufferDesc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;\
+    constantBufferDesc.ByteWidth           = sizeof(cbClassName);\
+    constantBufferDesc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;\
+    constantBufferDesc.MiscFlags           = 0;\
     constantBufferDesc.StructureByteStride = 0;\
-    constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;\
+    constantBufferDesc.Usage               = D3D11_USAGE_DYNAMIC;\
     HRESULT hr = d->CreateBuffer(&constantBufferDesc, nullptr, &cb);\
     if (FAILED(hr)){\
         s3Log::error("Failed to create constant buffer, hr: %d\n", hr);\
@@ -72,8 +72,8 @@ public:
         if (SUCCEEDED(deviceContext->Map(vsCBGPU, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
         {
             vsCBCPU.projection = camera->getProjectionMatrix();
-            vsCBCPU.view = camera->getWorldToCamera();
-            vsCBCPU.normalM = t3Matrix4x4::getTransposedOf((vsCBCPU.view * vsCBCPU.model).getInverse());
+            vsCBCPU.view       = camera->getWorldToCamera();
+            vsCBCPU.normalM    = t3Matrix4x4::getTransposedOf((vsCBCPU.view * vsCBCPU.model).getInverse());
 
             memcpy(ms.pData, &vsCBCPU, sizeof(vsCBCPU));
             deviceContext->Unmap(vsCBGPU, 0);
@@ -104,7 +104,7 @@ int main()
     app.setClearColor(t3Vector4f(0.1f, 0.1f, 0.1f, 1.0f));
 
     s3Renderer& renderer = s3Renderer::get();
-    device = renderer.getDevice();
+    device        = renderer.getDevice();
     deviceContext = renderer.getDeviceContext();
 
     s3Window* window = app.getWindow();

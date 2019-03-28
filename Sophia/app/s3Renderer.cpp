@@ -67,18 +67,18 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
 
     DXGI_SWAP_CHAIN_DESC scd;
     ZeroMemory(&scd, sizeof(scd));
-    scd.BufferCount = 1;
-    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    scd.BufferDesc.Height = height;
-    scd.BufferDesc.Width = width;
-    scd.BufferDesc.RefreshRate.Numerator = 60;
+    scd.BufferCount                        = 1;
+    scd.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
+    scd.BufferDesc.Height                  = height;
+    scd.BufferDesc.Width                   = width;
+    scd.BufferDesc.RefreshRate.Numerator   = 60;
     scd.BufferDesc.RefreshRate.Denominator = 1;
-    scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-    scd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-    scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    scd.Flags = 0;
-    scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-    scd.OutputWindow = hwnd;
+    scd.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
+    scd.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+    scd.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    scd.Flags                              = 0;
+    scd.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
+    scd.OutputWindow                       = hwnd;
     if (MSAAEnabled)
     {
         scd.SampleDesc.Count = MSAACount;
@@ -123,14 +123,14 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
 
     // Depth/Stencil Texture Creation
     D3D11_TEXTURE2D_DESC td;
-    td.ArraySize = 1;
-    td.MipLevels = 1;
-    td.Width = width;
-    td.Height = height;
-    td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    td.ArraySize      = 1;
+    td.MipLevels      = 1;
+    td.Width          = width;
+    td.Height         = height;
+    td.Format         = DXGI_FORMAT_D24_UNORM_S8_UINT;
     td.CPUAccessFlags = 0;
-    td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    td.MiscFlags = 0;
+    td.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+    td.MiscFlags      = 0;
     if (MSAAEnabled)
     {
         td.SampleDesc.Count = MSAACount;
@@ -156,10 +156,10 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
 
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilStateDesc.DepthEnable = MSAAEnabled;
+    depthStencilStateDesc.DepthEnable    = MSAAEnabled;
     depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-    depthStencilStateDesc.StencilEnable = FALSE;
+    depthStencilStateDesc.DepthFunc      = D3D11_COMPARISON_LESS_EQUAL;
+    depthStencilStateDesc.StencilEnable  = FALSE;
 
     hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
     if (FAILED(hr))
@@ -172,15 +172,15 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
     rasterizerDesc.AntialiasedLineEnable = MSAAEnabled;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.DepthBias = 0;
-    rasterizerDesc.DepthBiasClamp = 0.0f;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+    rasterizerDesc.CullMode              = D3D11_CULL_BACK;
+    rasterizerDesc.DepthBias             = 0;
+    rasterizerDesc.DepthBiasClamp        = 0.0f;
+    rasterizerDesc.DepthClipEnable       = TRUE;
+    rasterizerDesc.FillMode              = D3D11_FILL_SOLID;
     rasterizerDesc.FrontCounterClockwise = FALSE;
-    rasterizerDesc.MultisampleEnable = MSAAEnabled;
-    rasterizerDesc.ScissorEnable = FALSE;
-    rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+    rasterizerDesc.MultisampleEnable     = MSAAEnabled;
+    rasterizerDesc.ScissorEnable         = FALSE;
+    rasterizerDesc.SlopeScaledDepthBias  = 0.0f;
 
     // Create the rasterizer state object.
     hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
@@ -192,8 +192,8 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
 
     // ------------------------------------------Viewport------------------------------------------
     D3D11_VIEWPORT vp;
-    vp.Width = (float) width;
-    vp.Height = (float) height;
+    vp.Width    = (float) width;
+    vp.Height   = (float) height;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
@@ -266,14 +266,14 @@ void s3Renderer::resize(int width, int height)
     // depth/stencil's size match the window size
     // Depth/Stencil Texture Creation
     D3D11_TEXTURE2D_DESC td;
-    td.ArraySize = 1;
-    td.MipLevels = 1;
-    td.Width = (uint32)width;
-    td.Height = (uint32)height;
-    td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    td.ArraySize      = 1;
+    td.MipLevels      = 1;
+    td.Width          = (uint32)width;
+    td.Height         = (uint32)height;
+    td.Format         = DXGI_FORMAT_D24_UNORM_S8_UINT;
     td.CPUAccessFlags = 0;
-    td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    td.MiscFlags = 0; 
+    td.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+    td.MiscFlags      = 0; 
     if (MSAAEnabled)
     {
         td.SampleDesc.Count = MSAACount;
@@ -297,8 +297,8 @@ void s3Renderer::resize(int width, int height)
 
     // Set up the viewport.
     D3D11_VIEWPORT vp;
-    vp.Width = (float32) width;
-    vp.Height = (float32) height;
+    vp.Width    = (float32) width;
+    vp.Height   = (float32) height;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;

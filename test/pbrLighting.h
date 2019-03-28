@@ -11,12 +11,12 @@
 {\
     D3D11_BUFFER_DESC constantBufferDesc;\
     ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));\
-    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;\
-    constantBufferDesc.ByteWidth = sizeof(cbClassName);\
-    constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;\
-    constantBufferDesc.MiscFlags = 0;\
+    constantBufferDesc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;\
+    constantBufferDesc.ByteWidth           = sizeof(cbClassName);\
+    constantBufferDesc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;\
+    constantBufferDesc.MiscFlags           = 0;\
     constantBufferDesc.StructureByteStride = 0;\
-    constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;\
+    constantBufferDesc.Usage               = D3D11_USAGE_DYNAMIC;\
     HRESULT hr = d->CreateBuffer(&constantBufferDesc, nullptr, &cb);\
     if (FAILED(hr)){\
         s3Log::error("Failed to create constant buffer, hr: %d\n", hr);\
@@ -32,12 +32,11 @@ t3Vector4f toVec4(t3Vector3f v)
 const int32 sphereRows = 7, sphereColumns = 7;
 s3Mesh* spheres[sphereRows * sphereColumns];
 
-s3Camera* camera = nullptr;
-
+s3Camera* camera     = nullptr;
 s3Renderer* renderer = nullptr;
 
 // IA
-ID3D11Device* device = nullptr;
+ID3D11Device* device               = nullptr;
 ID3D11DeviceContext* deviceContext = nullptr;
 
 // Shaders
@@ -304,11 +303,11 @@ int main()
     float32 width = 0, height = 0;
 
     s3Window* window = app.getWindow();
-    width = window->getWindowSize().x;
+    width  = window->getWindowSize().x;
     height = window->getWindowSize().y;
 
     renderer = &s3Renderer::get();
-    device = renderer->getDevice();
+    device        = renderer->getDevice();
     deviceContext = renderer->getDeviceContext();
 
     camera = new s3Camera(t3Vector3f(0, 0, -25), t3Vector3f(0, 0, 1), t3Vector3f(0, 1, 0),

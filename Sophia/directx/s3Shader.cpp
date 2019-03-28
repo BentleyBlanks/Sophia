@@ -26,7 +26,7 @@ s3Shader::~s3Shader()
 bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFilePath)
 {
     ID3D11Device* device = s3Renderer::get().getDevice();
-    ID3DBlob* errorBlob = nullptr;
+    ID3DBlob* errorBlob  = nullptr;
 
     std::string profile = s3GetLatestProfile(s3ShaderType::S3_VERTEX_SHADER);
     uint32 flags = D3DCOMPILE_ENABLE_STRICTNESS;

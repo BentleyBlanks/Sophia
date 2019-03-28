@@ -26,9 +26,9 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_MBUTTONDOWN:
     {
         bool button[3];
-        button[s3ButtonType::LEFT] = (wParam & MK_LBUTTON) != 0;
+        button[s3ButtonType::LEFT]   = (wParam & MK_LBUTTON) != 0;
         button[s3ButtonType::MIDDLE] = (wParam & MK_MBUTTON) != 0;
-        button[s3ButtonType::RIGHT] = (wParam & MK_RBUTTON) != 0;
+        button[s3ButtonType::RIGHT]  = (wParam & MK_RBUTTON) != 0;
         
         bool shift = (wParam & MK_SHIFT) != 0;
         bool control = (wParam & MK_CONTROL) != 0;
@@ -56,9 +56,9 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_RBUTTONUP:
     {
         bool button[3];
-        button[s3ButtonType::LEFT] = (wParam & MK_LBUTTON) != 0;
+        button[s3ButtonType::LEFT]   = (wParam & MK_LBUTTON) != 0;
         button[s3ButtonType::MIDDLE] = (wParam & MK_MBUTTON) != 0;
-        button[s3ButtonType::RIGHT] = (wParam & MK_RBUTTON) != 0;
+        button[s3ButtonType::RIGHT]  = (wParam & MK_RBUTTON) != 0;
 
         bool shift = (wParam & MK_SHIFT) != 0;
         bool control = (wParam & MK_CONTROL) != 0;
@@ -87,9 +87,9 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         static int32 lastX, lastY;
 
         bool button[3];
-        button[s3ButtonType::LEFT] = (wParam & MK_LBUTTON) != 0;
+        button[s3ButtonType::LEFT]   = (wParam & MK_LBUTTON) != 0;
         button[s3ButtonType::MIDDLE] = (wParam & MK_MBUTTON) != 0;
-        button[s3ButtonType::RIGHT] = (wParam & MK_RBUTTON) != 0;
+        button[s3ButtonType::RIGHT]  = (wParam & MK_RBUTTON) != 0;
 
         bool shift = (wParam & MK_SHIFT) != 0;
         bool control = (wParam & MK_CONTROL) != 0;
@@ -135,7 +135,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         float zDelta = ((int)(short)HIWORD(wParam)) / (float)WHEEL_DELTA;
         short keyStates = (short)LOWORD(wParam);
 
-        bool shift = (keyStates & MK_SHIFT) != 0;
+        bool shift   = (keyStates & MK_SHIFT) != 0;
         bool control = (keyStates & MK_CONTROL) != 0;
 
         int32 x = ((int)(short)LOWORD(lParam));
@@ -178,9 +178,9 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_KEYUP:
     {
-        bool shift = GetAsyncKeyState(VK_SHIFT) > 0;
+        bool shift   = GetAsyncKeyState(VK_SHIFT) > 0;
         bool control = GetAsyncKeyState(VK_CONTROL) > 0;
-        bool alt = GetAsyncKeyState(VK_MENU) > 0;
+        bool alt     = GetAsyncKeyState(VK_MENU) > 0;
 
         s3KeyCode key = (s3KeyCode)wParam;
 

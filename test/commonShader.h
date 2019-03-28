@@ -93,10 +93,10 @@ void createStates()
     // Setup depth/stencil state.
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilStateDesc.DepthEnable = TRUE;
+    depthStencilStateDesc.DepthEnable    = TRUE;
     depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
-    depthStencilStateDesc.StencilEnable = FALSE;
+    depthStencilStateDesc.DepthFunc      = D3D11_COMPARISON_LESS;
+    depthStencilStateDesc.StencilEnable  = FALSE;
 
     HRESULT hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
     if (FAILED(hr))
@@ -109,15 +109,15 @@ void createStates()
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
     rasterizerDesc.AntialiasedLineEnable = MSAAEnabled;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.DepthBias = 0;
-    rasterizerDesc.DepthBiasClamp = 0.0f;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+    rasterizerDesc.CullMode              = D3D11_CULL_BACK;
+    rasterizerDesc.DepthBias             = 0;
+    rasterizerDesc.DepthBiasClamp        = 0.0f;
+    rasterizerDesc.DepthClipEnable       = TRUE;
+    rasterizerDesc.FillMode              = D3D11_FILL_SOLID;
     rasterizerDesc.FrontCounterClockwise = FALSE;
-    rasterizerDesc.MultisampleEnable = MSAAEnabled;
-    rasterizerDesc.ScissorEnable = FALSE;
-    rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+    rasterizerDesc.MultisampleEnable     = MSAAEnabled;
+    rasterizerDesc.ScissorEnable         = FALSE;
+    rasterizerDesc.SlopeScaledDepthBias  = 0.0f;
 
     // Create the rasterizer state object.
     hr = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
