@@ -116,20 +116,20 @@ void createConstantBuffers()
     createConstantBuffer(device, s3PbrPSCB, pbrPSCBGPU);
     {
         pbrPSCBCPU.albedo = t3Vector3f(1.0f, 1.0f, 1.0f);
-        pbrPSCBCPU.ao = 1.0f;
+        pbrPSCBCPU.ao     = 1.0f;
 
         for (int32 i = 0; i < 4; i++)
         {
             pbrPSCBCPU.lightPositions[i] = toVec4(pointLights[i].getPosition());
-            pbrPSCBCPU.lightColors[i] = toVec4(pointLights[i].getColor());
+            pbrPSCBCPU.lightColors[i]    = toVec4(pointLights[i].getColor());
         }
     }
 
     createConstantBuffer(device, s3SkyboxCB, skyboxCBGPU);
     {
         skyboxCBCPU.canvasDistance = 1;
-        skyboxCBCPU.tanHalfFovY = t3Math::tanDeg(camera->getFovY() / 2.0f);
-        skyboxCBCPU.tanHalfFovX = skyboxCBCPU.tanHalfFovY * camera->getAspectRatio();
+        skyboxCBCPU.tanHalfFovY    = t3Math::tanDeg(camera->getFovY() / 2.0f);
+        skyboxCBCPU.tanHalfFovX    = skyboxCBCPU.tanHalfFovY * camera->getAspectRatio();
     }
 }
 
@@ -232,9 +232,9 @@ public:
                     if (SUCCEEDED(deviceContext->Map(pbrVSCBGPU, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
                     {
                         pbrVSCBCPU.projection = camera->getProjectionMatrix();
-                        pbrVSCBCPU.view = camera->getWorldToCamera();
-                        pbrVSCBCPU.model = spheres[i * sphereColumns + j]->getObjectToWorld();
-                        pbrVSCBCPU.normalM = t3Matrix4x4::getTransposedOf((pbrVSCBCPU.view * pbrVSCBCPU.model).getInverse());
+                        pbrVSCBCPU.view       = camera->getWorldToCamera();
+                        pbrVSCBCPU.model      = spheres[i * sphereColumns + j]->getObjectToWorld();
+                        pbrVSCBCPU.normalM    = t3Matrix4x4::getTransposedOf((pbrVSCBCPU.view * pbrVSCBCPU.model).getInverse());
 
                         memcpy(ms.pData, &pbrVSCBCPU, sizeof(s3PbrVSCB));
                         deviceContext->Unmap(pbrVSCBGPU, 0);
@@ -254,8 +254,8 @@ public:
                     if (SUCCEEDED(deviceContext->Map(pbrPSCBGPU, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
                     {
                         pbrPSCBCPU.cameraPosition = camera->getOrigin();
-                        pbrPSCBCPU.roughness = t3Math::clamp((float32)(sphereColumns - j) / sphereColumns, 0.05f, 1.0f);
-                        pbrPSCBCPU.metallic = (float32)(sphereRows - i) / sphereRows;
+                        pbrPSCBCPU.roughness      = t3Math::clamp((float32)(sphereColumns - j) / sphereColumns, 0.05f, 1.0f);
+                        pbrPSCBCPU.metallic       = (float32)(sphereRows - i) / sphereRows;
 
                         memcpy(ms.pData, &pbrPSCBCPU, sizeof(s3PbrPSCB));
                         deviceContext->Unmap(pbrPSCBGPU, 0);

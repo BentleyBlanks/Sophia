@@ -7,6 +7,32 @@
 #include <t3Math.h>
 #include <imgui.h>
 
+s3Renderer* renderer = nullptr;
+
+ID3D11Device* device               = nullptr;
+ID3D11DeviceContext* deviceContext = nullptr;
+
+class s3Cloud : public s3CallbackHandle
+{
+public:
+    void guiRender()
+    {
+        ImGui::Begin("Cloud");
+        {
+            ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+
+            ImGui::End();
+        }
+    }
+
+    void onHandle(const s3CallbackUserData * imageData)
+    {
+        s3Log::info("This is cloud handle system\n");
+
+        guiRender();
+    }
+};
+
 int main()
 {
     s3App app;
@@ -19,6 +45,13 @@ int main()
     s3Window* window = app.getWindow();
     width  = window->getWindowSize().x;
     height = window->getWindowSize().y;
+
+    renderer = &s3Renderer::get();
+    device = renderer->getDevice();
+    deviceContext = renderer->getDeviceContext();
+
+    s3Cloud cloud;
+    s3CallbackManager::callBack.onBeginRender += cloud;
 
     app.run();
 
