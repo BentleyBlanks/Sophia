@@ -1,0 +1,6 @@
+[submodule "Sophia/thirdparty/t3Math"]
+	path = Sophia/thirdparty/t3Math
+	url = https://github.com/BentleyBlanks/t3Math.git
+[submodule "Sophia/thirdparty/t3DataStructures"]
+	path = Sophia/thirdparty/t3DataStructures
+	url = https://github.com/BentleyBlanks/t3DataStructures.git
