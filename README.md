@@ -1,9 +1,21 @@
-## sophia
+## Sophia
 Sophia is a real-time DirectX 11 renderer. It is not quite a rich graphics engine, only packages some low-level DirectX functions and contains some useful tools. But it is enough to implement some Real-Time algorithms more efficiently.
 
 ## Demo
 
-### Atmosperic
+### Volumetric Cloudscapes
+
+>   Placeholder
+
+
+
+---
+
+### Deprecated
+
+>   Demo before renderer was rewriting, so please check older version [Sophia](https://github.com/BentleyBlanks/Sophia/tree/064eff64b0e18f45cf01cf06e9c98386640871ac) for more details.
+
+#### Atmosperic
 
 Real-time atmosperic simulation based on [Accurate Atmospheric Scattering](https://developer.nvidia.com/gpugems/GPUGems2/gpugems2_chapter16.html) and [Simulating the Colors of the Sky](http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/simulating-sky). 
 
@@ -17,7 +29,7 @@ Real-time atmosperic simulation based on [Accurate Atmospheric Scattering](https
 
 <img src="https://farm2.staticflickr.com/1804/42252751394_2a58178cb6_b.jpg" width="1024" height="288" alt="inside">
 
-### PBR Based on IBL 
+#### PBR Based on IBL
 
 Precomputed LUT according to [Real Shading in Unreal Engine 4](https://cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf)
 

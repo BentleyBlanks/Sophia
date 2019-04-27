@@ -98,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math;..\Sophia\thirdparty\t3DataStructures\t3DataStructures;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math;..\Sophia\thirdparty\t3DataStructures\t3DataStructures;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -134,7 +134,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math;..\Sophia\thirdparty\t3DataStructures\t3DataStructures;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -155,7 +155,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\;..\Sophia\thirdparty\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math;..\Sophia\thirdparty\t3DataStructures\t3DataStructures;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -195,15 +195,6 @@
     <ClCompile Include="..\Sophia\directx\texture\s3RenderTexture.cpp" />
     <ClCompile Include="..\Sophia\directx\texture\s3Texture.cpp" />
     <ClCompile Include="..\Sophia\directx\texture\s3Texture2d.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\imgui\imgui.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\lodepng\lodepng.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\t3Math\t3Quaternion.cpp" />
-    <ClCompile Include="..\Sophia\thirdparty\tinyexr\tinyexr.cc" />
-    <ClCompile Include="..\Sophia\thirdparty\tinyobjloader\tiny_obj_loader.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sophia\3d\s3Camera.h" />
@@ -233,31 +224,6 @@
     <ClInclude Include="..\Sophia\directx\texture\s3Texture2d.h" />
     <ClInclude Include="..\Sophia\directx\texture\s3TextureMode.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
-    <ClInclude Include="..\Sophia\thirdparty\imgui\imconfig.h" />
-    <ClInclude Include="..\Sophia\thirdparty\imgui\imgui.h" />
-    <ClInclude Include="..\Sophia\thirdparty\imgui\imgui_internal.h" />
-    <ClInclude Include="..\Sophia\thirdparty\imgui\stb_rect_pack.h" />
-    <ClInclude Include="..\Sophia\thirdparty\imgui\stb_textedit.h" />
-    <ClInclude Include="..\Sophia\thirdparty\imgui\stb_truetype.h" />
-    <ClInclude Include="..\Sophia\thirdparty\lodepng\lodepng.h" />
-    <ClInclude Include="..\Sophia\thirdparty\stbImage\stb_image.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3DataStructures\Common\t3Timer.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Math.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3MathSettings.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Quaternion.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector2.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector3.h" />
-    <ClInclude Include="..\Sophia\thirdparty\t3Math\t3Vector4.h" />
-    <ClInclude Include="..\Sophia\thirdparty\tinyexr\tinyexr.h" />
-    <ClInclude Include="..\Sophia\thirdparty\tinyobjloader\tiny_obj_loader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Sophia\thirdparty\t3Math\t3Math.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\t3Matrix4x4.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\t3Vector2.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\t3Vector3.inl" />
-    <None Include="..\Sophia\thirdparty\t3Math\t3Vector4.inl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Sophia\shaders\common\drawImagePS.hlsl">
