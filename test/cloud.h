@@ -46,8 +46,8 @@ int main()
     width  = window->getWindowSize().x;
     height = window->getWindowSize().y;
 
-    renderer = &s3Renderer::get();
-    device = renderer->getDevice();
+    renderer      = &s3Renderer::get();
+    device        = renderer->getDevice();
     deviceContext = renderer->getDeviceContext();
 
     s3Cloud cloud;

@@ -767,7 +767,7 @@
 				{
 					"buffer": 0,
 					"file": "/E/Program/Renderer/Sophia/Sophia/shaders/ssao/aoLightingPS.hlsl",
-					"semi_transient": true,
+					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 0,
@@ -783,6 +783,7 @@
 						],
 						"settings":
 						{
+							"is_init_dirty_state": false,
 							"syntax": "Packages/C++/C++.sublime-syntax"
 						},
 						"translation.x": 0.0,

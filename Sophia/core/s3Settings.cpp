@@ -23,7 +23,7 @@ void s3Version::print()
 }
 
 // Version Changes Level
-s3Version::s3Version() : major(0), minor(0), revision(1), type("Alpha")
+s3Version::s3Version() : major(0), minor(0), revision(2), type("Alpha")
 {
 
 }

@@ -21,33 +21,33 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{63CEDA35-B38E-49E4-B9DF-B3F04FEE8258}</ProjectGuid>
     <RootNamespace>sophia</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Sophia</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -191,7 +191,10 @@
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
     <ClCompile Include="..\Sophia\directx\light\s3PointLight.cpp" />
     <ClCompile Include="..\Sophia\directx\s3Shader.cpp" />
-    <ClCompile Include="..\Sophia\directx\s3Texture.cpp" />
+    <ClCompile Include="..\Sophia\directx\texture\s3RenderBuffer.cpp" />
+    <ClCompile Include="..\Sophia\directx\texture\s3RenderTexture.cpp" />
+    <ClCompile Include="..\Sophia\directx\texture\s3Texture.cpp" />
+    <ClCompile Include="..\Sophia\directx\texture\s3Texture2d.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\Sophia\thirdparty\imgui\imgui_draw.cpp" />
@@ -224,7 +227,11 @@
     <ClInclude Include="..\sophia\core\s3Settings.h" />
     <ClInclude Include="..\Sophia\directx\light\s3PointLight.h" />
     <ClInclude Include="..\Sophia\directx\s3Shader.h" />
-    <ClInclude Include="..\Sophia\directx\s3Texture.h" />
+    <ClInclude Include="..\Sophia\directx\texture\s3RenderBuffer.h" />
+    <ClInclude Include="..\Sophia\directx\texture\s3RenderTexture.h" />
+    <ClInclude Include="..\Sophia\directx\texture\s3Texture.h" />
+    <ClInclude Include="..\Sophia\directx\texture\s3Texture2d.h" />
+    <ClInclude Include="..\Sophia\directx\texture\s3TextureMode.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
     <ClInclude Include="..\Sophia\thirdparty\imgui\imconfig.h" />
     <ClInclude Include="..\Sophia\thirdparty\imgui\imgui.h" />
