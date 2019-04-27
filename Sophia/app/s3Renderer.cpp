@@ -23,7 +23,7 @@ s3Renderer& s3Renderer::get()
     return renderer;
 }
 
-bool s3Renderer::init(HWND hwnd, int width, int height)
+bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 {
     // ------------------------------------------Device------------------------------------------
     uint32 createDeviceFlags = 0;
@@ -152,7 +152,7 @@ bool s3Renderer::init(HWND hwnd, int width, int height)
     deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 
     // ------------------------------------------Depth/Stencil State------------------------------------------
-    bool MSAAEnabled = s3Renderer::get().getMSAAEnabled();
+    bool MSAAEnabled = s3Renderer::get().isMSAAEnabled();
 
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -225,7 +225,7 @@ void s3Renderer::shutdown()
     S3_SAFE_RELEASE(device);
 }
 
-void s3Renderer::resize(int width, int height)
+void s3Renderer::resize(int32 width, int32 height)
 {
     // ref: https://msdn.microsoft.com/en-us/library/windows/desktop/bb205075%28v=vs.85%29.aspx#Handling_Window_Resizing
     if(!device || !deviceContext || !swapChain) return;
@@ -355,13 +355,13 @@ ID3D11RasterizerState *& s3Renderer::getRasterizerState()
     return rasterizerState;
 }
 
-void s3Renderer::setMSAACount(int count)
+void s3Renderer::setMSAACount(int32 count)
 {
     if (count >= 1)
         MSAACount = count;
 }
 
-int s3Renderer::getMSAACount()
+int32 s3Renderer::getMSAACount()
 {
     return MSAACount;
 }
@@ -371,7 +371,12 @@ void s3Renderer::setMSAAEnabled(bool enabled)
     MSAAEnabled = enabled;
 }
 
-bool s3Renderer::getMSAAEnabled()
+bool s3Renderer::isMSAAEnabled()
 {
     return MSAAEnabled;
+}
+
+uint32 s3Renderer::getMSAAQuality() const
+{
+	return MSAAQuality;
 }

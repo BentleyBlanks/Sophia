@@ -6,31 +6,46 @@ class s3Texture
 {
 public:
 	s3Texture();
-	s3Texture(const s3Texture& copy);
 	virtual ~s3Texture();
 
-	int getWidth() const;
-	int getHeight() const;
-	 
-	std::string getName() const;
-	void setName(std::string name);
+	// actually creates the RenderTexture.
+	virtual bool create();
 
-	s3TextureWrapMode getWrapMode() const;
-	void setWrapMode(const s3TextureWrapMode& wrapMode);
+	// is the render texture actually created?
+	bool isCreated() const;
 
-	s3TextureFilterMode getFilterMode() const;
-	void setFilterMode(const s3TextureFilterMode& filterMode);
+	// Manually re-generate mipmap levels of a render texture.
+	bool generateMips();
 
-	s3TextureDimension getDimension() const;
-	void setDimension(const s3TextureDimension& dimension);
-
-protected:
-	int width;
-	int height;
-
+	// Texture coordinate wrapping mode.
 	s3TextureWrapMode wrapMode;
+
+	// Filtering mode of the texture.
 	s3TextureFilterMode filterMode;
+
+	// Dimensionality (type) of the texture
 	s3TextureDimension dimension;
 
+	// texture format of a texture object.
+	s3TextureFormat format;
+
+	// size of the texture
+	int32 width, height;
+
+	// The maximum number of mipmap levels in the texture. 1: multisampled texture, 0: generate a full set of subtextures.
+	int32 mipLevels;
+
+	// name of the texture
 	std::string name;
+
+	ID3D11Texture2D* getTexture2D() const;
+	ID3D11ShaderResourceView* getShaderResourceView() const;
+
+protected:
+	virtual bool check() const;
+
+	bool created;
+
+	ID3D11Texture2D* texture2d;
+	ID3D11ShaderResourceView* srv;
 };

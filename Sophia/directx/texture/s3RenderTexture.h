@@ -1,28 +1,24 @@
 #pragma once
-#include <directx/texture/s3TextureMode.h>
+#include <directx/texture/s3Texture.h>
 
-class s3RenderTexture
+class s3RenderTexture : public s3Texture
 {
 public:
-	s3RenderTexture(int width, int height, int depth, s3TextureFormat format);
+	s3RenderTexture();
 	virtual ~s3RenderTexture();
 
 	// Actually creates the RenderTexture.
-	void create();
+	virtual bool create();
 
-	// Is the render texture actually created?
-	bool isCreated();
-
-	// Manually re-generate mipmap levels of a render texture.
-	void generateMips();
-
-private:
 	// The precision of the render texture's depth buffer in bits (0, 16, 24/32 are supported).
-	int depth;
+	int32 depth;
 	// Anti-aliasing value indicates the number of samples per pixel
-	int antiAlising;
-	// Render texture has mipmaps when this flag is set / Mipmaps generated automatically
-	bool autoGenerateMips, useMipMap;
-	// Is the render texture actually created?
-	bool created;
+	int32 antiAlising;
+
+	ID3D11RenderTargetView* getRenderTargetView() const;
+
+protected:
+	virtual bool check() const;
+
+	ID3D11RenderTargetView* renderTargetView;
 };

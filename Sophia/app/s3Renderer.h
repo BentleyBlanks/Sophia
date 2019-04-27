@@ -8,9 +8,9 @@ class s3Renderer
 public:
     static s3Renderer& get();
 
-    bool init(HWND hwnd, int width, int height);
+    bool init(HWND hwnd, int32 width, int32 height);
     void shutdown();
-    void resize(int width, int height);
+    void resize(int32 width, int32 height);
     void clear(const t3Vector4f& color);
     void present(int32 syncInterval = 0, int32 presentFlag = 0);
 
@@ -23,10 +23,13 @@ public:
     ID3D11DepthStencilState*& getDepthStencilState();
     ID3D11RasterizerState*& getRasterizerState();
 
-    void setMSAACount(int count);
-    int getMSAACount();
-    void setMSAAEnabled(bool enabled);
-    bool getMSAAEnabled();
+    void setMSAACount(int32 count);
+    int32 getMSAACount();
+	
+	void setMSAAEnabled(bool enabled);
+    bool isMSAAEnabled();
+
+	uint32 getMSAAQuality() const;
 
 private:
     s3Renderer();
@@ -44,6 +47,6 @@ private:
     ID3D11RasterizerState* rasterizerState;
 
     bool MSAAEnabled;
-    int32 MSAACount;
+	int32 MSAACount;
     uint32 MSAAQuality;
 };
