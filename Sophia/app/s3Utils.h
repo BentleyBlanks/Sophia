@@ -40,7 +40,7 @@ std::string s3GetLatestProfile(s3ShaderType type);
 
 s3ImageType s3GetImageType(const std::string & filePath);
 
-s3Texture* s3LoadAsMipmap(std::vector<std::string> fileNames);
+//s3Texture* s3LoadAsMipmap(std::vector<std::string> fileNames);
 
 float s3SphericalTheta(const t3Vector3f &w);
 

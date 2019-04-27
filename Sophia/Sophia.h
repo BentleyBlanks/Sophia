@@ -13,6 +13,6 @@
 #include <3d/s3Model.h>
 #include <3d/s3Mesh.h>
 
-#include <directx/s3Texture.h>
+#include <directx/texture/s3RenderTexture.h>
 #include <directx/s3Shader.h>
 #include <directx/light/s3PointLight.h>

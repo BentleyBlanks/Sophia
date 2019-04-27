@@ -11,33 +11,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\test\minecraft.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\atmospheric.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\earth.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\pbrLighting.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\commonShader.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\skybox.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\precomputedMap.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\ssao.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test\mesh.h">
-      <Filter>SophiaTest</Filter>
-    </ClInclude>
     <ClInclude Include="..\test\cloud.h">
       <Filter>SophiaTest</Filter>
     </ClInclude>

@@ -520,10 +520,10 @@
 	"buffers":
 	[
 		{
-			"file": "/E/Program/Renderer/Sophia/Sophia/shaders/ssao/aoLightingPS.hlsl",
+			"file": "/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/common/modelPS.hlsl",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 182,
 				"line_ending": "Windows"
 			}
 		}
@@ -588,17 +588,22 @@
 	},
 	"expanded_folders":
 	[
-		"/E/Program/Renderer/Sophia",
-		"/E/Program/Renderer/Sophia/Sophia",
-		"/E/Program/Renderer/Sophia/Sophia/shaders",
-		"/E/Program/Renderer/Sophia/Sophia/shaders/pbrLighting",
-		"/E/Program/Renderer/Sophia/Sophia/shaders/simple",
-		"/E/Program/Renderer/Sophia/Sophia/shaders/sky",
-		"/E/Program/Renderer/Sophia/Sophia/shaders/skyRayCasting",
-		"/E/Program/Renderer/Sophia/Sophia/shaders/ssao"
+		"/C/Users/Bentl/Documents/Program/Sophia",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/common",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/pbrLighting",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/simple",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/sky",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/skyRayCasting",
+		"/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/ssao"
 	],
 	"file_history":
 	[
+		"/C/Users/Bentl/Documents/Program/Sophia/Sophia/thirdparty/t3DataStructures/.gitignore",
+		"/C/Users/Bentl/Documents/Program/Sophia/Sophia/thirdparty/t3Math/.gitignore",
+		"/C/Users/Bentl/Documents/Program/Sophia/README.md",
+		"/E/Program/Renderer/Sophia/Sophia/shaders/ssao/aoLightingPS.hlsl",
 		"/E/Program/Unity/SublimeProject/Cloud.sublime-project",
 		"/D/Program/Unity/ProjectX/Assets/SRP/ScriptableRenderPipeline/Core/CoreRP/ShaderLibrary/Common.hlsl",
 		"/D/Program/Unity/ProjectX/Assets/SRP/ScriptableRenderPipeline/HDRenderPipeline/HDRP/ShaderVariablesFunctions.hlsl",
@@ -722,11 +727,7 @@
 		"/D/Program/Unity/ProjectX/Assets/SpaceCore/Terrain/Patch/PatchDataCPU.cs",
 		"/D/Program/Unity/ProjectX/Assets/SRP/ScriptableRenderPipeline/Core/CoreRP/ShaderLibrary/NormalSurfaceGradient.hlsl",
 		"/D/Program/Unity/ProjectX/Assets/SpaceCore/Experimental/Water/Shader/Deprecated/WaterDeprecated.oldShader",
-		"/D/Program/Unity/ProjectX/Assets/SpaceCore/Experimental/Water/Shader/WaterIODeclaration.hlsl",
-		"/D/Program/Unity/ProjectX/Assets/SpaceCore/Experimental/Water/Shader/Deprecated/WaterDeprecated.shader",
-		"/D/Program/Unity/ProjectX/Assets/AmplifyImpostors/Plugins/EditorResources/Shaders/Baking/HDRP/ImpostorSurfaceDataBaker.shader",
-		"/D/Program/Unity/ProjectX/Assets/SRP/ScriptableRenderPipeline/HDRenderPipeline/HDRP/ShaderPass/FragInputs.hlsl",
-		"/D/Program/Unity/ProjectX/Assets/AmplifyImpostors/Plugins/EditorResources/Shaders/Runtime/HDRP/ImpostorHDRP.shader"
+		"/D/Program/Unity/ProjectX/Assets/SpaceCore/Experimental/Water/Shader/WaterIODeclaration.hlsl"
 	],
 	"find":
 	{
@@ -766,24 +767,24 @@
 			[
 				{
 					"buffer": 0,
-					"file": "/E/Program/Renderer/Sophia/Sophia/shaders/ssao/aoLightingPS.hlsl",
-					"semi_transient": false,
+					"file": "/C/Users/Bentl/Documents/Program/Sophia/deprecated/Shaders/common/modelPS.hlsl",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 182,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								182,
+								182
 							]
 						],
 						"settings":
 						{
-							"is_init_dirty_state": false,
+							"origin_encoding": "ASCII",
 							"syntax": "Packages/C++/C++.sublime-syntax"
 						},
 						"translation.x": 0.0,

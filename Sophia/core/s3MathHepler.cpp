@@ -132,7 +132,7 @@ t3Matrix4x4 makeScaleMatrix(const t3Vector3f& s)
 void s3ScalarSinCos(float * pSin, float * pCos, float Value)
 {
     // Map Value to y in [-pi,pi], x = 2*pi*quotient + remainder.
-    float quotient = T3MATH_1DIV_2PI*Value;
+    float quotient = T3MATH_INV_2PI * Value;
     if (Value >= 0.0f)
     {
         quotient = (float)((int)(quotient + 0.5f));

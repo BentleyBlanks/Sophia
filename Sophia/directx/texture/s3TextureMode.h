@@ -30,7 +30,7 @@ enum s3TextureDimension
 	S3_TEXTURE_DIMENSION_CUBEARRAY,
 };
 
-typedef enum s3TextureFormat
+enum s3TextureFormat
 {
 	S3_TEXTURE_FORMAT_UNKNOWN = 0,
 	S3_TEXTURE_FORMAT_R32G32B32A32_TYPELESS = 1,

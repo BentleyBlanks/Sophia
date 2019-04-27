@@ -6,6 +6,7 @@ class s3Texture
 {
 public:
 	s3Texture();
+	s3Texture(const s3Texture& copy);
 	virtual ~s3Texture();
 
 	int getWidth() const;
