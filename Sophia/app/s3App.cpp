@@ -1,9 +1,9 @@
 ﻿#include <app/s3App.h>
-#include <app/s3Renderer.h>
 #include <app/s3Window.h>
 #include <app/s3CallbackManager.h>
 #include <core/s3Settings.h>
 #include <core/s3Event.h>
+#include <directx/grpahics/s3Renderer.h>
 
 #include <imgui.h>
 

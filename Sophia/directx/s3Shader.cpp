@@ -1,6 +1,6 @@
 ﻿#include <directx/s3Shader.h>
+#include <directx/grpahics/s3Renderer.h>
 #include <app/s3Utils.h>
-#include <app/s3Renderer.h>
 #include <core/log/s3Log.h>
 #include <core/s3Settings.h>
 #include <3d/s3Mesh.h>

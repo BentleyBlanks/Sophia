@@ -28,6 +28,9 @@
     <Filter Include="Sophia\shaders">
       <UniqueIdentifier>{8ad97765-faa6-472a-a909-75a9a60f055d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sophia\directx\graphics">
+      <UniqueIdentifier>{2efb8415-2ca5-4cf8-968b-df86c52d1aa8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sophia\core\s3Settings.cpp">
@@ -46,9 +49,6 @@
       <Filter>Sophia\app</Filter>
     </ClCompile>
     <ClCompile Include="..\Sophia\app\s3App.cpp">
-      <Filter>Sophia\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sophia\app\s3Renderer.cpp">
       <Filter>Sophia\app</Filter>
     </ClCompile>
     <ClCompile Include="..\Sophia\core\s3Callback.cpp">
@@ -102,8 +102,8 @@
     <ClCompile Include="..\Sophia\directx\texture\s3Texture2d.cpp">
       <Filter>Sophia\directx\texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\texture\s3RenderBuffer.cpp">
-      <Filter>Sophia\directx\texture</Filter>
+    <ClCompile Include="..\Sophia\directx\grpahics\s3Renderer.cpp">
+      <Filter>Sophia\directx\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,9 +123,6 @@
       <Filter>Sophia\app</Filter>
     </ClInclude>
     <ClInclude Include="..\Sophia\app\s3App.h">
-      <Filter>Sophia\app</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\app\s3Renderer.h">
       <Filter>Sophia\app</Filter>
     </ClInclude>
     <ClInclude Include="..\Sophia\core\s3Callback.h">
@@ -182,11 +179,11 @@
     <ClInclude Include="..\Sophia\directx\texture\s3TextureMode.h">
       <Filter>Sophia\directx\texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\directx\texture\s3RenderBuffer.h">
-      <Filter>Sophia\directx\texture</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sophia\Sophia.h">
       <Filter>Sophia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\directx\grpahics\s3Renderer.h">
+      <Filter>Sophia\directx\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

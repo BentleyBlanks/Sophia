@@ -27,7 +27,7 @@ public:
 
     void onHandle(const s3CallbackUserData * imageData)
     {
-        s3Log::info("This is cloud handle system\n");
+        //s3Log::info("This is cloud handle system\n");
 
         guiRender();
     }

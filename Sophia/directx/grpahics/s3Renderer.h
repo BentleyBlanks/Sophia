@@ -3,6 +3,7 @@
 #include <core/s3Settings.h>
 #include <t3Vector4.h>
 
+class s3RenderTexture;
 class s3Renderer
 {
 public:
@@ -18,10 +19,11 @@ public:
     ID3D11Device*& getDevice();
     ID3D11DeviceContext*& getDeviceContext();
     IDXGISwapChain*& getSwapChain();
-    ID3D11RenderTargetView*& getRenderTargetView();
-    ID3D11DepthStencilView*& getDepthStencilView();
     ID3D11DepthStencilState*& getDepthStencilState();
     ID3D11RasterizerState*& getRasterizerState();
+
+	s3RenderTexture*& getDepthTexture();
+	s3RenderTexture*& getColorTexture();
 
     void setMSAACount(int32 count);
     int32 getMSAACount();
@@ -39,12 +41,11 @@ private:
     ID3D11DeviceContext* deviceContext;
     IDXGISwapChain* swapChain;
 
-    ID3D11RenderTargetView* renderTargetView;
-    ID3D11DepthStencilView* depthStencilView;
-    ID3D11Texture2D* depthStencilBuffer;
+	ID3D11DepthStencilState* depthStencilState;
+	ID3D11RasterizerState* rasterizerState;
 
-    ID3D11DepthStencilState* depthStencilState;
-    ID3D11RasterizerState* rasterizerState;
+	s3RenderTexture* depthTexture;
+	s3RenderTexture* colorTexture;
 
     bool MSAAEnabled;
 	int32 MSAACount;

@@ -1,5 +1,6 @@
 #pragma once
 #include <directx/texture/s3Texture.h>
+#include <t3Vector4.h>
 
 class s3RenderTexture : public s3Texture
 {
@@ -10,12 +11,16 @@ public:
 	// Actually creates the RenderTexture.
 	virtual bool create();
 
-	// The precision of the render texture's depth buffer in bits (0, 16, 24/32 are supported).
-	int32 depth;
-	// Anti-aliasing value indicates the number of samples per pixel
-	int32 antiAlising;
+	// clear the renderTargetView and depthStencilView
+	void clear(bool clearRT, t3Vector4f clearColor, bool clearDepth);
 
 	ID3D11RenderTargetView* getRenderTargetView() const;
+	
+	D3D11_RTV_DIMENSION getRTVDimension() const;
+	
+	virtual uint32 getBindFlags() const;
+
+	friend class s3Renderer;
 
 protected:
 	virtual bool check() const;

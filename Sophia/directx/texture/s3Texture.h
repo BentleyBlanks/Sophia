@@ -11,6 +11,9 @@ public:
 	// actually creates the RenderTexture.
 	virtual bool create();
 
+	// clear the depthStencilView
+	void clear();
+
 	// is the render texture actually created?
 	bool isCreated() const;
 
@@ -23,7 +26,7 @@ public:
 	// Filtering mode of the texture.
 	s3TextureFilterMode filterMode;
 
-	// Dimensionality (type) of the texture
+	// Dimensionality (type) of the texture.
 	s3TextureDimension dimension;
 
 	// texture format of a texture object.
@@ -31,6 +34,9 @@ public:
 
 	// size of the texture
 	int32 width, height;
+
+	// The precision of the render texture's depth buffer in bits (0, 16, 24, 32 are supported).
+	int32 depth;
 
 	// The maximum number of mipmap levels in the texture. 1: multisampled texture, 0: generate a full set of subtextures.
 	int32 mipLevels;
@@ -40,12 +46,21 @@ public:
 
 	ID3D11Texture2D* getTexture2D() const;
 	ID3D11ShaderResourceView* getShaderResourceView() const;
+	ID3D11DepthStencilView* getDepthStencilView() const;
+	
+	DXGI_FORMAT getFormat() const;
+	D3D11_SRV_DIMENSION getSRVDimension() const;
+	D3D11_DSV_DIMENSION getDepthDimension() const;
+
+	virtual uint32 getBindFlags() const;
+
+	friend class s3Renderer;
 
 protected:
-	virtual bool check() const;
-
+	bool check() const;
 	bool created;
 
 	ID3D11Texture2D* texture2d;
-	ID3D11ShaderResourceView* srv;
+	ID3D11ShaderResourceView* shaderResourceView;
+	ID3D11DepthStencilView* depthStencilView;
 };

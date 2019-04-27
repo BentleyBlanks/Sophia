@@ -1,4 +1,5 @@
-#include <app/s3Renderer.h>
+#include <directx/grpahics/s3Renderer.h>
+#include <directx/texture/s3RenderTexture.h>
 #include <t3Vector4.h>
 #include <core/log/s3Log.h>
 
@@ -6,11 +7,10 @@ s3Renderer::s3Renderer()
   : device(nullptr),
     deviceContext(nullptr),
     swapChain(nullptr),
-    renderTargetView(nullptr),
-    depthStencilView(nullptr),
-    depthStencilBuffer(nullptr),
     depthStencilState(nullptr),
     rasterizerState(nullptr),
+	depthTexture(nullptr),
+	colorTexture(nullptr),
     MSAAEnabled(true),
     MSAACount(4),
     MSAAQuality(0)
@@ -25,6 +25,9 @@ s3Renderer& s3Renderer::get()
 
 bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 {
+	// prevent error when call init() muiltiple times 
+	shutdown();
+
     // ------------------------------------------Device------------------------------------------
     uint32 createDeviceFlags = 0;
 
@@ -49,7 +52,8 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 								   D3D_DRIVER_TYPE_HARDWARE,
 								   nullptr,
 								   createDeviceFlags,
-								   featureLevels, _countof(featureLevels),
+								   featureLevels, 
+								   _countof(featureLevels),
 								   D3D11_SDK_VERSION,
 								   &device,
 								   &featureLevel,
@@ -61,34 +65,36 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
         return false;
     }
 
+	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
     // ------------------------------------------Swap Chain------------------------------------------
     device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, MSAACount, &MSAAQuality);
 
-    DXGI_SWAP_CHAIN_DESC scd;
-    ZeroMemory(&scd, sizeof(scd));
-    scd.BufferCount                        = 1;
-    scd.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
-    scd.BufferDesc.Height                  = height;
-    scd.BufferDesc.Width                   = width;
-    scd.BufferDesc.RefreshRate.Numerator   = 60;
-    scd.BufferDesc.RefreshRate.Denominator = 1;
-    scd.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
-    scd.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-    scd.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    scd.Flags                              = 0;
-    scd.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
-    scd.OutputWindow                       = hwnd;
+    DXGI_SWAP_CHAIN_DESC scDesc;
+    ZeroMemory(&scDesc, sizeof(scDesc));
+    scDesc.BufferCount                        = 1;
+    scDesc.BufferDesc.Format                  = format;
+    scDesc.BufferDesc.Height                  = height;
+    scDesc.BufferDesc.Width                   = width;
+    scDesc.BufferDesc.RefreshRate.Numerator   = 60;
+    scDesc.BufferDesc.RefreshRate.Denominator = 1;
+    scDesc.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
+    scDesc.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+    scDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    scDesc.Flags                              = 0;
+    scDesc.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
+    scDesc.OutputWindow                       = hwnd;
+    scDesc.Windowed                           = true;
     if (MSAAEnabled)
     {
-        scd.SampleDesc.Count = MSAACount;
-        scd.SampleDesc.Quality = MSAAQuality - 1;
+        scDesc.SampleDesc.Count   = MSAACount;
+        scDesc.SampleDesc.Quality = MSAAQuality - 1;
     }
     else
     {
-        scd.SampleDesc.Count = 1;
-        scd.SampleDesc.Quality = 0;
+        scDesc.SampleDesc.Count   = 1;
+        scDesc.SampleDesc.Quality = 0;
     }
-    scd.Windowed = true;
 
     IDXGIDevice* dxgiDevice = 0;
     device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
@@ -99,7 +105,7 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
     IDXGIFactory* dxgiFactory = 0;
     dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
 
-    hr = dxgiFactory->CreateSwapChain(device, &scd, &swapChain);
+    hr = dxgiFactory->CreateSwapChain(device, &scDesc, &swapChain);
 
     S3_SAFE_RELEASE(dxgiDevice);
     S3_SAFE_RELEASE(dxgiAdapter);
@@ -107,52 +113,54 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 
     if(FAILED(hr))
     {
-        s3Log::error("D3D11CreateDevice Failed.\n");
+        s3Log::error("D3D11CreateDevice dailed.\n");
         return false;
     }
+
+    // ------------------------------------------Color Texture------------------------------------------
+    // create colorTexture's texture2d form swapChain's back buffer
+    ID3D11Texture2D* backBuffer = NULL;
+	if (FAILED(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& backBuffer)))
+	{
+		s3Log::error("s3Renderer::init() swapChain->GetBuffer() failed\n");
+		return false;
+	}
+
+	// user-defined texture2d's colorTexture creation
+	colorTexture = new s3RenderTexture();
+	colorTexture->texture2d  = backBuffer;
+	colorTexture->width      = width;
+	colorTexture->height     = height;
+	colorTexture->depth      = 0;
+	colorTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
+	colorTexture->format     = (s3TextureFormat) format;
+	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_BILINEAR;
+	colorTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
+	colorTexture->mipLevels  = S3_TEXTURE_MAX_MIPLEVEL;
+	colorTexture->name       = "s3RendererColorTexture";
+	colorTexture->create();
 
     // ------------------------------------------Depth / Stencil Texture------------------------------------------
-    // Create render target view for back buffer
-    ID3D11Texture2D* backBuffer = NULL;
-    if(FAILED(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*) &backBuffer)))	
-        return false;
-    if(FAILED(device->CreateRenderTargetView(backBuffer, 0, &renderTargetView)))
-        return false;
-    S3_SAFE_RELEASE(backBuffer);
+    // depth / stencil texture creation
+	depthTexture = new s3RenderTexture();
+	depthTexture->width      = width;
+	depthTexture->height     = height;
+	depthTexture->depth      = 24;
+	depthTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
+	depthTexture->format     = (s3TextureFormat) DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthTexture->filterMode = S3_TEXTURE_FILTERMODE_POINT;
+	depthTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
+	depthTexture->mipLevels  = 1;
+	depthTexture->name       = "s3RendererDepthTexture";
+	depthTexture->create();
 
-    // Depth/Stencil Texture Creation
-    D3D11_TEXTURE2D_DESC td;
-    td.ArraySize      = 1;
-    td.MipLevels      = 1;
-    td.Width          = width;
-    td.Height         = height;
-    td.Format         = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    td.CPUAccessFlags = 0;
-    td.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
-    td.MiscFlags      = 0;
-    if (MSAAEnabled)
-    {
-        td.SampleDesc.Count = MSAACount;
-        td.SampleDesc.Quality = MSAAQuality - 1;
-    }
-    else
-    {
-        td.SampleDesc.Count = 1;
-        td.SampleDesc.Quality = 0;
-    }
-    td.Usage = D3D11_USAGE_DEFAULT;
-
-    if(FAILED(device->CreateTexture2D(&td, 0, &depthStencilBuffer)))
-        return false;
-    if(FAILED(device->CreateDepthStencilView(depthStencilBuffer, 0, &depthStencilView)))
-        return false;
-
-    // Bind the Views to the Output Merger Stage
-    deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+    // Bind the colorTexture and depthTexture to the Output Merger Stage
+    deviceContext->OMSetRenderTargets(1, &colorTexture->renderTargetView, depthTexture->depthStencilView);
 
     // ------------------------------------------Depth/Stencil State------------------------------------------
     bool MSAAEnabled = s3Renderer::get().isMSAAEnabled();
 
+	// DepthStencil state controls how DepthStencil testing is performed by the OM stage.
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
     depthStencilStateDesc.DepthEnable    = MSAAEnabled;
@@ -204,23 +212,29 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 
 void s3Renderer::shutdown()
 {
-    S3_SAFE_RELEASE(swapChain);
-    S3_SAFE_RELEASE(renderTargetView);
-    S3_SAFE_RELEASE(depthStencilView);
-    S3_SAFE_RELEASE(deviceContext);
+	S3_SAFE_DELETE(depthTexture);
+	S3_SAFE_DELETE(colorTexture);
+
+	S3_SAFE_RELEASE(depthStencilState);
+	S3_SAFE_RELEASE(rasterizerState);
 
 #ifdef _DEBUG
     // ref: http://masterkenth.com/directx-leak-debugging/
     // reporting live objects ref count
     ID3D11Debug* debugDevice = nullptr;
-    HRESULT hr = device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast< void** >(&debugDevice));
-    if(hr == S_OK)
-    {
-        hr = debugDevice->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-        S3_SAFE_RELEASE(debugDevice);
-    }
+	if (device)
+	{
+		HRESULT hr = device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&debugDevice));
+		if (hr == S_OK)
+		{
+			hr = debugDevice->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+			S3_SAFE_RELEASE(debugDevice);
+		}
+	}
 #endif
 
+	S3_SAFE_RELEASE(swapChain);
+	S3_SAFE_RELEASE(deviceContext);
     S3_SAFE_RELEASE(device);
 }
 
@@ -229,15 +243,16 @@ void s3Renderer::resize(int32 width, int32 height)
     // ref: https://msdn.microsoft.com/en-us/library/windows/desktop/bb205075%28v=vs.85%29.aspx#Handling_Window_Resizing
     if(!device || !deviceContext || !swapChain) return;
 
-    S3_SAFE_RELEASE(renderTargetView);
-    S3_SAFE_RELEASE(depthStencilView);
-    S3_SAFE_RELEASE(depthStencilBuffer);
+	S3_SAFE_DELETE(depthTexture);
+	S3_SAFE_DELETE(colorTexture);
 
     deviceContext->OMSetRenderTargets(0, 0, 0);
 
     HRESULT hr;
+	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
     // Resize the swap chain and recreate the render target view.
-    hr = swapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+    hr = swapChain->ResizeBuffers(1, width, height, format, 0);
     if(FAILED(hr))
     {
         s3Log::error("Resize Buffer Failed\n");
@@ -253,46 +268,36 @@ void s3Renderer::resize(int32 width, int32 height)
         return;
     }
 
-    hr = device->CreateRenderTargetView(backBuffer, NULL, &renderTargetView);
-    if(FAILED(hr))
-    {
-        s3Log::error("Resize CreateRenderTargetView Failed\n");
-        return;
-    }
-    S3_SAFE_RELEASE(backBuffer);
+	// user-defined texture2d's colorTexture creation
+	colorTexture = new s3RenderTexture();
+	colorTexture->texture2d  = backBuffer;
+	colorTexture->width      = width;
+	colorTexture->height     = height;
+	colorTexture->depth      = 0;
+	colorTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
+	colorTexture->format     = (s3TextureFormat) format;
+	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_BILINEAR;
+	colorTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
+	colorTexture->mipLevels  = S3_TEXTURE_MAX_MIPLEVEL;
+	colorTexture->name       = "s3RendererColorTexture";
+	colorTexture->create();
 
     // https://gamedev.stackexchange.com/questions/86164/idxgiswapchainresizebuffers-should-i-recreate-the-depth-stencil-buffer-too
     // depth/stencil's size match the window size
     // Depth/Stencil Texture Creation
-    D3D11_TEXTURE2D_DESC td;
-    td.ArraySize      = 1;
-    td.MipLevels      = 1;
-    td.Width          = (uint32)width;
-    td.Height         = (uint32)height;
-    td.Format         = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    td.CPUAccessFlags = 0;
-    td.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
-    td.MiscFlags      = 0; 
-    if (MSAAEnabled)
-    {
-        td.SampleDesc.Count = MSAACount;
-        td.SampleDesc.Quality = MSAAQuality - 1;
-    }
-    else
-    {
-        td.SampleDesc.Count = 1;
-        td.SampleDesc.Quality = 0;
-    }
-    td.Usage = D3D11_USAGE_DEFAULT;
+	depthTexture = new s3RenderTexture();
+	depthTexture->width = width;
+	depthTexture->height = height;
+	depthTexture->depth = 24;
+	depthTexture->dimension = S3_TEXTURE_DIMENSION_TEX2D;
+	depthTexture->format = (s3TextureFormat)DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthTexture->filterMode = S3_TEXTURE_FILTERMODE_POINT;
+	depthTexture->wrapMode = S3_TEXTURE_WRAPMODE_CLAMP;
+	depthTexture->mipLevels = 1;
+	depthTexture->name = "s3RendererDepthTexture";
+	depthTexture->create();
 
-    hr = device->CreateTexture2D(&td, 0, &depthStencilBuffer);
-    if(FAILED(hr))
-        return;
-    hr = device->CreateDepthStencilView(depthStencilBuffer, 0, &depthStencilView);
-    if (FAILED(hr))
-        return;
-
-    deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+    deviceContext->OMSetRenderTargets(1, &colorTexture->renderTargetView, depthTexture->depthStencilView);
 
     // Set up the viewport.
     D3D11_VIEWPORT vp;
@@ -307,10 +312,11 @@ void s3Renderer::resize(int32 width, int32 height)
 
 void s3Renderer::clear(const t3Vector4f& c)
 {
-    const float color[4] = {c[0], c[1], c[2], c[3]};
-
-    deviceContext->ClearRenderTargetView(renderTargetView, color);
-    deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	if(colorTexture)
+		colorTexture->clear(true, c, false);
+	
+	if(depthTexture)
+		depthTexture->clear(true, c, true);
 }
 
 void s3Renderer::present(int32 syncInterval, int32 presentFlag)
@@ -334,16 +340,6 @@ IDXGISwapChain *& s3Renderer::getSwapChain()
     return swapChain;
 }
 
-ID3D11RenderTargetView *& s3Renderer::getRenderTargetView()
-{
-    return renderTargetView;
-}
-
-ID3D11DepthStencilView *& s3Renderer::getDepthStencilView()
-{
-    return depthStencilView;
-}
-
 ID3D11DepthStencilState *& s3Renderer::getDepthStencilState()
 {
     return depthStencilState;
@@ -352,6 +348,16 @@ ID3D11DepthStencilState *& s3Renderer::getDepthStencilState()
 ID3D11RasterizerState *& s3Renderer::getRasterizerState()
 {
     return rasterizerState;
+}
+
+s3RenderTexture*& s3Renderer::getDepthTexture()
+{
+	return depthTexture;
+}
+
+s3RenderTexture*& s3Renderer::getColorTexture()
+{
+	return colorTexture;
 }
 
 void s3Renderer::setMSAACount(int32 count)
