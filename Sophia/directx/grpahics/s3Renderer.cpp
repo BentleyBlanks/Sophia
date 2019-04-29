@@ -11,9 +11,7 @@ s3Renderer::s3Renderer()
     rasterizerState(nullptr),
 	depthTexture(nullptr),
 	colorTexture(nullptr),
-    MSAAEnabled(true),
-    MSAACount(4),
-    MSAAQuality(0)
+	msaaCount(4)
 {
 }
 
@@ -67,9 +65,16 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 
 	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-    // ------------------------------------------Swap Chain------------------------------------------
-    device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, MSAACount, &MSAAQuality);
+	// Multiple sampling checking
+	uint32 msaaQuality;
+	bool msaaEnabled = true;
+	if (FAILED(device->CheckMultisampleQualityLevels(format, msaaCount, &msaaQuality)))
+		msaaEnabled = false;
 
+	if (msaaQuality <= 1)
+		msaaEnabled = false;
+
+    // ------------------------------------------Swap Chain------------------------------------------
     DXGI_SWAP_CHAIN_DESC scDesc;
     ZeroMemory(&scDesc, sizeof(scDesc));
     scDesc.BufferCount                        = 1;
@@ -80,15 +85,15 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
     scDesc.BufferDesc.RefreshRate.Denominator = 1;
     scDesc.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
     scDesc.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-    scDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    scDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
     scDesc.Flags                              = 0;
     scDesc.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
     scDesc.OutputWindow                       = hwnd;
     scDesc.Windowed                           = true;
-    if (MSAAEnabled)
+    if (msaaEnabled)
     {
-        scDesc.SampleDesc.Count   = MSAACount;
-        scDesc.SampleDesc.Quality = MSAAQuality - 1;
+        scDesc.SampleDesc.Count   = msaaCount;
+        scDesc.SampleDesc.Quality = msaaQuality - 1;
     }
     else
     {
@@ -136,8 +141,8 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 	colorTexture->format     = (s3TextureFormat) format;
 	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_BILINEAR;
 	colorTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
-	colorTexture->mipLevels  = S3_TEXTURE_MAX_MIPLEVEL;
-	colorTexture->name       = "s3RendererColorTexture";
+	colorTexture->mipLevels  = 1;
+	colorTexture->name       = "s3RendererBackBufferTexture";
 	colorTexture->create();
 
     // ------------------------------------------Depth / Stencil Texture------------------------------------------
@@ -147,7 +152,7 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 	depthTexture->height     = height;
 	depthTexture->depth      = 24;
 	depthTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
-	depthTexture->format     = (s3TextureFormat) DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthTexture->format     = (s3TextureFormat) 0;
 	depthTexture->filterMode = S3_TEXTURE_FILTERMODE_POINT;
 	depthTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
 	depthTexture->mipLevels  = 1;
@@ -158,14 +163,12 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
     deviceContext->OMSetRenderTargets(1, &colorTexture->renderTargetView, depthTexture->depthStencilView);
 
     // ------------------------------------------Depth/Stencil State------------------------------------------
-    bool MSAAEnabled = s3Renderer::get().isMSAAEnabled();
-
 	// DepthStencil state controls how DepthStencil testing is performed by the OM stage.
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilStateDesc.DepthEnable    = MSAAEnabled;
+    depthStencilStateDesc.DepthEnable    = true;
     depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilStateDesc.DepthFunc      = D3D11_COMPARISON_LESS_EQUAL;
+    depthStencilStateDesc.DepthFunc      = D3D11_COMPARISON_LESS;
     depthStencilStateDesc.StencilEnable  = FALSE;
 
     hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
@@ -178,14 +181,14 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
     // Setup rasterizer state.
     D3D11_RASTERIZER_DESC rasterizerDesc;
     ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
-    rasterizerDesc.AntialiasedLineEnable = MSAAEnabled;
+    rasterizerDesc.AntialiasedLineEnable = msaaEnabled;
     rasterizerDesc.CullMode              = D3D11_CULL_BACK;
     rasterizerDesc.DepthBias             = 0;
     rasterizerDesc.DepthBiasClamp        = 0.0f;
     rasterizerDesc.DepthClipEnable       = TRUE;
     rasterizerDesc.FillMode              = D3D11_FILL_SOLID;
     rasterizerDesc.FrontCounterClockwise = FALSE;
-    rasterizerDesc.MultisampleEnable     = MSAAEnabled;
+    rasterizerDesc.MultisampleEnable     = !msaaEnabled;
     rasterizerDesc.ScissorEnable         = FALSE;
     rasterizerDesc.SlopeScaledDepthBias  = 0.0f;
 
@@ -270,18 +273,19 @@ void s3Renderer::resize(int32 width, int32 height)
 
 	// user-defined texture2d's colorTexture creation
 	colorTexture = new s3RenderTexture();
-	colorTexture->texture2d  = backBuffer;
-	colorTexture->width      = width;
-	colorTexture->height     = height;
-	colorTexture->depth      = 0;
-	colorTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
-	colorTexture->format     = (s3TextureFormat) format;
+	colorTexture->texture2d = backBuffer;
+	colorTexture->width = width;
+	colorTexture->height = height;
+	colorTexture->depth = 0;
+	colorTexture->dimension = S3_TEXTURE_DIMENSION_TEX2D;
+	colorTexture->format = (s3TextureFormat)format;
 	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_BILINEAR;
-	colorTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
-	colorTexture->mipLevels  = S3_TEXTURE_MAX_MIPLEVEL;
-	colorTexture->name       = "s3RendererColorTexture";
+	colorTexture->wrapMode = S3_TEXTURE_WRAPMODE_CLAMP;
+	colorTexture->mipLevels = 1;
+	colorTexture->name = "s3RendererBackBufferTexture";
 	colorTexture->create();
 
+	// ------------------------------------------Depth / Stencil Texture------------------------------------------
     // https://gamedev.stackexchange.com/questions/86164/idxgiswapchainresizebuffers-should-i-recreate-the-depth-stencil-buffer-too
     // depth/stencil's size match the window size
     // Depth/Stencil Texture Creation
@@ -290,7 +294,7 @@ void s3Renderer::resize(int32 width, int32 height)
 	depthTexture->height = height;
 	depthTexture->depth = 24;
 	depthTexture->dimension = S3_TEXTURE_DIMENSION_TEX2D;
-	depthTexture->format = (s3TextureFormat)DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthTexture->format = (s3TextureFormat)0;
 	depthTexture->filterMode = S3_TEXTURE_FILTERMODE_POINT;
 	depthTexture->wrapMode = S3_TEXTURE_WRAPMODE_CLAMP;
 	depthTexture->mipLevels = 1;
@@ -360,28 +364,13 @@ s3RenderTexture*& s3Renderer::getColorTexture()
 	return colorTexture;
 }
 
-void s3Renderer::setMSAACount(int32 count)
+void s3Renderer::setMSAACount(uint32 count)
 {
-    if (count >= 1)
-        MSAACount = count;
+	if (count <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT && count >= 0)
+		msaaCount = count;
 }
 
-int32 s3Renderer::getMSAACount()
+uint32 s3Renderer::getMSAACount() const
 {
-    return MSAACount;
-}
-
-void s3Renderer::setMSAAEnabled(bool enabled)
-{
-    MSAAEnabled = enabled;
-}
-
-bool s3Renderer::isMSAAEnabled()
-{
-    return MSAAEnabled;
-}
-
-uint32 s3Renderer::getMSAAQuality() const
-{
-	return MSAAQuality;
+	return msaaCount;
 }

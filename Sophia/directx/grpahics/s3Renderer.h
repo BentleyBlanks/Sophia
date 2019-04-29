@@ -25,13 +25,8 @@ public:
 	s3RenderTexture*& getDepthTexture();
 	s3RenderTexture*& getColorTexture();
 
-    void setMSAACount(int32 count);
-    int32 getMSAACount();
-	
-	void setMSAAEnabled(bool enabled);
-    bool isMSAAEnabled();
-
-	uint32 getMSAAQuality() const;
+	void setMSAACount(uint32 count);
+	uint32 getMSAACount() const;
 
 private:
     s3Renderer();
@@ -46,8 +41,6 @@ private:
 
 	s3RenderTexture* depthTexture;
 	s3RenderTexture* colorTexture;
-
-    bool MSAAEnabled;
-	int32 MSAACount;
-    uint32 MSAAQuality;
+	
+	uint32 msaaCount;
 };

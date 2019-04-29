@@ -11,6 +11,7 @@ s3Texture::s3Texture() :
 	width(0),
 	height(0),
 	mipLevels(1),
+	msaaCount(4),
 	name(""),
 	texture2d(nullptr),
 	shaderResourceView(nullptr),
@@ -26,6 +27,8 @@ s3Texture::~s3Texture()
 		S3_SAFE_RELEASE(texture2d);
 		S3_SAFE_RELEASE(depthStencilView);
 	}
+
+	created = false;
 }
 
 bool s3Texture::create()
@@ -35,6 +38,10 @@ bool s3Texture::create()
 	s3Renderer& renderer = s3Renderer::get();
 	ID3D11Device* device = renderer.getDevice();
 
+	uint32 msaaQuality;
+	bool msaaEnabled;
+	checkMSAA(&msaaEnabled, &msaaQuality);
+
 	// ------------------------------------------Texture2D------------------------------------------
 	// texture2d already been initialized by other module
 	if (!texture2d)
@@ -42,24 +49,24 @@ bool s3Texture::create()
 		// create texture2d from user-defined configs
 		D3D11_TEXTURE2D_DESC tex2dDesc;
 		ZeroMemory(&tex2dDesc, sizeof(tex2dDesc));
-		tex2dDesc.ArraySize = 1;
-		tex2dDesc.BindFlags = getBindFlags();
-		tex2dDesc.CPUAccessFlags = 0;
-		tex2dDesc.Format = getFormat();
-		tex2dDesc.Height = height;
-		tex2dDesc.Width = width;
-		tex2dDesc.MipLevels = mipLevels;
-		tex2dDesc.MiscFlags = 0;
-		tex2dDesc.Usage = D3D11_USAGE_DEFAULT;
-		if (renderer.isMSAAEnabled())
+		tex2dDesc.ArraySize          = 1;
+		tex2dDesc.BindFlags          = getBindFlags();
+		tex2dDesc.CPUAccessFlags     = 0;
+		tex2dDesc.Format             = getTexture2dFormat();
+		tex2dDesc.Height             = height;
+		tex2dDesc.Width              = width;
+		tex2dDesc.MipLevels          = mipLevels;
+		tex2dDesc.MiscFlags          = 0;
+		tex2dDesc.Usage              = D3D11_USAGE_DEFAULT;
+		if (msaaEnabled)
 		{
-			tex2dDesc.SampleDesc.Quality = renderer.getMSAAQuality();
-			tex2dDesc.SampleDesc.Count = renderer.getMSAACount();
+			tex2dDesc.SampleDesc.Quality = msaaQuality - 1;
+			tex2dDesc.SampleDesc.Count   = msaaCount;
 		}
 		else
 		{
 			tex2dDesc.SampleDesc.Quality = 0;
-			tex2dDesc.SampleDesc.Count = 1;
+			tex2dDesc.SampleDesc.Count   = 1;
 		}
 
 		if (FAILED(device->CreateTexture2D(&tex2dDesc, 0, &texture2d)))
@@ -73,7 +80,8 @@ bool s3Texture::create()
 	// ------------------------------------------ShaderResourceView------------------------------------------
 	// Creating a shaderResourceView of the texture to be used when binding it on a shader to sample
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format                    = getFormat();
+	ZeroMemory(&srvDesc, sizeof(srvDesc));
+	srvDesc.Format                    = getSRVFormat();
 	srvDesc.ViewDimension             = getSRVDimension();
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels       = mipLevels;
@@ -87,13 +95,14 @@ bool s3Texture::create()
 
 	// ------------------------------------------DepthStencilView------------------------------------------
 	// Creating a depthStencilView of the texture to be used as a depth texture
-	if (depth > 0)
+	if (isDepthTexture())
 	{
 		D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc;
+		ZeroMemory(&depthDesc, sizeof(depthDesc));
 		//--! Might be sync with depthDimension
 		depthDesc.Texture2D.MipSlice = 0;
 		depthDesc.ViewDimension      = getDepthDimension();
-		depthDesc.Format             = getFormat();
+		depthDesc.Format             = getDepthFormat();
 
 		if (FAILED(device->CreateDepthStencilView(texture2d, &depthDesc, &depthStencilView)))
 		{
@@ -119,6 +128,20 @@ void s3Texture::clear()
 bool s3Texture::isCreated() const
 {
 	return created;
+}
+
+bool s3Texture::isMSAAEnabled() const
+{
+	bool msaaEnabled;
+	uint32 msaaQuality;
+	checkMSAA(&msaaEnabled, &msaaQuality);
+
+	return msaaEnabled;
+}
+
+bool s3Texture::isDepthTexture() const
+{
+	return depth > 0;
 }
 
 bool s3Texture::generateMips()
@@ -175,6 +198,19 @@ bool s3Texture::check() const
 	return true;
 }
 
+void s3Texture::checkMSAA(bool* msaaEnabled, uint32* msaaQuality) const
+{
+	s3Renderer& renderer = s3Renderer::get();
+	ID3D11Device* device = renderer.getDevice();
+
+	*msaaEnabled = true;
+	if (FAILED(device->CheckMultisampleQualityLevels(getDepthFormat(), msaaCount, msaaQuality)))
+		*msaaEnabled = false;
+
+	if (*msaaQuality <= 1)
+		*msaaEnabled = false;
+}
+
 uint32 s3Texture::getBindFlags() const
 {
 	uint32 bindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -195,7 +231,31 @@ uint32 s3Texture::getBindFlags() const
 	return bindFlags;
 }
 
-DXGI_FORMAT s3Texture::getFormat() const
+DXGI_FORMAT s3Texture::getTexture2dFormat() const
+{
+	switch (depth)
+	{
+	case 0:
+		return (DXGI_FORMAT)format;
+
+	case 16:
+		// A two-component, 32-bit typeless format that supports 16 bits for the red channel and 16 bits for the green channel.
+		return DXGI_FORMAT_R16_TYPELESS;
+
+	case 24:
+		// A two - component, 32 - bit typeless format that supports 24 bits for the red channel and 8 bits for the green channel.
+		return DXGI_FORMAT_R24G8_TYPELESS;
+
+	case 32:
+		// 	A two-component, 64-bit typeless format that supports 32 bits for the red channel, 8 bits for the green channel, and 24 bits are unused.
+		return DXGI_FORMAT_R32G8X24_TYPELESS;
+
+	default:
+		return (DXGI_FORMAT)format;
+	}
+}
+
+DXGI_FORMAT s3Texture::getDepthFormat() const
 {
 	switch (depth)
 	{
@@ -219,6 +279,35 @@ DXGI_FORMAT s3Texture::getFormat() const
 	}
 }
 
+DXGI_FORMAT s3Texture::getRTFormat() const
+{
+	return getSRVFormat();
+}
+
+DXGI_FORMAT s3Texture::getSRVFormat() const
+{
+	switch (depth)
+	{
+	case 0:
+		return (DXGI_FORMAT)format;
+
+	case 16:
+		// A two-component, 32-bit typeless format that supports 16 bits for the red channel and 16 bits for the green channel.
+		return DXGI_FORMAT_R16_FLOAT;
+
+	case 24:
+		// A two - component, 32 - bit typeless format that supports 24 bits for the red channel and 8 bits for the green channel.
+		return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+
+	case 32:
+		// 	A two-component, 64-bit typeless format that supports 32 bits for the red channel, 8 bits for the green channel, and 24 bits are unused.
+		return DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
+
+	default:
+		return (DXGI_FORMAT)format;
+	}
+}
+
 D3D11_SRV_DIMENSION s3Texture::getSRVDimension() const
 {
 	s3Renderer& renderer = s3Renderer::get();
@@ -235,13 +324,13 @@ D3D11_SRV_DIMENSION s3Texture::getSRVDimension() const
 		return D3D_SRV_DIMENSION_TEXTURE1DARRAY;
 
 	case S3_TEXTURE_DIMENSION_TEX2D:
-		if (renderer.isMSAAEnabled())
+		if (isMSAAEnabled())
 			return D3D_SRV_DIMENSION_TEXTURE2DMS;
 		else
 			return D3D_SRV_DIMENSION_TEXTURE2D;
 
 	case S3_TEXTURE_DIMENSION_TEX2DARRAY:
-		if (renderer.isMSAAEnabled())
+		if (isMSAAEnabled())
 			return D3D_SRV_DIMENSION_TEXTURE2DMSARRAY;
 		else
 			return D3D_SRV_DIMENSION_TEXTURE2DARRAY;
@@ -274,13 +363,13 @@ D3D11_DSV_DIMENSION s3Texture::getDepthDimension() const
 		return D3D11_DSV_DIMENSION_TEXTURE1DARRAY;
 
 	case S3_TEXTURE_DIMENSION_TEX2D:
-		if (renderer.isMSAAEnabled())
+		if (isMSAAEnabled())
 			return D3D11_DSV_DIMENSION_TEXTURE2DMS;
 		else
 			return D3D11_DSV_DIMENSION_TEXTURE2D;
 
 	case S3_TEXTURE_DIMENSION_TEX2DARRAY:
-		if (renderer.isMSAAEnabled())
+		if (isMSAAEnabled())
 			return D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
 		else
 			return D3D11_DSV_DIMENSION_TEXTURE2DARRAY;

@@ -14,8 +14,6 @@ s3RenderTexture::~s3RenderTexture()
 	{
 		S3_SAFE_RELEASE(renderTargetView);
 	}
-
-	created = false;
 }
 
 bool s3RenderTexture::create()
@@ -28,17 +26,21 @@ bool s3RenderTexture::create()
 	ID3D11Device* device = renderer.getDevice();
 
 	// ------------------------------------------RenderTargetView------------------------------------------
-	// texture2d ready
-	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
-	renderTargetViewDesc.Format             = getFormat();
-	renderTargetViewDesc.ViewDimension      = getRTVDimension();
-	renderTargetViewDesc.Texture2D.MipSlice = 0;
-
-	if (FAILED(device->CreateRenderTargetView(texture2d, 0, &renderTargetView)))
+	// depth texture could not create render target view
+	if (!isDepthTexture())
 	{
-		s3Log::error("s3RenderTexture::create() renderTargetView create failed\n");
-		created = false;
-		return false;
+		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+		ZeroMemory(&renderTargetViewDesc, sizeof(renderTargetViewDesc));
+		renderTargetViewDesc.Format = getRTFormat();
+		renderTargetViewDesc.ViewDimension = getRTVDimension();
+		renderTargetViewDesc.Texture2D.MipSlice = 0;
+
+		if (FAILED(device->CreateRenderTargetView(texture2d, &renderTargetViewDesc, &renderTargetView)))
+		{
+			s3Log::error("s3RenderTexture::create() renderTargetView create failed\n");
+			created = false;
+			return false;
+		}
 	}
 
 	created = true;
@@ -66,32 +68,33 @@ bool s3RenderTexture::check() const
 {
 	if (!s3Texture::check()) return false;
 
-	if (depth != 0 ||
-		depth != 16 ||
-		depth != 24 ||
-		depth != 32)
+	if (depth == 0 ||
+		depth == 16 ||
+		depth == 24 ||
+		depth == 32)
 	{
-		s3Log::warning("s3RenderTexture::check() failed with invalid parameter\n");
-		return false;
+		return true;
 	}
 
-	return true;
+	s3Log::warning("s3RenderTexture::check() failed with invalid parameter\n");
+	return false;
 }
 
 uint32 s3RenderTexture::getBindFlags() const
 {
-	uint32 bindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+	uint32 bindFlags = 0;
 
 	switch (depth)
 	{
 	case 0:
-		// No depthStencilView created
+		bindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 		break;
 
 	case 16:
 	case 24:
 	case 32:
-		bindFlags |= D3D11_BIND_DEPTH_STENCIL;
+	    // D3D11_BIND_RENDER_TARGET and DEPTH_STENCIL can't both be used together.
+		bindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 		break;
 	}
 
@@ -114,13 +117,13 @@ D3D11_RTV_DIMENSION s3RenderTexture::getRTVDimension() const
 		return D3D11_RTV_DIMENSION_TEXTURE1DARRAY;
 
 	case S3_TEXTURE_DIMENSION_TEX2D:
-		if (renderer.isMSAAEnabled())
+		if (isMSAAEnabled())
 			return D3D11_RTV_DIMENSION_TEXTURE2DMS;
 		else
 			return D3D11_RTV_DIMENSION_TEXTURE2D;
 
 	case S3_TEXTURE_DIMENSION_TEX2DARRAY:
-		if (renderer.isMSAAEnabled())
+		if (isMSAAEnabled())
 			return D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
 		else
 			return D3D11_RTV_DIMENSION_TEXTURE2DARRAY;

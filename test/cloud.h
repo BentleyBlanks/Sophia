@@ -36,17 +36,16 @@ public:
 int main()
 {
     s3App app;
+    renderer = &s3Renderer::get();
+
     if (!app.init(t3Vector2f(1600, 900), t3Vector2f(10, 10)))
         return 0;
     app.setClearColor(t3Vector4f(0.1f, 0.1f, 0.1f, 1.0f));
 
-    float32 width = 0, height = 0;
-
     s3Window* window = app.getWindow();
-    width  = window->getWindowSize().x;
-    height = window->getWindowSize().y;
+	float32 width  = window->getWindowSize().x;
+	float32 height = window->getWindowSize().y;
 
-    renderer      = &s3Renderer::get();
     device        = renderer->getDevice();
     deviceContext = renderer->getDeviceContext();
 
