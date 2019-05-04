@@ -16,20 +16,17 @@
     <Filter Include="Sophia\core\log">
       <UniqueIdentifier>{ff10e17b-a039-423e-b9ec-5f8432334e9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sophia\directx">
-      <UniqueIdentifier>{b0b8498f-9522-47b5-be40-619bc74713f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sophia\directx\light">
-      <UniqueIdentifier>{5baebb74-a132-4401-9140-76690dd9df64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sophia\directx\texture">
-      <UniqueIdentifier>{d5964478-9d58-4721-87e4-85471ff59773}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sophia\shaders">
       <UniqueIdentifier>{8ad97765-faa6-472a-a909-75a9a60f055d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sophia\directx\graphics">
-      <UniqueIdentifier>{2efb8415-2ca5-4cf8-968b-df86c52d1aa8}</UniqueIdentifier>
+    <Filter Include="Sophia\graphics">
+      <UniqueIdentifier>{25ce653e-048c-4cba-817e-d067581287aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\texture">
+      <UniqueIdentifier>{0afbc262-52e2-420e-9ca5-9298d5d1c943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sophia\light">
+      <UniqueIdentifier>{63a53a55-330a-412c-a562-e856dd79a947}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,23 +84,29 @@
     <ClCompile Include="..\Sophia\3d\s3Model.cpp">
       <Filter>Sophia\3d</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\light\s3PointLight.cpp">
-      <Filter>Sophia\directx\light</Filter>
+    <ClCompile Include="..\Sophia\light\s3PointLight.cpp">
+      <Filter>Sophia\light</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\s3Shader.cpp">
-      <Filter>Sophia\directx</Filter>
+    <ClCompile Include="..\Sophia\texture\s3RenderTexture.cpp">
+      <Filter>Sophia\texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\texture\s3Texture.cpp">
-      <Filter>Sophia\directx\texture</Filter>
+    <ClCompile Include="..\Sophia\texture\s3Texture.cpp">
+      <Filter>Sophia\texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\texture\s3RenderTexture.cpp">
-      <Filter>Sophia\directx\texture</Filter>
+    <ClCompile Include="..\Sophia\texture\s3Texture2d.cpp">
+      <Filter>Sophia\texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\texture\s3Texture2d.cpp">
-      <Filter>Sophia\directx\texture</Filter>
+    <ClCompile Include="..\Sophia\grpahics\s3Graphics.cpp">
+      <Filter>Sophia\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\directx\grpahics\s3Renderer.cpp">
-      <Filter>Sophia\directx\graphics</Filter>
+    <ClCompile Include="..\Sophia\grpahics\s3Material.cpp">
+      <Filter>Sophia\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\grpahics\s3Renderer.cpp">
+      <Filter>Sophia\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sophia\grpahics\s3Shader.cpp">
+      <Filter>Sophia\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,29 +164,35 @@
     <ClInclude Include="..\Sophia\3d\s3Model.h">
       <Filter>Sophia\3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\directx\light\s3PointLight.h">
-      <Filter>Sophia\directx\light</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\directx\s3Shader.h">
-      <Filter>Sophia\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\directx\texture\s3Texture.h">
-      <Filter>Sophia\directx\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\directx\texture\s3RenderTexture.h">
-      <Filter>Sophia\directx\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\directx\texture\s3Texture2d.h">
-      <Filter>Sophia\directx\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sophia\directx\texture\s3TextureMode.h">
-      <Filter>Sophia\directx\texture</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sophia\Sophia.h">
       <Filter>Sophia</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\directx\grpahics\s3Renderer.h">
-      <Filter>Sophia\directx\graphics</Filter>
+    <ClInclude Include="..\Sophia\light\s3PointLight.h">
+      <Filter>Sophia\light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\texture\s3RenderTexture.h">
+      <Filter>Sophia\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\texture\s3Texture.h">
+      <Filter>Sophia\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\texture\s3Texture2d.h">
+      <Filter>Sophia\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\texture\s3TextureMode.h">
+      <Filter>Sophia\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\grpahics\s3Graphics.h">
+      <Filter>Sophia\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\grpahics\s3Material.h">
+      <Filter>Sophia\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\grpahics\s3Renderer.h">
+      <Filter>Sophia\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sophia\grpahics\s3Shader.h">
+      <Filter>Sophia\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 #include <core/log/s3Log.h>
 #include <core/s3Event.h>
 #include <core/s3Gui.h>
-#include <directx/grpahics/s3Renderer.h>
+#include <grpahics/s3Renderer.h>
 #include <imgui.h>
 
 s3Callbacks s3CallbackManager::callBack;

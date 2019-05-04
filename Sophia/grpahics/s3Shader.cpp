@@ -1,5 +1,5 @@
-﻿#include <directx/s3Shader.h>
-#include <directx/grpahics/s3Renderer.h>
+﻿#include <grpahics/s3Shader.h>
+#include <grpahics/s3Renderer.h>
 #include <app/s3Utils.h>
 #include <core/log/s3Log.h>
 #include <core/s3Settings.h>
@@ -50,7 +50,7 @@ bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFileP
     {
         if (errorBlob)
         {
-            s3Log::error("Vertex Shader Compile Failed: %s", (char*)errorBlob->GetBufferPointer());
+            s3Log::error("s3Shader::load() Vertex Shader Compile Failed: %s", (char*)errorBlob->GetBufferPointer());
             S3_SAFE_RELEASE(vertexShaderBlob);
             S3_SAFE_RELEASE(errorBlob);
             return false;
@@ -64,7 +64,7 @@ bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFileP
 
     if (FAILED(hr))
     {
-        s3Log::error("Vertex Shader Create Failed\n");
+        s3Log::error("s3Shader::load() Vertex Shader Create Failed\n");
         return false;
     }
 
@@ -78,7 +78,7 @@ bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFileP
 
     if (FAILED(hr))
     {
-        s3Log::error("Input Layout Create Failed\n");
+        s3Log::error("s3Shader::load() Input Layout Create Failed\n");
         return false;
     }
 
@@ -99,7 +99,7 @@ bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFileP
     {
         if (errorBlob)
         {
-            s3Log::error("Pixel Shader Compile Failed: %s", (char*)errorBlob->GetBufferPointer());
+            s3Log::error("s3Shader::load() Pixel Shader Compile Failed: %s", (char*)errorBlob->GetBufferPointer());
             S3_SAFE_RELEASE(pixelShaderBlob);
             S3_SAFE_RELEASE(errorBlob);
             return false;
@@ -113,7 +113,7 @@ bool s3Shader::load(const std::wstring& vsFilePath, const std::wstring & psFileP
 
     if (FAILED(hr))
     {
-        s3Log::error("Pixel Shader Create Failed\n");
+        s3Log::error("s3Shader::load() Pixel Shader Create Failed\n");
         return false;
     }
 

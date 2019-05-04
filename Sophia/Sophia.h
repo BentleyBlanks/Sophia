@@ -12,7 +12,7 @@
 #include <3d/s3Model.h>
 #include <3d/s3Mesh.h>
 
-#include <directx/grpahics/s3Renderer.h>
-#include <directx/texture/s3RenderTexture.h>
-#include <directx/s3Shader.h>
-#include <directx/light/s3PointLight.h>
+#include <grpahics/s3Renderer.h>
+#include <texture/s3RenderTexture.h>
+#include <s3Shader.h>
+#include <light/s3PointLight.h>

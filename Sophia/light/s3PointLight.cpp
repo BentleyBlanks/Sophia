@@ -1,4 +1,4 @@
-#include <directx/light/s3PointLight.h>
+#include <light/s3PointLight.h>
 
 s3PointLight::s3PointLight(t3Vector3f pos, t3Vector3f color)
     :position(pos), color(color)

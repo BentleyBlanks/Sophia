@@ -1,6 +1,6 @@
 #pragma once
 #include <core/s3Settings.h>
-#include <directx/texture/s3TextureMode.h>
+#include <texture/s3TextureMode.h>
 
 class s3Texture
 {
@@ -25,6 +25,20 @@ public:
 
 	// Manually re-generate mipmap levels of a render texture.
 	bool generateMips();
+
+	ID3D11Texture2D* getTexture2D() const;
+	ID3D11ShaderResourceView* getShaderResourceView() const;
+	ID3D11DepthStencilView* getDepthStencilView() const;
+
+	DXGI_FORMAT getTexture2dFormat() const;
+	DXGI_FORMAT getDepthFormat() const;
+	DXGI_FORMAT getRTFormat() const;
+	DXGI_FORMAT getSRVFormat() const;
+
+	D3D11_SRV_DIMENSION getSRVDimension() const;
+	D3D11_DSV_DIMENSION getDepthDimension() const;
+
+	virtual uint32 getBindFlags() const;
 
 	// Texture coordinate wrapping mode.
 	s3TextureWrapMode wrapMode;
@@ -52,20 +66,6 @@ public:
 
 	// name of the texture
 	std::string name;
-
-	ID3D11Texture2D* getTexture2D() const;
-	ID3D11ShaderResourceView* getShaderResourceView() const;
-	ID3D11DepthStencilView* getDepthStencilView() const;
-	
-	DXGI_FORMAT getTexture2dFormat() const;
-	DXGI_FORMAT getDepthFormat() const;
-	DXGI_FORMAT getRTFormat() const;
-	DXGI_FORMAT getSRVFormat() const;
-
-	D3D11_SRV_DIMENSION getSRVDimension() const;
-	D3D11_DSV_DIMENSION getDepthDimension() const;
-
-	virtual uint32 getBindFlags() const;
 
 	friend class s3Renderer;
 

@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{63CEDA35-B38E-49E4-B9DF-B3F04FEE8258}</ProjectGuid>
     <RootNamespace>sophia</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>Sophia</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -113,12 +113,14 @@
     <ClCompile Include="..\Sophia\core\s3Event.cpp" />
     <ClCompile Include="..\Sophia\core\s3MathHepler.cpp" />
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
-    <ClCompile Include="..\Sophia\directx\grpahics\s3Renderer.cpp" />
-    <ClCompile Include="..\Sophia\directx\light\s3PointLight.cpp" />
-    <ClCompile Include="..\Sophia\directx\s3Shader.cpp" />
-    <ClCompile Include="..\Sophia\directx\texture\s3RenderTexture.cpp" />
-    <ClCompile Include="..\Sophia\directx\texture\s3Texture.cpp" />
-    <ClCompile Include="..\Sophia\directx\texture\s3Texture2d.cpp" />
+    <ClCompile Include="..\Sophia\grpahics\s3Graphics.cpp" />
+    <ClCompile Include="..\Sophia\grpahics\s3Material.cpp" />
+    <ClCompile Include="..\Sophia\grpahics\s3Renderer.cpp" />
+    <ClCompile Include="..\Sophia\grpahics\s3Shader.cpp" />
+    <ClCompile Include="..\Sophia\light\s3PointLight.cpp" />
+    <ClCompile Include="..\Sophia\texture\s3RenderTexture.cpp" />
+    <ClCompile Include="..\Sophia\texture\s3Texture.cpp" />
+    <ClCompile Include="..\Sophia\texture\s3Texture2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sophia\3d\s3Camera.h" />
@@ -139,14 +141,16 @@
     <ClInclude Include="..\Sophia\core\s3Event.h" />
     <ClInclude Include="..\Sophia\core\s3MathHepler.h" />
     <ClInclude Include="..\sophia\core\s3Settings.h" />
-    <ClInclude Include="..\Sophia\directx\grpahics\s3Renderer.h" />
-    <ClInclude Include="..\Sophia\directx\light\s3PointLight.h" />
-    <ClInclude Include="..\Sophia\directx\s3Shader.h" />
-    <ClInclude Include="..\Sophia\directx\texture\s3RenderTexture.h" />
-    <ClInclude Include="..\Sophia\directx\texture\s3Texture.h" />
-    <ClInclude Include="..\Sophia\directx\texture\s3Texture2d.h" />
-    <ClInclude Include="..\Sophia\directx\texture\s3TextureMode.h" />
+    <ClInclude Include="..\Sophia\grpahics\s3Graphics.h" />
+    <ClInclude Include="..\Sophia\grpahics\s3Material.h" />
+    <ClInclude Include="..\Sophia\grpahics\s3Renderer.h" />
+    <ClInclude Include="..\Sophia\grpahics\s3Shader.h" />
+    <ClInclude Include="..\Sophia\light\s3PointLight.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
+    <ClInclude Include="..\Sophia\texture\s3RenderTexture.h" />
+    <ClInclude Include="..\Sophia\texture\s3Texture.h" />
+    <ClInclude Include="..\Sophia\texture\s3Texture2d.h" />
+    <ClInclude Include="..\Sophia\texture\s3TextureMode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

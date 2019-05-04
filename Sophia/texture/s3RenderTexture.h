@@ -1,5 +1,5 @@
 #pragma once
-#include <directx/texture/s3Texture.h>
+#include <texture/s3Texture.h>
 #include <t3Vector4.h>
 
 class s3RenderTexture : public s3Texture

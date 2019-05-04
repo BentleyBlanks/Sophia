@@ -1,5 +1,5 @@
-#include <directx/grpahics/s3Renderer.h>
-#include <directx/texture/s3RenderTexture.h>
+#include <grpahics/s3Renderer.h>
+#include <texture/s3RenderTexture.h>
 #include <t3Vector4.h>
 #include <core/log/s3Log.h>
 
@@ -251,23 +251,21 @@ void s3Renderer::resize(int32 width, int32 height)
 
     deviceContext->OMSetRenderTargets(0, 0, 0);
 
-    HRESULT hr;
 	DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
     // Resize the swap chain and recreate the render target view.
-    hr = swapChain->ResizeBuffers(1, width, height, format, 0);
-    if(FAILED(hr))
+    //hr = swapChain->ResizeBuffers(1, width, height, format, 0);
+    if(FAILED(swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)))
     {
-        s3Log::error("Resize Buffer Failed\n");
+        s3Log::error("s3Renderer::resize() Resize Buffer Failed\n");
         return;
     }
 
     // Get buffer and create a render-target-view.
     ID3D11Texture2D* backBuffer;
-    hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**) &backBuffer);
-    if(FAILED(hr))
+    if(FAILED(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)& backBuffer)))
     {
-        s3Log::error("Resize Get Buffer Failed\n");
+        s3Log::error("s3Renderer::resize() Get Buffer Failed\n");
         return;
     }
 

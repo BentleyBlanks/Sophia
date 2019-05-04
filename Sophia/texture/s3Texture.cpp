@@ -1,5 +1,5 @@
-#include <directx/texture/s3Texture.h>
-#include <directx/grpahics/s3Renderer.h>
+#include <texture/s3Texture.h>
+#include <grpahics/s3Renderer.h>
 #include <core/log/s3Log.h>
 
 s3Texture::s3Texture() :
