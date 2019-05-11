@@ -4,3 +4,6 @@
 [submodule "Sophia/thirdparty/t3DataStructures"]
 	path = Sophia/thirdparty/t3DataStructures
 	url = https://github.com/BentleyBlanks/t3DataStructures.git
+[submodule "Sophia/thirdparty/fakeUnityShader"]
+	path = Sophia/thirdparty/fakeUnityShader
+	url = https://github.com/lonelyWaiting/fake_unity_shader.git
