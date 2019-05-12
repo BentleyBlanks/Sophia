@@ -1,5 +1,5 @@
 ﻿#include <3d/s3Mesh.h>
-#include <grpahics/s3Renderer.h>
+#include <graphics/s3Renderer.h>
 #include <core/s3MathHepler.h>
 #include <core/log/s3Log.h>
 #include <t3Math.h>

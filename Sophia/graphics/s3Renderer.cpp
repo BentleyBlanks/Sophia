@@ -1,4 +1,4 @@
-#include <grpahics/s3Renderer.h>
+#include <graphics/s3Renderer.h>
 #include <texture/s3RenderTexture.h>
 #include <t3Vector4.h>
 #include <core/log/s3Log.h>

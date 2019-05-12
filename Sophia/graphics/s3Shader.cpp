@@ -1,5 +1,5 @@
-﻿#include <grpahics/s3Shader.h>
-#include <grpahics/s3Renderer.h>
+﻿#include <graphics/s3Shader.h>
+#include <graphics/s3Renderer.h>
 #include <app/s3Utils.h>
 #include <core/log/s3Log.h>
 #include <core/s3Settings.h>

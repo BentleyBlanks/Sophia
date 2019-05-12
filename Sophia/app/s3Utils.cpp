@@ -1,5 +1,5 @@
 ﻿#include <app/s3Utils.h>
-#include <grpahics/s3Renderer.h>
+#include <graphics/s3Renderer.h>
 #include <core/log/s3Log.h>
 
 #include <iostream>  

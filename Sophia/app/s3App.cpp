@@ -3,7 +3,7 @@
 #include <app/s3CallbackManager.h>
 #include <core/s3Settings.h>
 #include <core/s3Event.h>
-#include <grpahics/s3Renderer.h>
+#include <graphics/s3Renderer.h>
 
 #include <imgui.h>
 
