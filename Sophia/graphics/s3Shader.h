@@ -25,7 +25,7 @@ public:
 	bool SetInt(std::string name, int32 value);
 	bool SetFloat(std::string name, float32 value);
 	bool SetMatrix(std::string name, t3Matrix4x4 value);
-	bool SetVector(std::string name, t3Vector3f value);
+	bool SetVector(std::string name, t3Vector4f value);
 
 	void print() const;
 
