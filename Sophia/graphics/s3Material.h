@@ -9,7 +9,7 @@ class s3Shader;
 class s3Material
 {
 public:
-	s3Material(std::string filePath);
+	s3Material(std::string shaderName);
 	~s3Material();
 
 	float32 GetFloat(std::string name) const;

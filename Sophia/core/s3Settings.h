@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdint.h>
 #include <stdlib.h>
+#include <map>
 // min&max function
 #include <algorithm>
 #include <assert.h>

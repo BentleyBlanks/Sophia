@@ -1,27 +1,37 @@
-﻿#pragma once
-
+#pragma once
 #include <core/s3Settings.h>
+#include <t3Vector3.h>
+#include <t3Vector4.h>
+#include <t3Matrix4x4.h>
 
+// Initilalization would be done by Material
 class s3Shader
 {
 public:
-    s3Shader();
-    ~s3Shader();
+	s3Shader();
+	~s3Shader();
 
-    bool load(const std::wstring& vsfilePath, const std::wstring& psfilePath);
+	bool load(std::string fileName);
 
-    ID3D11VertexShader* getVertexShader();
-    ID3D11PixelShader* getPixelShader();
+	float32 GetFloat(std::string name) const;
+	int32 GetInt(std::string name) const;
+	t3Matrix4x4 GetMatrix(std::string name) const;
+	t3Vector4f GetVector(std::string name) const;
+	s3Shader* GetShader() const;
 
-    ID3DBlob* getPixelShaderBlob();
-    ID3DBlob* getVertexShaderBlob();
+	bool IsKeywordEnabled(std::string name) const;
+	bool IsLoaded() const;
 
-    ID3D11InputLayout* getInputLayout();
+	bool SetKeyword(std::string name, bool enableKeyword);
+	bool SetInt(std::string name, int32 value);
+	bool SetFloat(std::string name, float32 value);
+	bool SetMatrix(std::string name, t3Matrix4x4 value);
+	bool SetVector(std::string name, t3Vector3f value);
+
+	void print() const;
 
 private:
-    ID3D11VertexShader* vertexShader;
-    ID3D11PixelShader* pixelShader;
+	bool isLoaded;
 
-    ID3DBlob* pixelShaderBlob, *vertexShaderBlob;
-    ID3D11InputLayout* inputLayout;
+	std::string shaderName;
 };

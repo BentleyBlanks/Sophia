@@ -1,19 +1,7 @@
 #include <graphics/s3Material.h>
-#include <graphics/s3Renderer.h>
-#include <fake_unity_shader/shader.h>
-#include <fake_unity_shader/shader_parser.h>
-#include <core/log/s3Log.h>
 
-static bool fakeUnityShaderInitialized = false;
-
-s3Material::s3Material(std::string filePath)
+s3Material::s3Material(std::string shaderName)
 {
-	if (!fakeUnityShaderInitialized)
-		shader_init(s3Renderer::get().getDevice());
-
-	if (!shader_load(filePath.c_str()))
-		s3Log::warning("s3Material::s3Material() create shader failed.");
-
 
 }
 
