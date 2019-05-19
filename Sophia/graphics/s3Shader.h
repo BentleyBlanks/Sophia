@@ -17,7 +17,6 @@ public:
 	int32 GetInt(std::string name) const;
 	t3Matrix4x4 GetMatrix(std::string name) const;
 	t3Vector4f GetVector(std::string name) const;
-	s3Shader* GetShader() const;
 
 	bool IsKeywordEnabled(std::string name) const;
 	bool IsLoaded() const;
@@ -32,6 +31,5 @@ public:
 
 private:
 	bool isLoaded;
-
-	std::string shaderName;
+	class s3ShaderParser* shaderParser;
 };
