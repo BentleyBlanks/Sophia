@@ -56,7 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\fakeUnityShader;..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
@@ -72,7 +72,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\fakeUnityShader;..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\test\cloud.h" />
+    <ClInclude Include="..\test\shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="sophia.vcxproj">

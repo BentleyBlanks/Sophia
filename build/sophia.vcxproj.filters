@@ -96,16 +96,16 @@
     <ClCompile Include="..\Sophia\texture\s3Texture2d.cpp">
       <Filter>Sophia\texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\grpahics\s3Graphics.cpp">
+    <ClCompile Include="..\Sophia\graphics\s3Graphics.cpp">
       <Filter>Sophia\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\grpahics\s3Material.cpp">
+    <ClCompile Include="..\Sophia\graphics\s3Material.cpp">
       <Filter>Sophia\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\grpahics\s3Renderer.cpp">
+    <ClCompile Include="..\Sophia\graphics\s3Renderer.cpp">
       <Filter>Sophia\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sophia\grpahics\s3Shader.cpp">
+    <ClCompile Include="..\Sophia\graphics\s3Shader.cpp">
       <Filter>Sophia\graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,16 +182,16 @@
     <ClInclude Include="..\Sophia\texture\s3TextureMode.h">
       <Filter>Sophia\texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\grpahics\s3Graphics.h">
+    <ClInclude Include="..\Sophia\graphics\s3Graphics.h">
       <Filter>Sophia\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\grpahics\s3Material.h">
+    <ClInclude Include="..\Sophia\graphics\s3Material.h">
       <Filter>Sophia\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\grpahics\s3Renderer.h">
+    <ClInclude Include="..\Sophia\graphics\s3Renderer.h">
       <Filter>Sophia\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sophia\grpahics\s3Shader.h">
+    <ClInclude Include="..\Sophia\graphics\s3Shader.h">
       <Filter>Sophia\graphics</Filter>
     </ClInclude>
   </ItemGroup>

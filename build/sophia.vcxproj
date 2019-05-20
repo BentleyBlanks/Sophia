@@ -59,7 +59,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\fakeUnityShader;..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -68,7 +68,7 @@
       <AdditionalLibraryDirectories>..\Sophia\thirdparty\t3DataStructures\lib\x64;..\Sophia\thirdparty\t3Math\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>imguid.x64.lib;lodepngd.x64.lib;t3DataStructuresd.x64.lib;t3Mathd.x64.lib;tinyexrd.x64.lib;tinyobjloaderd.x64.lib;d3dcompiler.lib;d3d11.lib</AdditionalDependencies>
+      <AdditionalDependencies>imguid.x64.lib;lodepngd.x64.lib;t3DataStructuresd.x64.lib;t3Mathd.x64.lib;tinyexrd.x64.lib;tinyobjloaderd.x64.lib;fake_unity_shaderd.x64.lib;d3dcompiler.lib;d3d11.lib;dxguid.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\x64\Debug</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -79,7 +79,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Sophia\thirdparty\fakeUnityShader;..\Sophia\thirdparty\tinyobjloader;..\Sophia\thirdparty\stbImage;..\Sophia\thirdparty\tinyexr;..\Sophia\thirdparty\imgui\;..\Sophia\thirdparty\lodepng\;..\Sophia\thirdparty\t3Math\t3Math\;..\Sophia\thirdparty\t3DataStructures\t3DataStructures\;..\Sophia</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -90,7 +90,7 @@
       <AdditionalLibraryDirectories>..\Sophia\thirdparty\t3DataStructures\lib\x64;..\Sophia\thirdparty\t3Math\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>imgui.x64.lib;lodepng.x64.lib;t3DataStructures.x64.lib;t3Math.x64.lib;tinyexr.x64.lib;tinyobjloader.x64.lib;d3dcompiler.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imgui.x64.lib;lodepng.x64.lib;t3DataStructures.x64.lib;t3Math.x64.lib;tinyexr.x64.lib;tinyobjloader.x64.lib;fake_unity_shader.x64.lib;d3dcompiler.lib;d3d11.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\x64\Release</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -113,10 +113,10 @@
     <ClCompile Include="..\Sophia\core\s3Event.cpp" />
     <ClCompile Include="..\Sophia\core\s3MathHepler.cpp" />
     <ClCompile Include="..\sophia\core\s3Settings.cpp" />
-    <ClCompile Include="..\Sophia\grpahics\s3Graphics.cpp" />
-    <ClCompile Include="..\Sophia\grpahics\s3Material.cpp" />
-    <ClCompile Include="..\Sophia\grpahics\s3Renderer.cpp" />
-    <ClCompile Include="..\Sophia\grpahics\s3Shader.cpp" />
+    <ClCompile Include="..\Sophia\graphics\s3Graphics.cpp" />
+    <ClCompile Include="..\Sophia\graphics\s3Material.cpp" />
+    <ClCompile Include="..\Sophia\graphics\s3Renderer.cpp" />
+    <ClCompile Include="..\Sophia\graphics\s3Shader.cpp" />
     <ClCompile Include="..\Sophia\light\s3PointLight.cpp" />
     <ClCompile Include="..\Sophia\texture\s3RenderTexture.cpp" />
     <ClCompile Include="..\Sophia\texture\s3Texture.cpp" />
@@ -141,10 +141,10 @@
     <ClInclude Include="..\Sophia\core\s3Event.h" />
     <ClInclude Include="..\Sophia\core\s3MathHepler.h" />
     <ClInclude Include="..\sophia\core\s3Settings.h" />
-    <ClInclude Include="..\Sophia\grpahics\s3Graphics.h" />
-    <ClInclude Include="..\Sophia\grpahics\s3Material.h" />
-    <ClInclude Include="..\Sophia\grpahics\s3Renderer.h" />
-    <ClInclude Include="..\Sophia\grpahics\s3Shader.h" />
+    <ClInclude Include="..\Sophia\graphics\s3Graphics.h" />
+    <ClInclude Include="..\Sophia\graphics\s3Material.h" />
+    <ClInclude Include="..\Sophia\graphics\s3Renderer.h" />
+    <ClInclude Include="..\Sophia\graphics\s3Shader.h" />
     <ClInclude Include="..\Sophia\light\s3PointLight.h" />
     <ClInclude Include="..\Sophia\Sophia.h" />
     <ClInclude Include="..\Sophia\texture\s3RenderTexture.h" />

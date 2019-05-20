@@ -25,6 +25,8 @@ Shader "Hidden/Skybox"
         float4x4     cameraToWorld;
         float        tanHalfFovX;
         float        tanHalfFovY;
+        int          test1;
+        float4       test2;
         Texture2D    envMap;
         sampler      sampler_envMap;
 
