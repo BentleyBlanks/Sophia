@@ -327,37 +327,37 @@ void s3Renderer::present(int32 syncInterval, int32 presentFlag)
         swapChain->Present(syncInterval, presentFlag);
 }
 
-ID3D11Device*& s3Renderer::getDevice()
+ID3D11Device* s3Renderer::getDevice() const
 {
     return device;
 }
 
-ID3D11DeviceContext*& s3Renderer::getDeviceContext()
+ID3D11DeviceContext* s3Renderer::getDeviceContext() const
 {
     return deviceContext;
 }
 
-IDXGISwapChain *& s3Renderer::getSwapChain()
+IDXGISwapChain* s3Renderer::getSwapChain() const
 {
     return swapChain;
 }
 
-ID3D11DepthStencilState *& s3Renderer::getDepthStencilState()
+ID3D11DepthStencilState* s3Renderer::getDepthStencilState() const
 {
     return depthStencilState;
 }
 
-ID3D11RasterizerState *& s3Renderer::getRasterizerState()
+ID3D11RasterizerState* s3Renderer::getRasterizerState() const
 {
     return rasterizerState;
 }
 
-s3RenderTexture*& s3Renderer::getDepthTexture()
+s3RenderTexture* s3Renderer::getDepthTexture() const
 {
 	return depthTexture;
 }
 
-s3RenderTexture*& s3Renderer::getColorTexture()
+s3RenderTexture* s3Renderer::getColorTexture() const
 {
 	return colorTexture;
 }

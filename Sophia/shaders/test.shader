@@ -22,13 +22,23 @@ Shader "Hidden/Skybox"
             float4 vertex   : SV_POSITION;
         };
 
-        float4x4     cameraToWorld;
-        float        tanHalfFovX;
-        float        tanHalfFovY;
-        int          test1;
-        float4       test2;
-        Texture2D    envMap;
-        sampler      sampler_envMap;
+        // test variables
+        bool      boolTest;
+        int       intTest;
+        int2      int2Test;
+        int3      int3Test;
+        int4      int4Test;
+        float     floatTest;
+        float2    float2Test;
+        float3    float3Test;
+        float4    float4Test;
+
+        // skybox variables
+        float4x4  cameraToWorld;
+        Texture2D envMap;
+        sampler   sampler_envMap;
+        float     tanHalfFovX;
+        float     tanHalfFovY;
 
         vs_output vs_main(uint id : SV_VERTEXID)
         {

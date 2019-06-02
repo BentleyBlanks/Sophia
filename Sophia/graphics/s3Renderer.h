@@ -16,14 +16,14 @@ public:
     void present(int32 syncInterval = 0, int32 presentFlag = 0);
 
     // DirectX
-    ID3D11Device*& getDevice();
-    ID3D11DeviceContext*& getDeviceContext();
-    IDXGISwapChain*& getSwapChain();
-    ID3D11DepthStencilState*& getDepthStencilState();
-    ID3D11RasterizerState*& getRasterizerState();
+    ID3D11Device* getDevice() const;
+    ID3D11DeviceContext* getDeviceContext() const;
+    IDXGISwapChain* getSwapChain() const;
+    ID3D11DepthStencilState* getDepthStencilState() const;
+    ID3D11RasterizerState* getRasterizerState() const;
 
-	s3RenderTexture*& getDepthTexture();
-	s3RenderTexture*& getColorTexture();
+	s3RenderTexture* getDepthTexture() const;
+	s3RenderTexture* getColorTexture() const;
 
 	void setMSAACount(uint32 count);
 	uint32 getMSAACount() const;

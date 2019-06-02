@@ -1,5 +1,6 @@
 #pragma once
 
+// Texture used for texture file io
 class s3Texture2d
 {
 public:

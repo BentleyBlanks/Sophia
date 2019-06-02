@@ -29,11 +29,15 @@ public:
 	ID3D11Texture2D* getTexture2D() const;
 	ID3D11ShaderResourceView* getShaderResourceView() const;
 	ID3D11DepthStencilView* getDepthStencilView() const;
+	ID3D11SamplerState* getSamplerState() const;
 
 	DXGI_FORMAT getTexture2dFormat() const;
 	DXGI_FORMAT getDepthFormat() const;
 	DXGI_FORMAT getRTFormat() const;
 	DXGI_FORMAT getSRVFormat() const;
+
+	D3D11_TEXTURE_ADDRESS_MODE getWrapMode() const;
+	D3D11_FILTER getFilterMode() const;
 
 	D3D11_SRV_DIMENSION getSRVDimension() const;
 	D3D11_DSV_DIMENSION getDepthDimension() const;
@@ -51,6 +55,9 @@ public:
 
 	// texture's srv / rt format of a texture object.(depth format determined by the depth)
 	s3TextureFormat format;
+
+	// Anisotropic filtering level of the texture.(default is 1)
+	int32 anisoLevel;
 
 	// size of the texture
 	int32 width, height;
@@ -80,4 +87,5 @@ protected:
 	ID3D11Texture2D* texture2d;
 	ID3D11ShaderResourceView* shaderResourceView;
 	ID3D11DepthStencilView* depthStencilView;
+	ID3D11SamplerState* samplerState;
 };

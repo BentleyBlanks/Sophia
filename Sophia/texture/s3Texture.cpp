@@ -12,6 +12,7 @@ s3Texture::s3Texture() :
 	height(0),
 	mipLevels(1),
 	msaaCount(4),
+	anisoLevel(1),
 	name(""),
 	texture2d(nullptr),
 	shaderResourceView(nullptr),
@@ -42,7 +43,7 @@ bool s3Texture::create()
 	bool msaaEnabled;
 	checkMSAA(&msaaEnabled, &msaaQuality);
 
-	// ------------------------------------------Texture2D------------------------------------------
+	// ========================================== Texture2D ==========================================
 	// texture2d already been initialized by other module
 	if (!texture2d)
 	{
@@ -77,7 +78,7 @@ bool s3Texture::create()
 		}
 	}
 
-	// ------------------------------------------ShaderResourceView------------------------------------------
+	// ========================================== ShaderResourceView ==========================================
 	// Creating a shaderResourceView of the texture to be used when binding it on a shader to sample
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	ZeroMemory(&srvDesc, sizeof(srvDesc));
@@ -93,7 +94,7 @@ bool s3Texture::create()
 		return false;
 	}
 
-	// ------------------------------------------DepthStencilView------------------------------------------
+	// ========================================== DepthStencilView ==========================================
 	// Creating a depthStencilView of the texture to be used as a depth texture
 	if (isDepthTexture())
 	{
@@ -110,6 +111,30 @@ bool s3Texture::create()
 			created = false;
 			return false;
 		}
+	}
+
+	// ========================================== SamplerState ==========================================
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+	samplerDesc.Filter         = getFilterMode();
+	samplerDesc.AddressU       = getWrapMode();
+	samplerDesc.AddressV       = getWrapMode();
+	samplerDesc.AddressW       = getWrapMode();
+	samplerDesc.MipLODBias     = 0.0f;
+	samplerDesc.MaxAnisotropy  = anisoLevel;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.BorderColor[0] = 1.0f;
+	samplerDesc.BorderColor[1] = 1.0f;
+	samplerDesc.BorderColor[2] = 1.0f;
+	samplerDesc.BorderColor[3] = 1.0f;
+	samplerDesc.MinLOD         = -FLT_MAX;
+	samplerDesc.MaxLOD         = FLT_MAX;
+
+	if (FAILED(device->CreateSamplerState(&samplerDesc, &samplerState)))
+	{
+		s3Log::error("s3Texture::create() create SamplerState failed\n");
+		created = false;
+		return false;
 	}
 
 	created = true;
@@ -174,6 +199,11 @@ ID3D11ShaderResourceView* s3Texture::getShaderResourceView() const
 ID3D11DepthStencilView * s3Texture::getDepthStencilView() const
 {
 	return depthStencilView;
+}
+
+ID3D11SamplerState* s3Texture::getSamplerState() const
+{
+	return samplerState;
 }
 
 bool s3Texture::check() const
@@ -305,6 +335,47 @@ DXGI_FORMAT s3Texture::getSRVFormat() const
 
 	default:
 		return (DXGI_FORMAT)format;
+	}
+}
+
+D3D11_TEXTURE_ADDRESS_MODE s3Texture::getWrapMode() const
+{
+	// D3D11_TEXTURE_ADDRESS_BORDER not supported
+	switch (wrapMode)
+	{
+	case S3_TEXTURE_WRAPMODE_REPEAT:
+		return D3D11_TEXTURE_ADDRESS_WRAP;
+
+	case S3_TEXTURE_WRAPMODE_CLAMP:
+		return D3D11_TEXTURE_ADDRESS_CLAMP;
+
+	case S3_TEXTURE_WRAPMODE_MIRROR:
+		return D3D11_TEXTURE_ADDRESS_MIRROR;
+
+	case S3_TEXTURE_WRAPMODE_MIRRORONCE:
+		return D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+
+	default:
+		s3Log::warning("s3Texture::getWrapMode() wrapMode %d not supported\n", (int32) wrapMode);
+		return D3D11_TEXTURE_ADDRESS_CLAMP;
+	}
+}
+
+D3D11_FILTER s3Texture::getFilterMode() const
+{
+	switch (filterMode)
+	{
+	case S3_TEXTURE_FILTERMODE_POINT:
+		return D3D11_FILTER_MIN_MAG_MIP_POINT;
+
+	case S3_TEXTURE_FILTERMODE_LINEAR:
+		return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
+	case S3_TEXTURE_FILTERMODE_ANISOTROPIC:
+		return D3D11_FILTER_ANISOTROPIC;
+
+	default:
+		return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	}
 }
 
