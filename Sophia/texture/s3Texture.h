@@ -21,7 +21,10 @@ public:
 	bool isMSAAEnabled() const;
 
 	// is texture used as a depth texture
-	bool isDepthTexture() const;
+	virtual bool isDepthTexture() const;
+
+	// is texture used as a render texture
+	virtual bool isRenderTarget() const;
 
 	// Manually re-generate mipmap levels of a render texture.
 	bool generateMips();

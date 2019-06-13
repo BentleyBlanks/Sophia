@@ -55,7 +55,7 @@ public:
 	variable_type type;
 };
 
-bool s3Shader::GetValue(std::string name, int32 type, s3ShaderValue& value) const
+bool s3Shader::getValue(std::string name, int32 type, s3ShaderValue& value) const
 {
 	value.type = (variable_type)type;
 
@@ -124,7 +124,7 @@ bool s3Shader::GetValue(std::string name, int32 type, s3ShaderValue& value) cons
 	return false;
 }
 
-bool s3Shader::SetValue(std::string name, s3ShaderValue& value)
+bool s3Shader::setValue(std::string name, s3ShaderValue& value)
 {
 	auto existed = false;
 	auto& passList = *shaderParser->passList;
@@ -221,7 +221,7 @@ bool s3Shader::SetValue(std::string name, s3ShaderValue& value)
 
 // =============================================== s3Shader ===============================================
 s3Shader::s3Shader():
-	isLoaded(false),
+	bIsLoaded(false),
 	shaderParser(nullptr)
 {}
 
@@ -248,7 +248,7 @@ bool s3Shader::load(std::string fileName)
 	{
 		S3_SAFE_DELETE(shaderParser);
 
-		auto& shader = g_shaderMap[shaderParser->shaderName];
+		auto& shader = g_shaderMap[name];
 
 		// s3ShaderParser initialize
 		shaderParser = new s3ShaderParser();
@@ -265,12 +265,12 @@ bool s3Shader::load(std::string fileName)
 		{
 			S3_SAFE_DELETE(shaderParser);
 			s3Log::warning("s3Shader::load() create shader %s failed, passList count error\n");
-			isLoaded = false;
+			bIsLoaded = false;
 			return false;
 		}
 
 		auto passList = shaderParser->passList;
-		shaderParser->passNum = passList->size();
+		shaderParser->passNum = (int32) passList->size();
 		for (int32 j = 0; j < passList->size(); j++)
 		{
 			auto& permutation = (*passList)[j];
@@ -296,20 +296,20 @@ bool s3Shader::load(std::string fileName)
 			}
 		}
 
-		isLoaded = true;
+		bIsLoaded = true;
 		s3Log::success("s3Shader::load() create shader %s successfully\n", fileName.c_str());
 		return true;
 	}
 }
 
-float32 s3Shader::GetFloat(std::string name) const
+float32 s3Shader::getFloat(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_FLOAT, value);
+	bool exsited = getValue(name, eVT_FLOAT, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetFloat() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getFloat() variable %s doesn't existed\n", name.c_str());
 		return 0.0f;
 	}
 	else
@@ -318,14 +318,14 @@ float32 s3Shader::GetFloat(std::string name) const
 	}
 }
 
-int32 s3Shader::GetInt(std::string name) const
+int32 s3Shader::getInt(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_INT, value);
+	bool exsited = getValue(name, eVT_INT, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetInt() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getInt() variable %s doesn't existed\n", name.c_str());
 		return 0;
 	}
 	else
@@ -334,14 +334,14 @@ int32 s3Shader::GetInt(std::string name) const
 	}
 }
 
-t3Matrix4x4 s3Shader::GetMatrix(std::string name) const
+t3Matrix4x4 s3Shader::getMatrix(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_FLOAT4X4, value);
+	bool exsited = getValue(name, eVT_FLOAT4X4, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetMatrix() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getMatrix() variable %s doesn't existed\n", name.c_str());
 		return t3Matrix4x4::newIdentityMatrix();
 	}
 	else
@@ -350,14 +350,14 @@ t3Matrix4x4 s3Shader::GetMatrix(std::string name) const
 	}
 }
 
-t3Vector4f s3Shader::GetFloat4(std::string name) const
+t3Vector4f s3Shader::getFloat4(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_FLOAT4, value);
+	bool exsited = getValue(name, eVT_FLOAT4, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetFloat4() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getFloat4() variable %s doesn't existed\n", name.c_str());
 		return t3Vector4f::zero();
 	}
 	else
@@ -366,14 +366,14 @@ t3Vector4f s3Shader::GetFloat4(std::string name) const
 	}
 }
 
-t3Vector3f s3Shader::GetFloat3(std::string name) const
+t3Vector3f s3Shader::getFloat3(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_FLOAT3, value);
+	bool exsited = getValue(name, eVT_FLOAT3, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetFloat3() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getFloat3() variable %s doesn't existed\n", name.c_str());
 		return t3Vector3f::zero();
 	}
 	else
@@ -382,14 +382,14 @@ t3Vector3f s3Shader::GetFloat3(std::string name) const
 	}
 }
 
-t3Vector2f s3Shader::GetFloat2(std::string name) const
+t3Vector2f s3Shader::getFloat2(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_FLOAT2, value);
+	bool exsited = getValue(name, eVT_FLOAT2, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetFloat2() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getFloat2() variable %s doesn't existed\n", name.c_str());
 		return t3Vector2f::zero();
 	}
 	else
@@ -398,14 +398,14 @@ t3Vector2f s3Shader::GetFloat2(std::string name) const
 	}
 }
 
-t3Vector4i s3Shader::GetInt4(std::string name) const
+t3Vector4i s3Shader::getInt4(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_INT4, value);
+	bool exsited = getValue(name, eVT_INT4, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetInt4() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getInt4() variable %s doesn't existed\n", name.c_str());
 		return t3Vector4i::zero();
 	}
 	else
@@ -414,14 +414,14 @@ t3Vector4i s3Shader::GetInt4(std::string name) const
 	}
 }
 
-t3Vector3i s3Shader::GetInt3(std::string name) const
+t3Vector3i s3Shader::getInt3(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_INT3, value);
+	bool exsited = getValue(name, eVT_INT3, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetInt3() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getInt3() variable %s doesn't existed\n", name.c_str());
 		return t3Vector3i::zero();
 	}
 	else
@@ -430,14 +430,14 @@ t3Vector3i s3Shader::GetInt3(std::string name) const
 	}
 }
 
-t3Vector2i s3Shader::GetInt2(std::string name) const
+t3Vector2i s3Shader::getInt2(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_INT2, value);
+	bool exsited = getValue(name, eVT_INT2, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetInt2() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getInt2() variable %s doesn't existed\n", name.c_str());
 		return t3Vector2i::zero();
 	}
 	else
@@ -446,19 +446,19 @@ t3Vector2i s3Shader::GetInt2(std::string name) const
 	}
 }
 
-bool s3Shader::GetKeyword(std::string name) const
+bool s3Shader::getKeyword(std::string name) const
 {
 	return false;
 }
 
-bool s3Shader::GetBool(std::string name) const
+bool s3Shader::getBool(std::string name) const
 {
 	s3ShaderValue value;
-	bool exsited = GetValue(name, eVT_BOOL, value);
+	bool exsited = getValue(name, eVT_BOOL, value);
 
 	if (!exsited)
 	{
-		s3Log::warning("s3Shader::GetBool() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::getBool() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	else
@@ -467,104 +467,108 @@ bool s3Shader::GetBool(std::string name) const
 	}
 }
 
-bool s3Shader::IsLoaded() const
+bool s3Shader::isLoaded() const
 {
-	return isLoaded;
+	return bIsLoaded;
 }
 
-bool s3Shader::SetKeyword(std::string name, bool enableKeyword)
+bool s3Shader::setKeyword(std::string name, bool enableKeyword)
 {
 	return false;
 }
 
-bool s3Shader::SetBool(std::string name, bool value)
+bool s3Shader::setBool(std::string name, bool value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type   = eVT_BOOL;
 	shaderValue.bValue = value;
 
-	if(!SetValue(name, shaderValue))
+	if(!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetBool() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setBool() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetInt(std::string name, int32 value)
+bool s3Shader::setInt(std::string name, int32 value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type   = eVT_INT;
 	shaderValue.iValue = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetInt() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setInt() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetFloat(std::string name, float32 value)
+bool s3Shader::setFloat(std::string name, float32 value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type   = eVT_FLOAT;
 	shaderValue.fValue = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetFloat() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setFloat() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetMatrix(std::string name, t3Matrix4x4 value)
+bool s3Shader::setMatrix(std::string name, t3Matrix4x4 value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type   = eVT_FLOAT4X4;
 	shaderValue.matrix = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetMatrix() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setMatrix() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-std::vector<void*>* s3Shader::GetConstantBufferDataList(int32 pass) const
+std::vector<void*>* s3Shader::getConstantBufferDataList(int32 pass) const
 {
 	auto& cbList = shaderParser->passConstantBufferList;
+	if (cbList.size() == 0) return nullptr;
+
 	if (pass < 0 || pass >= cbList.size())
 	{
-		s3Log::warning("s3Shader::GetConstantBufferList() pass %d illegal\n", pass);
+		s3Log::warning("s3Shader::getConstantBufferList() pass %d illegal\n", pass);
 		return nullptr;
 	}
 	auto& cb = cbList[pass];
 	return &cb.dataList;
 }
 
-std::vector<ID3D11Buffer*>* s3Shader::GetConstantBufferList(int32 pass) const
+std::vector<ID3D11Buffer*>* s3Shader::getConstantBufferList(int32 pass) const
 {
 	auto& cbList = shaderParser->passConstantBufferList;
+	if (cbList.size() == 0) return nullptr;
+
 	if (pass < 0 || pass >= cbList.size())
 	{
-		s3Log::warning("s3Shader::GetConstantBufferList() pass %d illegal\n", pass);
+		s3Log::warning("s3Shader::getConstantBufferList() pass %d illegal\n", pass);
 		return nullptr;
 	}
 	auto& cb = cbList[pass];
 	return &cb.bufferList;
 }
 
-int32 s3Shader::GetPassConstantBufferNum(int32 pass) const
+int32 s3Shader::getPassConstantBufferNum(int32 pass) const
 {
-	auto cb = GetConstantBufferList(pass);
-	if(cb) return cb->size();
-	else return 1;
+	auto cb = getConstantBufferList(pass);
+	if(cb) return (int32) cb->size();
+	else return 0;
 }
 
-ID3D11PixelShader* s3Shader::GetPixelShader(int32 pass) const
+ID3D11PixelShader* s3Shader::getPixelShader(int32 pass) const
 {
 	if (pass >= 0 && pass < shaderParser->pixelShaderList.size())
 		return shaderParser->pixelShaderList[pass];
@@ -572,7 +576,7 @@ ID3D11PixelShader* s3Shader::GetPixelShader(int32 pass) const
 		return nullptr;
 }
 
-ID3D11VertexShader* s3Shader::GetVertexShader(int32 pass) const
+ID3D11VertexShader* s3Shader::getVertexShader(int32 pass) const
 {
 	if (pass >= 0 && pass < shaderParser->vertexShaderList.size())
 		return shaderParser->vertexShaderList[pass];
@@ -580,90 +584,90 @@ ID3D11VertexShader* s3Shader::GetVertexShader(int32 pass) const
 		return nullptr;
 }
 
-int32 s3Shader::GetPassNum() const
+int32 s3Shader::getPassNum() const
 {
 	return shaderParser->passNum;
 }
 
-bool s3Shader::SetFloat4(std::string name, t3Vector4f value)
+bool s3Shader::setFloat4(std::string name, t3Vector4f value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type     = eVT_FLOAT4;
 	shaderValue.vector4f = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetFloat4() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setFloat4() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetFloat3(std::string name, t3Vector3f value)
+bool s3Shader::setFloat3(std::string name, t3Vector3f value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type     = eVT_FLOAT3;
 	shaderValue.vector3f = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetFloat3() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setFloat3() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetFloat2(std::string name, t3Vector2f value)
+bool s3Shader::setFloat2(std::string name, t3Vector2f value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type     = eVT_FLOAT2;
 	shaderValue.vector2f = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetFloat2() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setFloat2() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetInt4(std::string name, t3Vector4i value)
+bool s3Shader::setInt4(std::string name, t3Vector4i value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type     = eVT_INT4;
 	shaderValue.vector4i = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetInt4() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setInt4() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetInt3(std::string name, t3Vector3i value)
+bool s3Shader::setInt3(std::string name, t3Vector3i value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type     = eVT_INT3;
 	shaderValue.vector3i = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetInt3() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setInt3() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool s3Shader::SetInt2(std::string name, t3Vector2i value)
+bool s3Shader::setInt2(std::string name, t3Vector2i value)
 {
 	s3ShaderValue shaderValue;
 	shaderValue.type     = eVT_INT2;
 	shaderValue.vector2i = value;
 
-	if (!SetValue(name, shaderValue))
+	if (!setValue(name, shaderValue))
 	{
-		s3Log::warning("s3Shader::SetInt2() variable %s doesn't existed\n", name.c_str());
+		s3Log::warning("s3Shader::setInt2() variable %s doesn't existed\n", name.c_str());
 		return false;
 	}
 	return true;
@@ -671,7 +675,7 @@ bool s3Shader::SetInt2(std::string name, t3Vector2i value)
 
 void s3Shader::print() const
 {
-	if (!isLoaded) return;
+	if (!bIsLoaded) return;
 
 	s3Log::debug("=============================== s3Shader::print() begin ===============================\n");
 
@@ -796,4 +800,13 @@ void s3Shader::print() const
 	}
 
 	s3Log::debug("=============================== s3Shader::print() end ===============================\n");
+}
+
+void s3Shader::reloadShaderSystem()
+{
+	//shader_cleanup();
+	//--! the fakeUnityShader init could be moved into renderer
+	shader_init(s3Renderer::get().getDevice(), "../Sophia/thirdparty/fakeUnityShader/fake_unity_shader/shader_parser/");
+
+	fakeUnityShaderInitialized = true;
 }

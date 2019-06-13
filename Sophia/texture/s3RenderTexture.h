@@ -11,6 +11,9 @@ public:
 	// Actually creates the RenderTexture.
 	virtual bool create();
 
+	// is texture used as a render texture
+	virtual bool isRenderTarget() const;
+
 	// clear the renderTargetView and depthStencilView
 	void clear(bool clearRT, t3Vector4f clearColor, bool clearDepth);
 

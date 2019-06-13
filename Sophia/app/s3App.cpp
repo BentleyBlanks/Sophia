@@ -233,7 +233,7 @@ LRESULT windowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 s3App::s3App()
 {
     window = nullptr;
-    clearColor.set(0.0f, 0.0f, 0.0f, 1.0f);
+    clearColor.set(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 s3App::~s3App()

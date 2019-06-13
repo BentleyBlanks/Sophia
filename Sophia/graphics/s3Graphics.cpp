@@ -2,18 +2,25 @@
 #include <graphics/s3Renderer.h>
 #include <graphics/s3Material.h>
 #include <texture/s3RenderTexture.h>
+#include <core/s3Settings.h>
+#include <imgui.h>
 
-void s3Graphics::DrawTextureOnGui(s3Texture* texture)
-{}
-
-void s3Graphics::DrawMesh(s3Mesh* mesh, t3Matrix4x4 localToWorld, s3Material* material)
-{}
-
-void s3Graphics::Blit(s3Texture* src, s3Texture* dst, s3Material* material)
+void s3Graphics::drawTextureOnGui(s3Texture* texture)
 {
-	auto renderer         = &s3Renderer::get();
-	auto deviceContext    = renderer->getDeviceContext();
-	auto renderTargetView = renderer->getColorTexture()->getRenderTargetView();
+	ImGui::Image((void*)texture->getShaderResourceView(), ImVec2((float32)texture->width, (float32)texture->height));
+}
+
+void s3Graphics::drawMesh(s3Mesh* mesh, t3Matrix4x4 localToWorld, s3Material* material)
+{}
+
+void s3Graphics::blit(s3Texture* src, s3Texture* dst, s3Material* material)
+{
+	if (!dst || !dst->isRenderTarget()) return;
+
+	auto renderTexture = (s3RenderTexture*) dst;
+	auto renderer      = &s3Renderer::get();
+	auto deviceContext = renderer->getDeviceContext();
+	auto rtv           = renderTexture->getRenderTargetView();
 
 	// IA
 	deviceContext->IASetVertexBuffers(0, 0, NULL, NULL, NULL);
@@ -23,36 +30,62 @@ void s3Graphics::Blit(s3Texture* src, s3Texture* dst, s3Material* material)
 
 	deviceContext->RSSetState(renderer->getRasterizerState());
 
-	// vs
-	deviceContext->VSSetShader(material->GetVertexShader(), nullptr, 0);
+	// vs / ps
+	deviceContext->VSSetShader(material->getVertexShader(), nullptr, 0);
+	deviceContext->PSSetShader(material->getPixelShader(), nullptr, 0);
 
-	// ps
-	auto srv = src->getShaderResourceView();
-	auto* samplerState = src->getSamplerState();
+	// shader resources
+	if (src)
+	{
+		auto srv = src->getShaderResourceView();
+		auto* samplerState = src->getSamplerState();
 
-	deviceContext->PSSetShader(material->GetPixelShader(), nullptr, 0);
-	deviceContext->PSSetSamplers(0, 1, &samplerState);
-	deviceContext->PSSetShaderResources(0, 1, &srv);
+		deviceContext->PSSetSamplers(0, 1, &samplerState);
+		deviceContext->PSSetShaderResources(0, 1, &srv);
+	}
 
 	// multiple constant buffer
-	for (int32 i = 0; i < material->GetConstantBufferNum(); i++)
-	{
-		auto bufferList = material->GetConstantBuffer();
-		auto dataList   = material->GetConstantBufferData();
+	auto bufferList = material->getConstantBuffer();
+	auto dataList   = material->getConstantBufferData();
+	auto cbNum      = material->getConstantBufferNum();
+
+	for (int32 i = 0; i < cbNum; i++)
 		deviceContext->UpdateSubresource((*bufferList)[i], 0, nullptr, &dataList[i], 0, 0);
-	}
-	deviceContext->PSSetConstantBuffers(0, material->GetConstantBufferNum(), bufferList->data());
+
+	// constant buffer could be null
+	if (cbNum > 0)
+		deviceContext->PSSetConstantBuffers(0, material->getConstantBufferNum(), bufferList->data());
 
 	deviceContext->OMSetDepthStencilState(renderer->getDepthStencilState(), 1);
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, renderer->getDepthTexture()->getDepthStencilView());
+	deviceContext->OMSetRenderTargets(1, &rtv, NULL);
 	deviceContext->Draw(3, 0);
+
+	// rt need to be restored to renderer's, incase it will be used as srv
+	auto currentColorTexture    = (s3RenderTexture*)renderer->currentColorTexture;
+	auto currentDepthTexture    = (s3RenderTexture*)renderer->currentDepthTexture;
+	auto currentColorTextureRTV = currentColorTexture->getRenderTargetView();
+	auto currentDepthTextureDSV = currentDepthTexture->getDepthStencilView();
+	deviceContext->OMSetRenderTargets(1, &currentColorTextureRTV, currentDepthTextureDSV);
 }
 
-void s3Graphics::SetRenderTarget(s3Texture* rt)
+void s3Graphics::setRenderTarget(s3Texture* color, s3Texture* depth)
 {
+	if (!color || !color->isRenderTarget()) return;
+
+	auto renderTexture    = (s3RenderTexture*) color;
 	auto renderer         = &s3Renderer::get();
 	auto deviceContext    = renderer->getDeviceContext();
-	auto renderTargetView = renderer->getColorTexture()->getRenderTargetView();
+	auto renderTargetView = renderTexture->getRenderTargetView();
 
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, renderer->getDepthTexture()->getDepthStencilView());
+	renderer->currentColorTexture = renderTexture;
+
+	if (depth && depth->isDepthTexture())
+	{
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, depth->getDepthStencilView());
+		renderer->currentDepthTexture = depth;
+	}
+	else
+	{
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, NULL);
+	}
 }

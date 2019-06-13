@@ -7,11 +7,12 @@ class s3Texture;
 class s3Graphics
 {
 public:
-	static void DrawTextureOnGui(s3Texture* texture);
+	static void drawTextureOnGui(s3Texture* texture);
 
-	static void DrawMesh(s3Mesh* mesh, t3Matrix4x4 localToWorld, s3Material* material);
+	static void drawMesh(s3Mesh* mesh, t3Matrix4x4 localToWorld, s3Material* material);
 
-	static void Blit(s3Texture* src, s3Texture* dst, s3Material* material);
+	// Blit would set dst texture as renderTarget
+	static void blit(s3Texture* src, s3Texture* dst, s3Material* material);
 
-	static void SetRenderTarget(s3Texture* rt);
+	static void setRenderTarget(s3Texture* color, s3Texture* depth = nullptr);
 };

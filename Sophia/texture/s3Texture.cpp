@@ -5,11 +5,12 @@
 s3Texture::s3Texture() :
 	created(false),
 	wrapMode(S3_TEXTURE_WRAPMODE_CLAMP),
-	filterMode(S3_TEXTURE_FILTERMODE_BILINEAR),
+	filterMode(S3_TEXTURE_FILTERMODE_LINEAR),
 	dimension(S3_TEXTURE_DIMENSION_TEX2D),
 	format(S3_TEXTURE_FORMAT_R32G32B32A32_UINT),
 	width(0),
 	height(0),
+	depth(0),
 	mipLevels(1),
 	msaaCount(4),
 	anisoLevel(1),
@@ -76,6 +77,9 @@ bool s3Texture::create()
 			created = false;
 			return false;
 		}
+
+		// Set debug name of the texture
+		texture2d->SetPrivateData(WKPDID_D3DDebugObjectName, (uint32) name.size(), name.c_str());
 	}
 
 	// ========================================== ShaderResourceView ==========================================
@@ -167,6 +171,11 @@ bool s3Texture::isMSAAEnabled() const
 bool s3Texture::isDepthTexture() const
 {
 	return depth > 0;
+}
+
+bool s3Texture::isRenderTarget() const
+{
+	return false;
 }
 
 bool s3Texture::generateMips()

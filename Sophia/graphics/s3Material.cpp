@@ -1,4 +1,6 @@
 #include <graphics/s3Material.h>
+#include <texture/s3Texture.h>
+#include <core/log/s3Log.h>
 
 s3Material::s3Material(std::string fileName) :
 	activatedPassIndex(0)
@@ -12,57 +14,62 @@ s3Material::~s3Material()
 	S3_SAFE_DELETE(shader);
 }
 
-bool s3Material::GetBool(std::string name) const
+bool s3Material::isLoaded() const
 {
-	return shader->GetBool(name);
+	return shader->isLoaded();
 }
 
-float32 s3Material::GetFloat(std::string name) const
+bool s3Material::getBool(std::string name) const
 {
-	return shader->GetFloat(name);
+	return shader->getBool(name);
 }
 
-t3Vector2f s3Material::GetFloat2(std::string name) const
+float32 s3Material::getFloat(std::string name) const
 {
-	return shader->GetFloat2(name);
+	return shader->getFloat(name);
 }
 
-t3Vector3f s3Material::GetFloat3(std::string name) const
+t3Vector2f s3Material::getFloat2(std::string name) const
 {
-	return shader->GetFloat3(name);
+	return shader->getFloat2(name);
 }
 
-t3Vector4f s3Material::GetFloat4(std::string name) const
+t3Vector3f s3Material::getFloat3(std::string name) const
 {
-	return shader->GetFloat4(name);
+	return shader->getFloat3(name);
 }
 
-int32 s3Material::GetInt(std::string name) const
+t3Vector4f s3Material::getFloat4(std::string name) const
 {
-	return shader->GetInt(name);
+	return shader->getFloat4(name);
 }
 
-t3Vector2i s3Material::GetInt2(std::string name) const
+int32 s3Material::getInt(std::string name) const
 {
-	return shader->GetInt2(name);
+	return shader->getInt(name);
 }
 
-t3Vector3i s3Material::GetInt3(std::string name) const
+t3Vector2i s3Material::getInt2(std::string name) const
 {
-	return shader->GetInt3(name);
+	return shader->getInt2(name);
 }
 
-t3Vector4i s3Material::GetInt4(std::string name) const
+t3Vector3i s3Material::getInt3(std::string name) const
 {
-	return shader->GetInt4(name);
+	return shader->getInt3(name);
 }
 
-t3Matrix4x4 s3Material::GetMatrix(std::string name) const
+t3Vector4i s3Material::getInt4(std::string name) const
 {
-	return shader->GetMatrix(name);
+	return shader->getInt4(name);
 }
 
-s3Texture* s3Material::GetTexture(std::string name) const
+t3Matrix4x4 s3Material::getMatrix(std::string name) const
+{
+	return shader->getMatrix(name);
+}
+
+s3Texture* s3Material::getTexture(std::string name) const
 {
 	auto iter = textureList.find(name);
 	if (iter == textureList.end())
@@ -71,62 +78,62 @@ s3Texture* s3Material::GetTexture(std::string name) const
 		return iter->second;
 }
 
-bool s3Material::GetKeyword(std::string name) const
+bool s3Material::getKeyword(std::string name) const
 {
 	return false;
 }
 
-bool s3Material::SetBool(std::string name, bool value)
+bool s3Material::setBool(std::string name, bool value)
 {
-	return shader->SetBool(name, value);
+	return shader->setBool(name, value);
 }
 
-bool s3Material::SetFloat(std::string name, float32 value)
+bool s3Material::setFloat(std::string name, float32 value)
 {
-	return shader->SetFloat(name, value);
+	return shader->setFloat(name, value);
 }
 
-bool s3Material::SetFloat2(std::string name, t3Vector2f value)
+bool s3Material::setFloat2(std::string name, t3Vector2f value)
 {
-	return shader->SetFloat2(name, value);
+	return shader->setFloat2(name, value);
 }
 
-bool s3Material::SetFloat3(std::string name, t3Vector3f value)
+bool s3Material::setFloat3(std::string name, t3Vector3f value)
 {
-	return shader->SetFloat3(name, value);
+	return shader->setFloat3(name, value);
 }
 
-bool s3Material::SetFloat4(std::string name, t3Vector4f value)
+bool s3Material::setFloat4(std::string name, t3Vector4f value)
 {
-	return shader->SetFloat4(name, value);
+	return shader->setFloat4(name, value);
 }
 
-bool s3Material::SetInt(std::string name, int32 value)
+bool s3Material::setInt(std::string name, int32 value)
 {
-	return shader->SetInt(name, value);
+	return shader->setInt(name, value);
 }
 
-bool s3Material::SetInt2(std::string name, t3Vector2i value)
+bool s3Material::setInt2(std::string name, t3Vector2i value)
 {
-	return shader->SetInt2(name, value);
+	return shader->setInt2(name, value);
 }
 
-bool s3Material::SetInt3(std::string name, t3Vector3i value)
+bool s3Material::setInt3(std::string name, t3Vector3i value)
 {
-	return shader->SetInt3(name, value);
+	return shader->setInt3(name, value);
 }
 
-bool s3Material::SetInt4(std::string name, t3Vector4i value)
+bool s3Material::setInt4(std::string name, t3Vector4i value)
 {
-	return shader->SetInt4(name, value);
+	return shader->setInt4(name, value);
 }
 
-bool s3Material::SetMatrix(std::string name, t3Matrix4x4 value)
+bool s3Material::setMatrix(std::string name, t3Matrix4x4 value)
 {
-	return shader->SetMatrix(name, value);
+	return shader->setMatrix(name, value);
 }
 
-bool s3Material::SetTexture(std::string name, s3Texture* texture)
+bool s3Material::setTexture(std::string name, s3Texture* texture)
 {
 	if (!texture) return false;
 
@@ -136,49 +143,49 @@ bool s3Material::SetTexture(std::string name, s3Texture* texture)
 	return true;
 }
 
-bool s3Material::SetKeyword(std::string name, bool enableKeyword)
+bool s3Material::setKeyword(std::string name, bool enableKeyword)
 {
 	return false;
 }
 
-std::vector<void*>* s3Material::GetConstantBufferData() const
+std::vector<void*>* s3Material::getConstantBufferData() const
 {
-	return shader->GetConstantBufferDataList(activatedPassIndex);
+	return shader->getConstantBufferDataList(activatedPassIndex);
 }
 
-std::vector<ID3D11Buffer*>* s3Material::GetConstantBuffer() const
+std::vector<ID3D11Buffer*>* s3Material::getConstantBuffer() const
 {
-	return shader->GetConstantBufferList(activatedPassIndex);
+	return shader->getConstantBufferList(activatedPassIndex);
 }
 
-int32 s3Material::GetConstantBufferNum() const
+int32 s3Material::getConstantBufferNum() const
 {
-	return shader->GetPassConstantBufferNum(activatedPassIndex);
+	return shader->getPassConstantBufferNum(activatedPassIndex);
 }
 
-ID3D11PixelShader* s3Material::GetPixelShader() const
+ID3D11PixelShader* s3Material::getPixelShader() const
 {
-	return shader->GetPixelShader(activatedPassIndex);
+	return shader->getPixelShader(activatedPassIndex);
 }
 
-ID3D11VertexShader* s3Material::GetVertexShader() const
+ID3D11VertexShader* s3Material::getVertexShader() const
 {
-	return shader->GetVertexShader(activatedPassIndex);
+	return shader->getVertexShader(activatedPassIndex);
 }
 
-int32 s3Material::GetPassNum() const
+int32 s3Material::getPassNum() const
 {
-	return shader->GetPassNum();
+	return shader->getPassNum();
 }
 
-s3Shader* s3Material::GetShader() const
+s3Shader* s3Material::getShader() const
 {
 	return shader;
 }
 
-bool s3Material::SetPass(int32 pass)
+bool s3Material::setPass(int32 pass)
 {
-	if (pass >= 0 && pass < shader->GetPassNum())
+	if (pass >= 0 && pass < shader->getPassNum())
 	{
 		activatedPassIndex = pass;
 		return true;
@@ -189,8 +196,26 @@ bool s3Material::SetPass(int32 pass)
 	}
 }
 
-int32 s3Material::GetPass(int32 pass) const
+int32 s3Material::getPass(int32 pass) const
 {
 	return activatedPassIndex;
+}
+
+void s3Material::print() const
+{
+	if (!isLoaded()) return;
+
+	s3Log::debug("=============================== s3Material::print() begin ===============================\n");
+	s3Log::debug("activatedPassIndex: %d\n", activatedPassIndex);
+	auto& textureIter = textureList.begin();
+	while (textureIter != textureList.end())
+	{
+		s3Log::debug("shader.name: %s\n", textureIter->second->name.c_str());
+		textureIter++;
+	}
+
+	shader->print();
+
+	s3Log::debug("=============================== s3Material::print() end ===============================\n");
 }
 

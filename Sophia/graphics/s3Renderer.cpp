@@ -1,4 +1,5 @@
 #include <graphics/s3Renderer.h>
+#include <graphics/s3Graphics.h>
 #include <texture/s3RenderTexture.h>
 #include <t3Vector4.h>
 #include <core/log/s3Log.h>
@@ -11,6 +12,8 @@ s3Renderer::s3Renderer()
     rasterizerState(nullptr),
 	depthTexture(nullptr),
 	colorTexture(nullptr),
+	currentDepthTexture(nullptr),
+	currentColorTexture(nullptr),
 	msaaCount(4)
 {
 }
@@ -139,7 +142,7 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 	colorTexture->depth      = 0;
 	colorTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
 	colorTexture->format     = (s3TextureFormat) format;
-	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_BILINEAR;
+	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_LINEAR;
 	colorTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
 	colorTexture->mipLevels  = 1;
 	colorTexture->name       = "s3RendererBackBufferTexture";
@@ -160,6 +163,8 @@ bool s3Renderer::init(HWND hwnd, int32 width, int32 height)
 	depthTexture->create();
 
     // Bind the colorTexture and depthTexture to the Output Merger Stage
+	currentDepthTexture = depthTexture;
+	currentColorTexture = colorTexture;
     deviceContext->OMSetRenderTargets(1, &colorTexture->renderTargetView, depthTexture->depthStencilView);
 
     // ------------------------------------------Depth/Stencil State------------------------------------------
@@ -271,16 +276,16 @@ void s3Renderer::resize(int32 width, int32 height)
 
 	// user-defined texture2d's colorTexture creation
 	colorTexture = new s3RenderTexture();
-	colorTexture->texture2d = backBuffer;
-	colorTexture->width = width;
-	colorTexture->height = height;
-	colorTexture->depth = 0;
-	colorTexture->dimension = S3_TEXTURE_DIMENSION_TEX2D;
-	colorTexture->format = (s3TextureFormat)format;
-	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_BILINEAR;
-	colorTexture->wrapMode = S3_TEXTURE_WRAPMODE_CLAMP;
-	colorTexture->mipLevels = 1;
-	colorTexture->name = "s3RendererBackBufferTexture";
+	colorTexture->texture2d  = backBuffer;
+	colorTexture->width      = width;
+	colorTexture->height     = height;
+	colorTexture->depth      = 0;
+	colorTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
+	colorTexture->format     = (s3TextureFormat)format;
+	colorTexture->filterMode = S3_TEXTURE_FILTERMODE_LINEAR;
+	colorTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
+	colorTexture->mipLevels  = 1;
+	colorTexture->name       = "s3RendererBackBufferTexture";
 	colorTexture->create();
 
 	// ------------------------------------------Depth / Stencil Texture------------------------------------------
@@ -288,17 +293,20 @@ void s3Renderer::resize(int32 width, int32 height)
     // depth/stencil's size match the window size
     // Depth/Stencil Texture Creation
 	depthTexture = new s3RenderTexture();
-	depthTexture->width = width;
-	depthTexture->height = height;
-	depthTexture->depth = 24;
-	depthTexture->dimension = S3_TEXTURE_DIMENSION_TEX2D;
-	depthTexture->format = (s3TextureFormat)0;
+	depthTexture->width      = width;
+	depthTexture->height     = height;
+	depthTexture->depth      = 24;
+	depthTexture->dimension  = S3_TEXTURE_DIMENSION_TEX2D;
+	depthTexture->format     = (s3TextureFormat)0;
 	depthTexture->filterMode = S3_TEXTURE_FILTERMODE_POINT;
-	depthTexture->wrapMode = S3_TEXTURE_WRAPMODE_CLAMP;
-	depthTexture->mipLevels = 1;
-	depthTexture->name = "s3RendererDepthTexture";
+	depthTexture->wrapMode   = S3_TEXTURE_WRAPMODE_CLAMP;
+	depthTexture->mipLevels  = 1;
+	depthTexture->name       = "s3RendererDepthTexture";
 	depthTexture->create();
 
+	// Bind the colorTexture and depthTexture to the Output Merger Stage
+	currentDepthTexture = depthTexture;
+	currentColorTexture = colorTexture;
     deviceContext->OMSetRenderTargets(1, &colorTexture->renderTargetView, depthTexture->depthStencilView);
 
     // Set up the viewport.

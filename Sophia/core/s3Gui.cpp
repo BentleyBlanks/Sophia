@@ -377,29 +377,29 @@ static void ImGui_ImplDX11_CreateFontsTexture()
     {
         D3D11_TEXTURE2D_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.Width = width;
-        desc.Height = height;
-        desc.MipLevels = 1;
-        desc.ArraySize = 1;
-        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc.Width            = width;
+        desc.Height           = height;
+        desc.MipLevels        = 1;
+        desc.ArraySize        = 1;
+        desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
         desc.SampleDesc.Count = 1;
-        desc.Usage = D3D11_USAGE_DEFAULT;
-        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-        desc.CPUAccessFlags = 0;
+        desc.Usage            = D3D11_USAGE_DEFAULT;
+        desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
+        desc.CPUAccessFlags   = 0;
 
         ID3D11Texture2D *pTexture = NULL;
         D3D11_SUBRESOURCE_DATA subResource;
-        subResource.pSysMem = pixels;
-        subResource.SysMemPitch = desc.Width * 4;
+        subResource.pSysMem          = pixels;
+        subResource.SysMemPitch      = desc.Width * 4;
         subResource.SysMemSlicePitch = 0;
         g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
 
         // Create texture view
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory(&srvDesc, sizeof(srvDesc));
-        srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MipLevels = desc.MipLevels;
+        srvDesc.Format                    = DXGI_FORMAT_R8G8B8A8_UNORM;
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MipLevels       = desc.MipLevels;
         srvDesc.Texture2D.MostDetailedMip = 0;
         g_pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, &g_pFontTextureView);
         pTexture->Release();
@@ -412,20 +412,20 @@ static void ImGui_ImplDX11_CreateFontsTexture()
     {
         D3D11_SAMPLER_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-        desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.MipLODBias = 0.f;
+        desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        desc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
+        desc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
+        desc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
+        desc.MipLODBias     = 0.f;
         desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
+        desc.MinLOD         = 0.f;
+        desc.MaxLOD         = 0.f;
         g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
     }
 }
 
-void    ImGui_ImplDX11_InvalidateDeviceObjects();
-bool    ImGui_ImplDX11_CreateDeviceObjects()
+void ImGui_ImplDX11_InvalidateDeviceObjects();
+bool ImGui_ImplDX11_CreateDeviceObjects()
 {
     if (!g_pd3dDevice)
         return false;
@@ -486,11 +486,11 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
         // Create the constant buffer
         {
             D3D11_BUFFER_DESC desc;
-            desc.ByteWidth = sizeof(VERTEX_CONSTANT_BUFFER);
-            desc.Usage = D3D11_USAGE_DYNAMIC;
-            desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+            desc.ByteWidth      = sizeof(VERTEX_CONSTANT_BUFFER);
+            desc.Usage          = D3D11_USAGE_DYNAMIC;
+            desc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
             desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-            desc.MiscFlags = 0;
+            desc.MiscFlags      = 0;
             g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVertexConstantBuffer);
         }
     }
@@ -524,14 +524,14 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     {
         D3D11_BLEND_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.AlphaToCoverageEnable = false;
-        desc.RenderTarget[0].BlendEnable = true;
-        desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-        desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-        desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-        desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
-        desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-        desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        desc.AlphaToCoverageEnable                 = false;
+        desc.RenderTarget[0].BlendEnable           = true;
+        desc.RenderTarget[0].SrcBlend              = D3D11_BLEND_SRC_ALPHA;
+        desc.RenderTarget[0].DestBlend             = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].BlendOp               = D3D11_BLEND_OP_ADD;
+        desc.RenderTarget[0].SrcBlendAlpha         = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].DestBlendAlpha        = D3D11_BLEND_ZERO;
+        desc.RenderTarget[0].BlendOpAlpha          = D3D11_BLEND_OP_ADD;
         desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
         g_pd3dDevice->CreateBlendState(&desc, &g_pBlendState);
     }
@@ -540,9 +540,9 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     {
         D3D11_RASTERIZER_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.FillMode = D3D11_FILL_SOLID;
-        desc.CullMode = D3D11_CULL_NONE;
-        desc.ScissorEnable = true;
+        desc.FillMode        = D3D11_FILL_SOLID;
+        desc.CullMode        = D3D11_CULL_NONE;
+        desc.ScissorEnable   = true;
         desc.DepthClipEnable = true;
         g_pd3dDevice->CreateRasterizerState(&desc, &g_pRasterizerState);
     }
@@ -551,22 +551,21 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     {
         D3D11_DEPTH_STENCIL_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.DepthEnable = false;
-        desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-        desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
-        desc.StencilEnable = false;
+        desc.DepthEnable             = false;
+        desc.DepthWriteMask          = D3D11_DEPTH_WRITE_MASK_ALL;
+        desc.DepthFunc               = D3D11_COMPARISON_ALWAYS;
+        desc.StencilEnable           = false;
         desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-        desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-        desc.BackFace = desc.FrontFace;
+        desc.FrontFace.StencilFunc   = D3D11_COMPARISON_ALWAYS;
+        desc.BackFace                = desc.FrontFace;
         g_pd3dDevice->CreateDepthStencilState(&desc, &g_pDepthStencilState);
     }
 
     ImGui_ImplDX11_CreateFontsTexture();
-
     return true;
 }
 
-void    ImGui_ImplDX11_InvalidateDeviceObjects()
+void ImGui_ImplDX11_InvalidateDeviceObjects()
 {
     if (!g_pd3dDevice)
         return;
@@ -587,16 +586,15 @@ void    ImGui_ImplDX11_InvalidateDeviceObjects()
     if (g_pVertexShaderBlob) { g_pVertexShaderBlob->Release(); g_pVertexShaderBlob = NULL; }
 }
 
-bool    s3ImGuiInit(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* device_context)
+bool s3ImGuiInit(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* device_context)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
-
-    g_hWnd = (HWND)hwnd;
-    g_pd3dDevice = device;
+    g_hWnd              = (HWND)hwnd;
+    g_pd3dDevice        = device;
     g_pd3dDeviceContext = device_context;
 
     if (!QueryPerformanceFrequency((LARGE_INTEGER *)&g_TicksPerSecond))
@@ -608,29 +606,28 @@ bool    s3ImGuiInit(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* devic
     //ImGuiIO& io = ImGui::GetIO();
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;    // We can honor io.WantSetMousePos requests (optional, rarely used)
-
                                                             // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
-    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
+    io.KeyMap[ImGuiKey_Tab]        = VK_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow]  = VK_LEFT;
     io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
-    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
-    io.KeyMap[ImGuiKey_Home] = VK_HOME;
-    io.KeyMap[ImGuiKey_End] = VK_END;
-    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
-    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
-    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = 'A';
-    io.KeyMap[ImGuiKey_C] = 'C';
-    io.KeyMap[ImGuiKey_V] = 'V';
-    io.KeyMap[ImGuiKey_X] = 'X';
-    io.KeyMap[ImGuiKey_Y] = 'Y';
-    io.KeyMap[ImGuiKey_Z] = 'Z';
+    io.KeyMap[ImGuiKey_UpArrow]    = VK_UP;
+    io.KeyMap[ImGuiKey_DownArrow]  = VK_DOWN;
+    io.KeyMap[ImGuiKey_PageUp]     = VK_PRIOR;
+    io.KeyMap[ImGuiKey_PageDown]   = VK_NEXT;
+    io.KeyMap[ImGuiKey_Home]       = VK_HOME;
+    io.KeyMap[ImGuiKey_End]        = VK_END;
+    io.KeyMap[ImGuiKey_Insert]     = VK_INSERT;
+    io.KeyMap[ImGuiKey_Delete]     = VK_DELETE;
+    io.KeyMap[ImGuiKey_Backspace]  = VK_BACK;
+    io.KeyMap[ImGuiKey_Space]      = VK_SPACE;
+    io.KeyMap[ImGuiKey_Enter]      = VK_RETURN;
+    io.KeyMap[ImGuiKey_Escape]     = VK_ESCAPE;
+    io.KeyMap[ImGuiKey_A]          = 'A';
+    io.KeyMap[ImGuiKey_C]          = 'C';
+    io.KeyMap[ImGuiKey_V]          = 'V';
+    io.KeyMap[ImGuiKey_X]          = 'X';
+    io.KeyMap[ImGuiKey_Y]          = 'Y';
+    io.KeyMap[ImGuiKey_Z]          = 'Z';
 
     io.ImeWindowHandle = g_hWnd;
 
@@ -659,9 +656,9 @@ bool    s3ImGuiInit(void* hwnd, ID3D11Device* device, ID3D11DeviceContext* devic
 void s3ImGuiShutdown()
 {
     ImGui_ImplDX11_InvalidateDeviceObjects();
-    g_pd3dDevice = NULL;
+    g_pd3dDevice        = NULL;
     g_pd3dDeviceContext = NULL;
-    g_hWnd = (HWND)0;
+    g_hWnd              = (HWND)0;
     ImGui::DestroyContext();
 }
 
@@ -684,9 +681,9 @@ void s3ImGuiBeginRender()
     g_Time = current_time;
 
     // Read keyboard modifiers inputs
-    io.KeyCtrl = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
+    io.KeyCtrl  = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
     io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
-    io.KeyAlt = (GetKeyState(VK_MENU) & 0x8000) != 0;
+    io.KeyAlt   = (GetKeyState(VK_MENU) & 0x8000) != 0;
     io.KeySuper = false;
     // io.KeysDown : filled by WM_KEYDOWN/WM_KEYUP events
     // io.MousePos : filled by WM_MOUSEMOVE events

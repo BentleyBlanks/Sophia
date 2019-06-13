@@ -3,7 +3,10 @@
 #include <core/s3Settings.h>
 #include <t3Vector4.h>
 
+class s3Graphics;
 class s3RenderTexture;
+class s3Texture;
+
 class s3Renderer
 {
 public:
@@ -28,6 +31,7 @@ public:
 	void setMSAACount(uint32 count);
 	uint32 getMSAACount() const;
 
+	friend class s3Graphics;
 private:
     s3Renderer();
 
@@ -39,8 +43,13 @@ private:
 	ID3D11DepthStencilState* depthStencilState;
 	ID3D11RasterizerState* rasterizerState;
 
+	// renderer's backbuffers
 	s3RenderTexture* depthTexture;
 	s3RenderTexture* colorTexture;
 	
+	// renderer's current render / depth texture (could be updated according to SetRT)
+	s3Texture* currentDepthTexture;
+	s3Texture* currentColorTexture;
+
 	uint32 msaaCount;
 };

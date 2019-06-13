@@ -31,8 +31,8 @@ bool s3RenderTexture::create()
 	{
 		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 		ZeroMemory(&renderTargetViewDesc, sizeof(renderTargetViewDesc));
-		renderTargetViewDesc.Format = getRTFormat();
-		renderTargetViewDesc.ViewDimension = getRTVDimension();
+		renderTargetViewDesc.Format             = getRTFormat();
+		renderTargetViewDesc.ViewDimension      = getRTVDimension();
 		renderTargetViewDesc.Texture2D.MipSlice = 0;
 
 		if (FAILED(device->CreateRenderTargetView(texture2d, &renderTargetViewDesc, &renderTargetView)))
@@ -44,6 +44,11 @@ bool s3RenderTexture::create()
 	}
 
 	created = true;
+	return true;
+}
+
+bool s3RenderTexture::isRenderTarget() const
+{
 	return true;
 }
 
