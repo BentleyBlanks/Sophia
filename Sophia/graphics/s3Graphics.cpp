@@ -3,6 +3,7 @@
 #include <graphics/s3Material.h>
 #include <texture/s3RenderTexture.h>
 #include <core/s3Settings.h>
+#include <core/log/s3Log.h>
 #include <imgui.h>
 
 void s3Graphics::drawTextureOnGui(s3Texture* texture)
@@ -45,16 +46,34 @@ void s3Graphics::blit(s3Texture* src, s3Texture* dst, s3Material* material)
 	}
 
 	// multiple constant buffer
-	auto bufferList = material->getConstantBuffer();
-	auto dataList   = material->getConstantBufferData();
-	auto cbNum      = material->getConstantBufferNum();
+	auto bufferList   = material->getConstantBuffer();
+	auto dataList     = material->getConstantBufferData();
+	auto dataSizeList = material->getConstantBufferDataSize();
+	auto cbNum        = material->getConstantBufferNum();
 
 	for (int32 i = 0; i < cbNum; i++)
-		deviceContext->UpdateSubresource((*bufferList)[i], 0, nullptr, &dataList[i], 0, 0);
+	{
+		// Using Map / Unmap instead of UpdateSubresource
+		//deviceContext->UpdateSubresource((*bufferList)[i], 0, nullptr, (*dataList)[i], 0, 0);
+
+		D3D11_MAPPED_SUBRESOURCE ms;
+		ZeroMemory(&ms, sizeof(D3D11_MAPPED_SUBRESOURCE));
+		HRESULT result = deviceContext->Map((*bufferList)[i], 0, D3D11_MAP_WRITE_DISCARD, 0, &ms);
+		if (FAILED(result))
+		{
+			s3Log::error("s3Graphics::blit() Map constant buffer failed\n");
+			continue;
+		}
+		else
+		{
+			memcpy(ms.pData, (*dataList)[i], (*dataSizeList)[i]);
+			deviceContext->Unmap((*bufferList)[i], 0);
+		}
+	}
 
 	// constant buffer could be null
 	if (cbNum > 0)
-		deviceContext->PSSetConstantBuffers(0, material->getConstantBufferNum(), bufferList->data());
+		deviceContext->PSSetConstantBuffers(0, cbNum, bufferList->data());
 
 	deviceContext->OMSetDepthStencilState(renderer->getDepthStencilState(), 1);
 	deviceContext->OMSetRenderTargets(1, &rtv, NULL);

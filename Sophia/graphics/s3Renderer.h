@@ -28,6 +28,9 @@ public:
 	s3RenderTexture* getDepthTexture() const;
 	s3RenderTexture* getColorTexture() const;
 
+	s3Texture* getCurrentDepthTexture() const;
+	s3Texture* getCurrentColorTexture() const;
+
 	void setMSAACount(uint32 count);
 	uint32 getMSAACount() const;
 

@@ -234,6 +234,8 @@ s3App::s3App()
 {
     window = nullptr;
     clearColor.set(1.0f, 0.0f, 0.0f, 1.0f);
+
+	timer.start();
 }
 
 s3App::~s3App()
@@ -258,6 +260,13 @@ bool s3App::init(const t3Vector2f& size, const t3Vector2f& pos)
     if(!s3Renderer::get().init(window->getHandle(), width, height))	return false;
 
     return true;
+}
+
+float32 s3App::getTimeElapsed()
+{
+	timer.end();
+	float32 elapsedTime = (float32) timer.difference();
+	return elapsedTime;
 }
 
 void s3App::shutdown()

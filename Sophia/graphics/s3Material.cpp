@@ -153,6 +153,11 @@ std::vector<void*>* s3Material::getConstantBufferData() const
 	return shader->getConstantBufferDataList(activatedPassIndex);
 }
 
+std::vector<int32>* s3Material::getConstantBufferDataSize() const
+{
+	return shader->getConstantBufferDataSizeList(activatedPassIndex);
+}
+
 std::vector<ID3D11Buffer*>* s3Material::getConstantBuffer() const
 {
 	return shader->getConstantBufferList(activatedPassIndex);

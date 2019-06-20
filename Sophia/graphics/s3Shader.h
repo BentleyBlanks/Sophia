@@ -42,6 +42,7 @@ public:
 
 	// activate pas index related
 	std::vector<void*>* getConstantBufferDataList(int32 pass) const;
+	std::vector<int32>* getConstantBufferDataSizeList(int32 pass) const;
 	std::vector<ID3D11Buffer*>* getConstantBufferList(int32 pass) const;
 	int32 getPassConstantBufferNum(int32 pass) const;
 

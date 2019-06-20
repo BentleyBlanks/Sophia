@@ -43,6 +43,7 @@ public:
 	bool setKeyword(std::string name, bool enableKeyword);
 
 	std::vector<void*>* getConstantBufferData() const;
+	std::vector<int32>* getConstantBufferDataSize() const;
 	std::vector<ID3D11Buffer*>* getConstantBuffer() const;
 	int32 getConstantBufferNum() const;
 

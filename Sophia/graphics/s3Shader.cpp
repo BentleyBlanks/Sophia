@@ -11,8 +11,8 @@ class s3ShaderConstantBuffer
 {
 public:
 	std::vector<void*> dataList;
+	std::vector<int32> dataSizeList;
 	std::vector<ID3D11Buffer*> bufferList;
-	int32 cbCount;
 };
 
 class s3ShaderParser
@@ -290,6 +290,7 @@ bool s3Shader::load(std::string fileName)
 				s3ShaderConstantBuffer cb;
 				cb.dataList.push_back(cbIter->second.data);
 				cb.bufferList.push_back(cbIter->second.buffer);
+				cb.dataSizeList.push_back(cbIter->second.size);
 				shaderParser->passConstantBufferList.push_back(cb);
 
 				cbIter++;
@@ -540,11 +541,25 @@ std::vector<void*>* s3Shader::getConstantBufferDataList(int32 pass) const
 
 	if (pass < 0 || pass >= cbList.size())
 	{
-		s3Log::warning("s3Shader::getConstantBufferList() pass %d illegal\n", pass);
+		s3Log::warning("s3Shader::getConstantBufferDataList() pass %d illegal\n", pass);
 		return nullptr;
 	}
 	auto& cb = cbList[pass];
 	return &cb.dataList;
+}
+
+std::vector<int32>* s3Shader::getConstantBufferDataSizeList(int32 pass) const
+{
+	auto& cbList = shaderParser->passConstantBufferList;
+	if (cbList.size() == 0) return nullptr;
+
+	if (pass < 0 || pass >= cbList.size())
+	{
+		s3Log::warning("s3Shader::getConstantBufferDataSizeList() pass %d illegal\n", pass);
+		return nullptr;
+	}
+	auto& cb = cbList[pass];
+	return &cb.dataSizeList;
 }
 
 std::vector<ID3D11Buffer*>* s3Shader::getConstantBufferList(int32 pass) const

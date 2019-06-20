@@ -370,6 +370,16 @@ s3RenderTexture* s3Renderer::getColorTexture() const
 	return colorTexture;
 }
 
+s3Texture* s3Renderer::getCurrentDepthTexture() const
+{
+	return currentDepthTexture;
+}
+
+s3Texture* s3Renderer::getCurrentColorTexture() const
+{
+	return currentColorTexture;
+}
+
 void s3Renderer::setMSAACount(uint32 count)
 {
 	if (count <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT && count >= 0)

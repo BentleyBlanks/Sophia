@@ -11,7 +11,7 @@ public:
 
 	static void drawMesh(s3Mesh* mesh, t3Matrix4x4 localToWorld, s3Material* material);
 
-	// Blit would set dst texture as renderTarget
+	// Blit would not set dst texture as current renderTarget
 	static void blit(s3Texture* src, s3Texture* dst, s3Material* material);
 
 	static void setRenderTarget(s3Texture* color, s3Texture* depth = nullptr);

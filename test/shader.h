@@ -8,6 +8,7 @@
 #include <t3Math.h>
 #include <imgui.h>
 
+s3App* app                = nullptr;
 s3Renderer* renderer      = nullptr;
 s3Material* noiseMaterial = nullptr;
 s3Texture* perlinNoise    = nullptr;
@@ -105,6 +106,8 @@ public:
 		{
 			if (noiseMaterial && noiseMaterial->isLoaded())
 			{
+				noiseMaterial->setFloat("time", app->getTimeElapsed());
+				//s3Log::info("Time: %f\n", noiseMaterial->getFloat("time"));
 				s3Graphics::blit(nullptr, perlinNoise, noiseMaterial);
 			}
 
@@ -115,17 +118,17 @@ public:
 
 int main()
 {
-	s3App app;
-	renderer = &s3Renderer::get();
+	app = new s3App();
 
-	if (!app.init(t3Vector2f(800, 600), t3Vector2f(10, 10))) return 0;
+	if (!app->init(t3Vector2f(800, 600), t3Vector2f(10, 10))) return 0;
 
-	app.setClearColor(t3Vector4f(0.2f, 0.2f, 0.2f, 1.0f));
+	app->setClearColor(t3Vector4f(0.2f, 0.2f, 0.2f, 1.0f));
 
-	s3Window* window = app.getWindow();
+	s3Window* window = app->getWindow();
 	float32 width  = window->getWindowSize().x;
 	float32 height = window->getWindowSize().y;
 
+	renderer      = &s3Renderer::get();
 	device        = renderer->getDevice();
 	deviceContext = renderer->getDeviceContext();
 
@@ -135,7 +138,7 @@ int main()
 
 	InitTextures();
 
-	app.run();
+	app->run();
 
 	return 0;
 }
